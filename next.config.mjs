@@ -1,6 +1,18 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-};
+// next.config.mjs
 
-export default nextConfig;
+export default {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'tptqglihfsppnrrtukvw.supabase.co',
+        pathname: '/storage/v1/object/sign/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'tptqglihfsppnrrtukvw.supabase.co',
+        pathname: '/storage/v1/object/sign/assets/logos/**',
+      }
+    ],
+  },
+};

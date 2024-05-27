@@ -1,6 +1,7 @@
 // components/News.js
 import React, { useState, useEffect } from 'react';
 import supabase from '../pages/api/supabase';
+import Image from 'next/image';
 
 const News = () => {
   const [news, setNews] = useState([]);
@@ -43,7 +44,7 @@ const News = () => {
         {news.map((item, index) => (
           <div key={index} className={`news-item ${index === currentIndex ? 'active' : ''}`}>
             <a href={item.url} target="_blank" rel="noopener noreferrer">
-              <img src={item.image_url} alt={item.title} />
+            <Image src={item.image_url} alt={item.title} width={819} height={460} layout="responsive" />
             </a>
             <p>{item.title}</p>
           </div>
