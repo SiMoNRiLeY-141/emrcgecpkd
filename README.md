@@ -18,7 +18,6 @@ This repository contains the source code and assets for the EMRC website. The we
 
 View the website at: [EMRC Website](https://emrcgecpkd.vercel.app)
 
-
 ## License
 
 All rights reserved. The content of this repository is the property of the Electrical Maintenance and Research Club (EMRC) at Govt. Engineering College, Sreekrishnapuram. Unauthorized copying, distribution, or modification of any files is strictly prohibited without prior written permission from the club.
@@ -31,5 +30,6 @@ For questions, feedback, or inquiries about the EMRC website, feel free to conta
 - **GitHub**: [github.com/SiMoNRiLeY-141](https://github.com/SiMoNRiLeY-141)
 
 Visit our social media:
+
 - [Instagram](https://instagram.com/emrc_gec)
 - [LinkedIn](https://linkedin.com/company/emrc-gecpkd)

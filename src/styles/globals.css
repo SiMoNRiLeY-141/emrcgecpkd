@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Saira:ital,wght@0,100..900;1,100..900&family=Sofadi+One&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Saira:ital,wght@0,100..900;1,100..900&family=Sofadi+One&display=swap');
 
 body {
   background-color: #f8f8f8;
-  background-image: url("https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/bg.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvYmcucG5nIiwiaWF0IjoxNzE2Mzg5Nzc3LCJleHAiOjIwMzE3NDk3Nzd9.UB3ve4dVjgmvu8n_8NqFAiMXpqyDtGKmzn_7hIzwPbw&t=2024-05-22T14%3A56%3A18.632Z");
+  background-image: url('https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/bg.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvYmcucG5nIiwiaWF0IjoxNzE2Mzg5Nzc3LCJleHAiOjIwMzE3NDk3Nzd9.UB3ve4dVjgmvu8n_8NqFAiMXpqyDtGKmzn_7hIzwPbw&t=2024-05-22T14%3A56%3A18.632Z');
   background-repeat: repeat;
   margin: 0;
   padding: 0;
@@ -38,12 +38,12 @@ h1 {
   color: #ffffff;
   font-size: 2em;
   margin: 10px 0;
-  font-family: "Saira", Calibri, sans-serif;
+  font-family: 'Saira', Calibri, sans-serif;
 }
 
 h2 {
   color: #0f0f0f;
-  font-family: "Saira", Geneva, Tahoma, sans-serif;
+  font-family: 'Saira', Geneva, Tahoma, sans-serif;
 }
 
 .news-container {
@@ -73,7 +73,7 @@ h2 {
 .news-item p {
   margin-top: 5px;
   font-size: 14px;
-  font-family: "Saira", serif;
+  font-family: 'Saira', serif;
 }
 
 .committee-container {
@@ -126,14 +126,14 @@ h2 {
   color: rgb(0, 0, 0);
   font-size: 120%;
   font-weight: bold;
-  font-family: "Kalam", Courier, monospace;
+  font-family: 'Kalam', Courier, monospace;
 }
 
 .member-card p {
   margin: 5px 0;
   color: rgb(0, 0, 0);
   font-size: 1em;
-  font-family: "Kalam", Cambria, serif;
+  font-family: 'Kalam', Cambria, serif;
 }
 
 @media screen and (max-width: 768px) {
@@ -245,14 +245,16 @@ h2 {
 .newsletter-form button {
   padding: 10px 20px;
   font-weight: bolder;
-  font-family: "Kalam", cursive;
+  font-family: 'Kalam', cursive;
   font-size: 16px;
   color: #000000;
   background-color: #ffbb00;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease,
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease,
     box-shadow 0.3s ease;
 }
 
@@ -266,5 +268,5 @@ h2 {
   margin-top: 10px;
   font-size: 14px;
   color: #333;
-  font-style: "Kalam", cursive;
+  font-style: 'Kalam', cursive;
 }

@@ -12,7 +12,7 @@ export default {
         protocol: 'https',
         hostname: 'tptqglihfsppnrrtukvw.supabase.co',
         pathname: '/storage/v1/object/sign/assets/logos/**',
-      }
+      },
     ],
   },
 };

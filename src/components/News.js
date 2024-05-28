@@ -27,7 +27,9 @@ const News = () => {
     if (news.length === 0) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex(prevIndex => prevIndex === news.length - 1 ? 0 : prevIndex + 1);
+      setCurrentIndex((prevIndex) =>
+        prevIndex === news.length - 1 ? 0 : prevIndex + 1
+      );
     }, 7000);
 
     return () => clearInterval(interval);
@@ -42,9 +44,18 @@ const News = () => {
       <h2>Latest News</h2>
       <div className="news-scroll">
         {news.map((item, index) => (
-          <div key={index} className={`news-item ${index === currentIndex ? 'active' : ''}`}>
+          <div
+            key={index}
+            className={`news-item ${index === currentIndex ? 'active' : ''}`}
+          >
             <a href={item.url} target="_blank" rel="noopener noreferrer">
-            <Image src={item.image_url} alt={item.title} width={819} height={460} layout="responsive" />
+              <Image
+                src={item.image_url}
+                alt={item.title}
+                width={819}
+                height={460}
+                layout="responsive"
+              />
             </a>
             <p>{item.title}</p>
           </div>

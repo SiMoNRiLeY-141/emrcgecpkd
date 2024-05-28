@@ -18,7 +18,7 @@ const Committee = () => {
         console.error('Error fetching committee data:', error.message);
       }
     };
-  
+
     fetchCommittee();
   }, []);
 
@@ -29,7 +29,12 @@ const Committee = () => {
         {committee.map((member, index) => (
           <div key={index} className="member-card">
             <div className="image-wrapper">
-              <Image src={member.photo_url} alt={member.name} width={512} height={512} />
+              <Image
+                src={member.photo_url}
+                alt={member.name}
+                width={512}
+                height={512}
+              />
             </div>
             <h3>{member.name}</h3>
             <p>{member.position}</p>
