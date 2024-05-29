@@ -49,8 +49,7 @@ h2 {
   background-color: #f0f0f0;
   padding: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  min-height:150px; /* Reserve space for content */
-  min-width:95%;
+  min-height:150px;
 }
 
 .news-item {
