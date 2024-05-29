@@ -11,6 +11,7 @@ const SocialMediaOverlay = () => {
         href="https://www.instagram.com/emrc_gec"
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="Visit our Instagram page"
       >
         <FontAwesomeIcon icon={faInstagram} size="2x" />
       </a>
@@ -18,6 +19,7 @@ const SocialMediaOverlay = () => {
         href="https://www.linkedin.com/company/emrc-gecpkd"
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="Visit our LinkedIn page"
       >
         <FontAwesomeIcon icon={faLinkedin} size="2x" />
       </a>
@@ -25,6 +27,7 @@ const SocialMediaOverlay = () => {
         href="mailto:emrc@gecskp.ac.in"
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="Send us an email"
       >
         <FontAwesomeIcon icon={faEnvelope} size="2x" />
       </a>

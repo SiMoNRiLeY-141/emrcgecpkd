@@ -19,6 +19,15 @@ const HomePage = () => {
         <title>EMRC GECPKD</title>
         <meta charSet="UTF-8" />
         <link
+          rel="preload"
+          href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Saira:ital,wght@0,100..900;1,100..900&family=Sofadi+One&display=swap"
+          as="style"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Saira:ital,wght@0,100..900;1,100..900&family=Sofadi+One&display=swap"
+          rel="stylesheet"
+        />
+        <link
           rel="icon"
           href="https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9vcy9mYXZpY29uLmljbyIsImlhdCI6MTcxNjM4OTk1NSwiZXhwIjoyMDMxNzQ5OTU1fQ.pS7XAYfr9OuB7EwJiMEemuRjUfstb7EPp0MUetEFixg&t=2024-05-22T14%3A59%3A16.270Z"
         />
