@@ -46,7 +46,10 @@ h2 {
   font-family: 'Saira', Geneva, Tahoma, sans-serif;
 }
 
-.news-container {
+.news-container,
+.committee-container,
+.contact-section,
+.newsletter-container  {
   margin-top: 10px;
   margin-bottom: 50px;
   border-radius: 20px;
@@ -76,28 +79,20 @@ h2 {
   font-family: 'Saira', serif;
 }
 
-.committee-container {
-  margin-bottom: 50px;
-  border-radius: 20px;
-  background-color: #d8d8d8;
-  padding: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
 .committee-members {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content:space-evenly;
 }
 
 .member-card {
   flex: 0 1 calc(25% - 50px);
-  margin: 4vw;
+  margin: 3vw;
   width: 200px;
   border-radius: 20px;
   background-color: #ffffff;
   padding: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px #0000001a;
   transition: transform 0.3s ease-in-out;
   text-align: center; /* Center text and images */
 }
@@ -107,10 +102,10 @@ h2 {
 }
 
 .image-wrapper {
-  width: 50%; /* Adjust size as needed */
-  max-width: 300px;
+  width: 70%; /* Adjust size as needed */
+  max-width: 200px;
   height: auto; /* Adjust size as needed */
-  margin: 0 auto 10px; /* Center the wrapper and add bottom margin */
+  margin: 0 auto 5px; /* Center the wrapper and add bottom margin */
   overflow: hidden;
   border-radius: 50%;
 }
@@ -122,7 +117,7 @@ h2 {
 }
 
 .member-card h3 {
-  margin: 5px 0;
+  margin: 1px;
   color: rgb(0, 0, 0);
   font-size: 120%;
   font-weight: bold;
@@ -130,7 +125,7 @@ h2 {
 }
 
 .member-card p {
-  margin: 5px 0;
+  margin: 1px;
   color: rgb(0, 0, 0);
   font-size: 1em;
   font-family: 'Kalam', Cambria, serif;
@@ -157,16 +152,8 @@ h2 {
   }
 
   .member-card {
-    flex: 0 1 calc(70% - 0px);
+    flex: 0 1 calc(60% - 10px);
   }
-}
-
-.contact-section {
-  margin-bottom: 50px;
-  border-radius: 20px;
-  background-color: #f0f0f0;
-  padding: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .contact-section h2 {
@@ -215,14 +202,6 @@ h2 {
 
 .social-media-overlay img:hover {
   transform: scale(1.2);
-}
-
-.newsletter-container {
-  padding: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  margin-bottom: 50px;
-  border-radius: 20px;
-  background-color: #f0f0f0;
 }
 
 .newsletter-form {
