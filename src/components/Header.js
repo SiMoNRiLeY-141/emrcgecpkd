@@ -35,8 +35,8 @@ const Header = () => {
             src={logo2Url}
             alt="Logo 2"
             className="logo"
-            width={100}
-            height={100}
+            width={128}
+            height={153}
           />
         </div>
       </div>

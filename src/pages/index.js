@@ -32,6 +32,10 @@ const HomePage = () => {
           href="https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9vcy9mYXZpY29uLmljbyIsImlhdCI6MTcxNjM4OTk1NSwiZXhwIjoyMDMxNzQ5OTU1fQ.pS7XAYfr9OuB7EwJiMEemuRjUfstb7EPp0MUetEFixg&t=2024-05-22T14%3A59%3A16.270Z"
         />
         <meta
+          name="description"
+          content="Welcome to the EMRC, the Electrical Maintenance and Research Club at Government Engineering College, Sreekrishnapuram. Stay updated with our latest news, events, and research activities."
+        />
+        <meta
           name="google-site-verification"
           content="RsmQDkTKhMkEqmP3ipd5IGfsQoeIZd3glUMDWGcEhUI"
         />
