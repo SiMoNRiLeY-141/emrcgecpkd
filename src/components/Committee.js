@@ -32,8 +32,8 @@ const Committee = () => {
               <Image
                 src={member.photo_url}
                 alt={member.name}
-                width={512}
-                height={512}
+                width={200}
+                height={200}
               />
             </div>
             <h3>{member.name}</h3>
