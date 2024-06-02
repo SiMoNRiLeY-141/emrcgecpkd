@@ -29,7 +29,7 @@ const HomePage = () => {
         />
         <link
           rel="icon"
-          href="https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9vcy9mYXZpY29uLmljbyIsImlhdCI6MTcxNjM4OTk1NSwiZXhwIjoyMDMxNzQ5OTU1fQ.pS7XAYfr9OuB7EwJiMEemuRjUfstb7EPp0MUetEFixg&t=2024-05-22T14%3A59%3A16.270Z"
+          href="https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZmF2aWNvbi5pY28iLCJpYXQiOjE3MTczMDg4NzksImV4cCI6MjAzMjY2ODg3OX0.zcGyGIXZgCHG0VKOPFWt1F1JNMr3syMfaTyUISsEfIU&t=2024-06-02T06%3A14%3A39.945Z"
         />
         <meta
           name="description"
