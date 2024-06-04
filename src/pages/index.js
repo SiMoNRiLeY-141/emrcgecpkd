@@ -33,7 +33,7 @@ const HomePage = () => {
         />
         <meta
           name="description"
-          content="Welcome to the EMRC, the Electrical Maintenance and Research Club at Government Engineering College, Sreekrishnapuram. Stay updated with our latest news, events, and research activities."
+          content="Electrical Maintenance and Research Club at Govt. Engineering College, Sreekrishnapuram. Stay updated with our news, events, and research activities."
         />
         <meta
           name="google-site-verification"
