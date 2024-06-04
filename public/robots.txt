@@ -1,0 +1,11 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+# Host
+Host: https://emrcgecpkd.vercel.app
+
+# Sitemaps
+Sitemap: https://emrcgecpkd.vercel.app/sitemap.xml

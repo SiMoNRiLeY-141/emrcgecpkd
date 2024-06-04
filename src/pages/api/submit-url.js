@@ -1,4 +1,4 @@
-import { submitUrlsToIndexNow } from '../../lib/indexnow';
+import { submitUrlsToIndexNow } from '../../components/indexnow';
 
 export default async function handler(req, res) {
   // Ensure the request is a POST request
