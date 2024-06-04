@@ -16,7 +16,7 @@ const HomePage = () => {
   return (
     <div className="App">
       <Head>
-        <title>EMRC GECPKD</title>
+        <title>EMRC GEC Palakkad</title>
         <meta charSet="UTF-8" />
         <link
           rel="preload"
