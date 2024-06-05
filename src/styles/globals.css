@@ -97,7 +97,7 @@ h2 {
 .member-card {
   flex: 0 1 calc(25% - 50px);
   margin: 3vw;
-  width: 200px;
+  width: 600px;
   border-radius: 20px;
   background-color: #ffffff;
   padding: 20px;
@@ -112,7 +112,7 @@ h2 {
 
 .image-wrapper {
   width: 70%; /* Adjust size as needed */
-  max-width: 200px;
+  max-width: 512px;
   height: auto; /* Adjust size as needed */
   margin: 0 auto 5px; /* Center the wrapper and add bottom margin */
   overflow: hidden;

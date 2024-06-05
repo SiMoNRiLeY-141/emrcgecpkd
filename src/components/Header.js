@@ -4,9 +4,9 @@ import Head from "next/head";
 
 const Header = () => {
   const logo1Url =
-    "https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/emrc.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZW1yYy5wbmciLCJpYXQiOjE3MTYzNzg5MTMsImV4cCI6MjAzMTczODkxM30.hlFm7wnGdbBjVs2p3Ac8lzksjPanlzlhCYUDTNLbMG8&t=2024-05-22T11%3A55%3A14.061Z";
+    "https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/emrc.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZW1yYy53ZWJwIiwiaWF0IjoxNzE3NTcxNDY0LCJleHAiOjIwMzI5MzE0NjR9.hxUAaSoUgf3Her8CiMUdjIaTDYr1d_hGrOUZR3VL3wI&t=2024-06-05T07%3A11%3A05.557Z";
   const logo2Url =
-    "https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/gec.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZ2VjLnBuZyIsImlhdCI6MTcxNjM4OTU1NiwiZXhwIjoyMDMxNzQ5NTU2fQ.dCoSf2oxl0hXwCkiEBlaD97r2wLH_YmC70bccgdQVb4&t=2024-05-22T14%3A52%3A37.104Z";
+    "https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/gec.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZ2VjLndlYnAiLCJpYXQiOjE3MTc1NzE0MDIsImV4cCI6MjAzMjkzMTQwMn0.ombayM0Wj-ReJuyJCUrqX5dZ-EE1JmJoTPZ76h9voTg&t=2024-06-05T07%3A10%3A03.768Z";
 
   return (
     <>
