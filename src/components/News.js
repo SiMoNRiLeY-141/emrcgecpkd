@@ -55,8 +55,7 @@ const News = () => {
                 width={819}
                 height={460}
                 layout="responsive"
-                priority={index === 0}
-                loading={index !== 0 ? "lazy" : undefined}
+                priority
               />
             </a>
             <p>{item.title}</p>
