@@ -22,6 +22,8 @@ class MyDocument extends Document {
               `,
             }}
           />
+          {/* Canonical Tag */}
+          <link rel="canonical" href="https://emrcgecpkd.vercel.app/" />
         </Head>
         <body>
           <Main />

@@ -1,3 +1,15 @@
+@font-face {
+  font-family: 'Saira';
+  src: url('/fonts/memjYa2wxmKQyPMrZX79wwYZQMhsyuSLiIvSdyqOvg.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Kalam';
+  src: url('/fonts/YA9Qr0Wd4kDdMtDqHTLMkiQqtbGs.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Kalam';
+  src: url('/fonts/YA9dr0Wd4kDdMthROCfhsCkA.woff2') format('woff2');
+}
 body {
   background-color: #f8f8f8;
   background-image: url('https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/bg.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvYmcud2VicCIsImlhdCI6MTcxNzUyNTIyNSwiZXhwIjoyMDMyODg1MjI1fQ.ui1PUPnDKGnTFzy1zcVDZ8qizKUDRgPzmOczXYtJ1FI&t=2024-06-04T18%3A20%3A26.628Z');

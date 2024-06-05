@@ -19,15 +19,6 @@ const HomePage = () => {
         <title>EMRC GEC Palakkad</title>
         <meta charSet="UTF-8" />
         <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Saira:ital,wght@0,100..900;1,100..900&family=Sofadi+One&display=swap"
-          as="style"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Saira:ital,wght@0,100..900;1,100..900&family=Sofadi+One&display=swap"
-          rel="stylesheet"
-        />
-        <link
           rel="icon"
           href="https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZmF2aWNvbi5pY28iLCJpYXQiOjE3MTczMDg4NzksImV4cCI6MjAzMjY2ODg3OX0.zcGyGIXZgCHG0VKOPFWt1F1JNMr3syMfaTyUISsEfIU&t=2024-06-02T06%3A14%3A39.945Z"
         />
