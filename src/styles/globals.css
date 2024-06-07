@@ -2,19 +2,16 @@
   font-family: 'Saira';
   src: url('/fonts/memjYa2wxmKQyPMrZX79wwYZQMhsyuSLiIvSdyqOvg.woff2') format('woff2');
   font-display: swap;
-  size-adjust: 100%;
 }
 @font-face {
   font-family: 'Kalam';
   src: url('/fonts/YA9Qr0Wd4kDdMtDqHTLMkiQqtbGs.woff2') format('woff2');
   font-display: swap;
-  size-adjust: 100%;
 }
 @font-face {
   font-family: 'Kalam';
   src: url('/fonts/YA9dr0Wd4kDdMthROCfhsCkA.woff2') format('woff2');
   font-display: swap;
-  size-adjust: 100%;
 }
 body {
   background-color: #f8f8f8;

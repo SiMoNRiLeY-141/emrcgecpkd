@@ -15,27 +15,6 @@ const HomePage = () => {
   return (
     <div className="App">
       <Head>
-        <link
-          rel="preload"
-          href="/fonts/memjYa2wxmKQyPMrZX79wwYZQMhsyuSLiIvSdyqOvg.woff2"
-          as="font"
-          type="font/woff2"
-          crossorigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/YA9Qr0Wd4kDdMtDqHTLMkiQqtbGs.woff2"
-          as="font"
-          type="font/woff2"
-          crossorigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/YA9dr0Wd4kDdMthROCfhsCkA.woff2"
-          as="font"
-          type="font/woff2"
-          crossorigin="anonymous"
-        />
         <title>EMRC GEC Palakkad</title>
         <meta charSet="UTF-8" />
         <link
