@@ -8,7 +8,7 @@ class MyDocument extends Document {
         <Head>
           {/* Google Analytics */}
           <script
-            async
+            defer
             src="https://www.googletagmanager.com/gtag/js?id=G-GFJQXE1T6K"
           ></script>
           <script
