@@ -1,0 +1,39 @@
+# OSV-Scanner Workflow
+
+# This workflow runs OSV-Scanner on a periodic basis and on specific GitHub events
+# It ensures that new vulnerabilities are not introduced via PRs
+
+name: OSV-Scanner
+
+on:
+  pull_request:
+    branches: [ "master" ]  # Triggers the workflow when a PR targets the master branch
+  merge_group:
+    branches: [ "master" ]  # Triggers the workflow when a merge group targets the master branch
+  schedule:
+    - cron: '30 12 * * 0'   # Schedules the workflow to run at 12:30 PM UTC every Sunday
+  push:
+    branches: [ "master" ]  # Triggers the workflow when code is pushed to the master branch
+
+permissions:
+  security-events: write    # Allows writing security events to upload SARIF files to the security tab
+  contents: read            # Allows reading commit contents
+
+jobs:
+  scan-scheduled:
+    if: ${{ github.event_name == 'push' || github.event_name == 'schedule' }}
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@1f1242919d8a60496dd1874b24b62b2370ed4c78" # Uses reusable workflow for scheduled scans
+    with:
+      scan-args: |-         # Custom arguments for the OSV-Scanner
+        -r                 # Recursive scan
+        --skip-git         # Skip scanning git-specific files
+        ./
+
+  scan-pr:
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@1f1242919d8a60496dd1874b24b62b2370ed4c78" # Uses reusable workflow for PR scans
+    with:
+      scan-args: |-         # Custom arguments for the OSV-Scanner
+        -r                 # Recursive scan
+        --skip-git         # Skip scanning git-specific files
+        ./
