@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from "react";
 import Head from "next/head";
-import { Analytics } from "@vercel/analytics/react";
 
 const Header = lazy(() => import("../components/Header"));
 const SocialMediaOverlay = lazy(
@@ -57,7 +56,6 @@ const HomePage = () => {
         <Newsletter />
         <ContactSection />
         <SocialMediaOverlay />
-        <Analytics />
       </Suspense>
     </div>
   );
