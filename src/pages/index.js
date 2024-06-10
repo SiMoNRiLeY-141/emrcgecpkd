@@ -54,11 +54,12 @@ const HomePage = () => {
             {
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "EMRC GEC Palakkad",
+              "name": "EMRC GEC",
               "url": "https://emrcgecpkd.vercel.app",
               "logo": "https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZmF2aWNvbi5pY28iLCJpYXQiOjE3MTczMDg4NzksImV4cCI6MjAzMjY2ODg3OX0.zcGyGIXZgCHG0VKOPFWt1F1JNMr3syMfaTyUISsEfIU&t=2024-06-02T06%3A14%3A39.945Z",
               "contactPoint": {
                 "@type": "ContactPoint",
+                "telephone": "+123-456-7890",
                 "contactType": "Customer Service",
                 "email": "emrc@gecskp.ac.in"
               },
@@ -67,6 +68,13 @@ const HomePage = () => {
                   "@type": "Person",
                   "name": "Rithin",
                   "jobTitle": "Chairperson",
+                  "email": "emrc@gecskp.ac.in"
+                },
+                {
+                  "@type": "Person",
+                  "name": "Yatheesh",
+                  "jobTitle": "Vice Chairperson",
+                  "email": "emrc@gecskp.ac.in"
                 }
               ]
             }
