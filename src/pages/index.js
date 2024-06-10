@@ -47,7 +47,7 @@ const HomePage = () => {
   return (
     <div className="App">
       <Head>
-        <title>EMRC GEC Palakkad</title>
+        <title>Electrical Maintenance and Research Club, GEC Palakkad</title>
         <meta charSet="UTF-8" />
         <link
           rel="icon"
