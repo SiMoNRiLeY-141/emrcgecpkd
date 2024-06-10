@@ -28,7 +28,10 @@ const HomePage = () => {
           name="google-site-verification"
           content="RsmQDkTKhMkEqmP3ipd5IGfsQoeIZd3glUMDWGcEhUI"
         />
-        <meta name="keywords" content="EMRC, GEC, EMRC GEC, GEC Palakkad, GECPKD, Government Engineering College, Sreekrishnapuram, Electrical Maintenance and Research Club Palakkad, Electrical Engineering, EMRC Palakkad, EMRC GEC PKD, GECSKP, GECPKD "></meta>
+        <meta
+          name="keywords"
+          content="EMRC, GEC, EMRC GEC, GEC Palakkad, GECPKD, Government Engineering College, Sreekrishnapuram, Electrical Maintenance and Research Club Palakkad, Electrical Engineering, EMRC Palakkad, EMRC GEC PKD, GECSKP, GECPKD "
+        ></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           property="og:title"
@@ -44,10 +47,7 @@ const HomePage = () => {
         />
         <meta property="og:image:width" content="500" />
         <meta property="og:image:height" content="281" />
-        <meta
-          property="og:url"
-          content="https://emrcgecpkd.vercel.app"
-        />
+        <meta property="og:url" content="https://emrcgecpkd.vercel.app" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">
           {`
@@ -67,11 +67,6 @@ const HomePage = () => {
                   "@type": "Person",
                   "name": "Rithin",
                   "jobTitle": "Chairperson",
-                },
-                {
-                  "@type": "Person",
-                  "name": "Yatheesh",
-                  "jobTitle": "Vice Chairperson",
                 }
               ]
             }
