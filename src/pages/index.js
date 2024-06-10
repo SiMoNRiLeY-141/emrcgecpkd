@@ -46,9 +46,37 @@ const HomePage = () => {
         <meta property="og:image:height" content="281" />
         <meta
           property="og:url"
-          content="https://simonriley-141.github.io/emrcgec/"
+          content="https://emrcgecpkd.vercel.app"
         />
         <meta property="og:type" content="website" />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "EMRC GEC Palakkad",
+              "url": "https://emrcgecpkd.vercel.app",
+              "logo": "https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZmF2aWNvbi5pY28iLCJpYXQiOjE3MTczMDg4NzksImV4cCI6MjAzMjY2ODg3OX0.zcGyGIXZgCHG0VKOPFWt1F1JNMr3syMfaTyUISsEfIU&t=2024-06-02T06%3A14%3A39.945Z",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "Customer Service",
+                "email": "emrc@gecskp.ac.in"
+              },
+              "member": [
+                {
+                  "@type": "Person",
+                  "name": "Rithin",
+                  "jobTitle": "Chairperson",
+                },
+                {
+                  "@type": "Person",
+                  "name": "Yatheesh",
+                  "jobTitle": "Vice Chairperson",
+                }
+              ]
+            }
+          `}
+        </script>
       </Head>
       <Suspense fallback={<div>Loading...</div>}>
         <Header />
