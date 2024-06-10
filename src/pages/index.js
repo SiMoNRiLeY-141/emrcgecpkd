@@ -51,7 +51,7 @@ const HomePage = () => {
         <meta charSet="UTF-8" />
         <link
           rel="icon"
-          href="https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZmF2aWNvbi5pY28iLCJpYXQiOjE3MTczMDg4NzksImV4cCI6MjAzMjY2ODg3OX0.zcGyGIXZgCHG0VKOPFWt1F1JNMr3syMfaTyUISsEfIU&t=2024-06-02T06%3A14%3A39.945Z"
+          href="https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZmF2aWNvbi5pY28iLCJpYXQiOjE3MTgwMTk4NTYsImV4cCI6MjAzMzM3OTg1Nn0.nwC1NumJ6XgQMieuh4w72nuOQbTpk-72oqt597kRkC8&t=2024-06-10T11%3A44%3A16.398Z"
         />
         <meta
           name="description"
