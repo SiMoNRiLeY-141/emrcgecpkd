@@ -9,6 +9,39 @@ const Committee = lazy(() => import("../components/Committee"));
 const ContactSection = lazy(() => import("../components/ContactSection"));
 const News = lazy(() => import("../components/News"));
 const Newsletter = lazy(() => import("../components/Newsletter"));
+const schemaMarkup = {
+  "@context": "https://schema.org",
+  "@type": "CollegeOrUniversity",
+  name: "EMRC GEC Palakkad",
+  alternateName: "Electrical Maintenance and Research Club GEC Palakkad",
+  url: "https://emrcgecpkd.vercel.app",
+  logo: "https://emrcgecpkd.vercel.app/_next/image?url=https%3A%2F%2Ftptqglihfsppnrrtukvw.supabase.co%2Fstorage%2Fv1%2Fobject%2Fsign%2Fassets%2Flogos%2Femrc.webp%3Ftoken%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZW1yYy53ZWJwIiwiaWF0IjoxNzE3NTcxNDY0LCJleHAiOjIwMzI5MzE0NjR9.hxUAaSoUgf3Her8CiMUdjIaTDYr1d_hGrOUZR3VL3wI%26t%3D2024-06-05T07%253A11%253A05.557Z&w=128&q=75",
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "",
+    contactType: "customer service",
+    areaServed: "IN",
+    availableLanguage: ["en", "Malayalam"],
+  },
+  member: [
+    {
+      "@type": "Person",
+      name: "Rithin",
+      jobTitle: "Chairperson",
+      email: "emrc@gecskp.ac.in",
+    },
+    {
+      "@type": "Person",
+      name: "Yatheesh",
+      jobTitle: "Vice Chairperson",
+      email: "emrc@gecskp.ac.in",
+    },
+  ],
+  sameAs: [
+    "https://www.instagram.com/emrc_gec",
+    "https://www.linkedin.com/company/emrc-gecpkd",
+  ],
+};
 
 const HomePage = () => {
   return (
@@ -49,41 +82,14 @@ const HomePage = () => {
         <meta property="og:image:height" content="281" />
         <meta property="og:url" content="https://emrcgecpkd.vercel.app" />
         <meta property="og:type" content="website" />
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org/",
-              "@type": "Organization",
-              "name": "EMRC GEC Palakkad",
-              "url": "https://emrcgecpkd.vercel.app/",
-              "logo": "https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/favicon.ico?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZmF2aWNvbi5pY28iLCJpYXQiOjE3MTczMDg4NzksImV4cCI6MjAzMjY2ODg3OX0.zcGyGIXZgCHG0VKOPFWt1F1JNMr3syMfaTyUISsEfIU&t=2024-06-02T06%3A14%3A39.945Z/",
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+123-456-7890",
-                "contactType": "Customer Service",
-                "email": "emrc@gecskp.ac.in"
-              },
-              "member": [
-                {
-                  "@type": "Person",
-                  "name": "Rithin",
-                  "jobTitle": "Chairperson",
-                  "email": "emrc@gecskp.ac.in"
-                },
-                {
-                  "@type": "Person",
-                  "name": "Yatheesh",
-                  "jobTitle": "Vice Chairperson",
-                  "email": "emrc@gecskp.ac.in"
-                }
-              ]
-            }
-          `}
-        </script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
+        />
       </Head>
       <Suspense fallback={<div>Loading...</div>}>
         <Header />
-        <News />s
+        <News />
         <Committee />
         <Newsletter />
         <ContactSection />
