@@ -4,7 +4,7 @@ Welcome to the official GitHub repository for the Electrical Maintenance and Res
 
 ## About
 
-This repository contains the source code and assets for the EMRC website. The website serves as the primary online platform for the club, providing information about its activities, events, committee members, and more.
+This repository contains the source code and assets for the EMRC GEC Palakkad official website. The website serves as the primary online platform for the club, providing information about its activities, events, committee members, and more.
 
 ## Features
 
