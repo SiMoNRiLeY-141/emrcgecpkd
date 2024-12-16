@@ -13,7 +13,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@supabase/supabase-js": "^2.43.5",
+    "@supabase/supabase-js": "^2.47.8",
     "indexnow": "^0.1.0",
     "next": "^15.0.3",
     "next-sitemap": "^4.2.3",
