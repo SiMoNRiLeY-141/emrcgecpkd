@@ -12,7 +12,11 @@ const Committee = () => {
         if (error) {
           throw error;
         }
-        console.log('Fetched committee data:', data);
+
+        if (!data) {
+          setCommittee([]); // Handle null or undefined data
+          return;
+        }
         setCommittee(data);
       } catch (error) {
         console.error('Error fetching committee data:', error.message);
@@ -32,6 +36,7 @@ const Committee = () => {
               <Image
                 src={member.photo_url}
                 alt={member.name}
+                className="member-image"
                 width={512}
                 height={512}
               />
