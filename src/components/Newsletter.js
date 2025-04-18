@@ -1,6 +1,5 @@
 // components/Newsletter.js
 import React, { useState, useEffect } from 'react';
-import supabase from '../pages/api/supabase';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
@@ -24,36 +23,27 @@ const Newsletter = () => {
       return;
     }
 
-    try {
-      const { data, error: selectError } = await supabase
-        .from('newsletter_subscribers')
-        .select('id')
-        .eq('email', email)
-        .single();
-
-      if (selectError && selectError.code !== 'PGRST116') {
-        throw selectError;
+      try {
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          setStatus(data.message);
+          setEmail('');
+        } else {
+          setStatus(data.error || 'Subscription failed. Please try again later.');
+        }
+      } catch (error) {
+        console.error('Error subscribing:', error);
+        setStatus('Subscription failed. Please try again later.');
       }
-
-      if (data) {
-        setStatus('You are already subscribed!');
-        return;
-      }
-
-      const { error: insertError } = await supabase
-        .from('newsletter_subscribers')
-        .insert([{ email }]);
-
-      if (insertError) {
-        throw insertError;
-      }
-
-      setStatus('Thank you for subscribing!');
-      setEmail('');
-    } catch (error) {
-      console.error('Error subscribing:', error.message);
-      setStatus('Subscription failed. Please try again later.');
-    }
   };
 
   return (
