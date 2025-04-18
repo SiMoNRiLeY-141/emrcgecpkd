@@ -1,37 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import supabase from '../pages/api/supabase';
 import Image from 'next/image';
 
 const Committee = () => {
   const [committee, setCommittee] = useState([]);
 
   useEffect(() => {
-    const fetchCommittee = async () => {
-      try {
-        const { data, error } = await supabase.from('committee').select('*');
-        if (error) {
-          throw error;
-        }
-
-        if (!data) {
-          setCommittee([]); // Handle null or undefined data
-          return;
-        }
-        setCommittee(data);
-      } catch (error) {
-        console.error('Error fetching committee data:', error.message);
-      }
-    };
+      const fetchCommittee = async () => {
+          try {
+              const response = await fetch('/api/committee');
+              if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              const data = await response.json();
+              setCommittee(data);
+          } catch (error) {
+              console.error('Error fetching committee data:', error);
+              setCommittee([]);
+          }
+      };
 
     fetchCommittee();
   }, []);
 
-  return (
+    return (
     <div className="committee-container">
       <h2>Executive Committee</h2>
       <div className="committee-members">
-        {committee.map((member, index) => (
-          <div key={index} className="member-card">
+          {committee.map((member, index) => (
+              <div key={index} className="member-card">
             <div className="image-wrapper">
               <Image
                 src={member.photo_url}
@@ -43,7 +39,7 @@ const Committee = () => {
             </div>
             <h3>{member.name}</h3>
             <p>{member.position}</p>
-          </div>
+              </div>
         ))}
       </div>
     </div>
@@ -51,3 +47,4 @@ const Committee = () => {
 };
 
 export default Committee;
+
