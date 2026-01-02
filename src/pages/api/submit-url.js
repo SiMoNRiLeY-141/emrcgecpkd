@@ -33,7 +33,7 @@ export default async function handler(req, res) {
         if (response.ok) {
           console.log(`URLs submitted successfully: ${urls}`);
         } else {
-          console.error(`Failed to submit URLs: ${urls}`, await response.text());
+          console.error('Failed to submit URLs: %s', urls, await response.text());
         }
       } catch (error) {
         console.error('Error submitting URLs to IndexNow:', error);
