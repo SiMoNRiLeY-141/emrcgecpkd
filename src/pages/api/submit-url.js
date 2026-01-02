@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         });
     
         if (response.ok) {
-          console.log(`URLs submitted successfully: ${urls}`);
+          console.log('URLs submitted successfully: %s', urls);
         } else {
           console.error('Failed to submit URLs: %s', urls, await response.text());
         }
