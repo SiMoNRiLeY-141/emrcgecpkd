@@ -3,12 +3,12 @@ export default {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'tptqglihfsppnrrtukvw.supabase.co',
+        hostname: 'jfgkhseftiwquikjuhcv.supabase.co',
         pathname: '/storage/v1/object/sign/images/**',
       },
       {
         protocol: 'https',
-        hostname: 'tptqglihfsppnrrtukvw.supabase.co',
+        hostname: 'jfgkhseftiwquikjuhcv.supabase.co',
         pathname: '/storage/v1/object/sign/assets/logos/**',
       },
     ],

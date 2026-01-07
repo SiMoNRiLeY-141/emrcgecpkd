@@ -15,7 +15,7 @@ const schemaMarkup = {
   name: "EMRC GEC Palakkad",
   alternateName: "Electrical Maintenance and Research Club GEC Palakkad",
   url: "https://emrcgecpkd.vercel.app",
-  logo: "https://emrcgecpkd.vercel.app/_next/image?url=https%3A%2F%2Ftptqglihfsppnrrtukvw.supabase.co%2Fstorage%2Fv1%2Fobject%2Fsign%2Fassets%2Flogos%2Femrc.webp%3Ftoken%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZW1yYy53ZWJwIiwiaWF0IjoxNzE3NTcxNDY0LCJleHAiOjIwMzI5MzE0NjR9.hxUAaSoUgf3Her8CiMUdjIaTDYr1d_hGrOUZR3VL3wI%26t%3D2024-06-05T07%253A11%253A05.557Z&w=128&q=75",
+  logo: "https://emrcgecpkd.vercel.app/_next/image?url=https%3A%2F%2Fjfgkhseftiwquikjuhcv.supabase.co%2Fstorage%2Fv1%2Fobject%2Fsign%2Fassets%2Flogos%2Femrc.webp%3Ftoken%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZW1yYy53ZWJwIiwiaWF0IjoxNzE3NTcxNDY0LCJleHAiOjIwMzI5MzE0NjR9.hxUAaSoUgf3Her8CiMUdjIaTDYr1d_hGrOUZR3VL3wI%26t%3D2024-06-05T07%253A11%253A05.557Z&w=128&q=75",
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "",
@@ -76,7 +76,7 @@ const HomePage = () => {
         />
         <meta
           property="og:image"
-          content="https://tptqglihfsppnrrtukvw.supabase.co/storage/v1/object/sign/assets/logos/pre.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9vcy9wcmUuanBnIiwiaWF0IjoxNzE2Mzg5OTE3LCJleHAiOjIwMzE3NDk5MTd9.5drTGw6A8c_eRDFh1Kxox-E6tQ34Ksg8DcxlMOTu-kU&t=2024-05-22T14%3A58%3A38.182Z"
+          content="https://jfgkhseftiwquikjuhcv.supabase.co/storage/v1/object/sign/assets/logos/pre.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhc3NldHMvbG9vcy9wcmUuanBnIiwiaWF0IjoxNzE2Mzg5OTE3LCJleHAiOjIwMzE3NDk5MTd9.5drTGw6A8c_eRDFh1Kxox-E6tQ34Ksg8DcxlMOTu-kU&t=2024-05-22T14%3A58%3A38.182Z"
         />
         <meta property="og:image:width" content="500" />
         <meta property="og:image:height" content="281" />
