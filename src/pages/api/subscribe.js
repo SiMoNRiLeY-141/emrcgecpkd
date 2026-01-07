@@ -1,5 +1,4 @@
 // src/pages/api/subscribe.js
-// src/pages/api/subscribe.js
 import supabase from './supabase';
 
 export default async function handler(req, res) {

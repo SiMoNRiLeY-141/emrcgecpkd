@@ -1,5 +1,4 @@
 // src/pages/api/news.js
-// src/pages/api/news.js
 import supabase from './supabase';
 
 export default async function handler(req, res) {

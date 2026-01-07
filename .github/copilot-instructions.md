@@ -51,8 +51,8 @@ npm run build && npm start     # Production build
 ### Environment Variables
 Create `.env.local`:
 ```
-NEXT_PUBLIC_SUPABASE_URL=https://tptqglihfsppnrrtukvw.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon_key>
+NEXT_PUBLIC_SUPABASE_URL=https://jfgkhseftiwquikjuhcv.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable_key>
 ```
 
 ### Deployment

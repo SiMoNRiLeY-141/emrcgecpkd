@@ -51,7 +51,7 @@ const News = () => {
             <div className="news-scroll">
                 {news.map((item, index) => (
                     <div
-                        key={index}
+                        key={item.id}
                         className={`news-item ${index === currentIndex ? 'active' : ''}`}
                     >
                         <a href={item.url} target="_blank" rel="noopener noreferrer">

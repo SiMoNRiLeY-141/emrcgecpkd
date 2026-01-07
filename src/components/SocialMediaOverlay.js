@@ -25,8 +25,6 @@ const SocialMediaOverlay = () => {
       </a>
       <a
         href="mailto:emrc@gecskp.ac.in"
-        target="_blank"
-        rel="noopener noreferrer"
         aria-label="Send us an email"
       >
         <FontAwesomeIcon icon={faEnvelope} size="2x" />

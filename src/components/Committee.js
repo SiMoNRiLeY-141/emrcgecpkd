@@ -26,8 +26,8 @@ const Committee = () => {
     <div className="committee-container">
       <h2>Executive Committee</h2>
       <div className="committee-members">
-          {committee.map((member, index) => (
-              <div key={index} className="member-card">
+          {committee.map((member) => (
+              <div key={member.id} className="member-card">
             <div className="image-wrapper">
               <Image
                 src={member.photo_url}
