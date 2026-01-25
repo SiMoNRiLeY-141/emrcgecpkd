@@ -4,12 +4,12 @@ export default {
       {
         protocol: 'https',
         hostname: 'jfgkhseftiwquikjuhcv.supabase.co',
-        pathname: '/storage/v1/object/sign/images/**',
+        pathname: '/storage/v1/object/public/**',
       },
       {
         protocol: 'https',
         hostname: 'jfgkhseftiwquikjuhcv.supabase.co',
-        pathname: '/storage/v1/object/sign/assets/logos/**',
+        pathname: '/storage/v1/object/sign/**',
       },
     ],
   },
