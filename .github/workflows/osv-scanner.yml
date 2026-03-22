@@ -16,12 +16,17 @@ on:
     branches: [ "master" ]  # Triggers the workflow when code is pushed to the master branch
 
 permissions:
+  actions: read             # Required by reusable workflow for SARIF/code scanning integration
   security-events: write    # Allows writing security events to upload SARIF files to the security tab
   contents: read            # Allows reading commit contents
 
 jobs:
   scan-scheduled:
     if: ${{ github.event_name == 'push' || github.event_name == 'schedule' }}
+    permissions:
+      actions: read
+      security-events: write
+      contents: read
     uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.3" # Uses reusable workflow for scheduled scans
     with:
       scan-args: |-         # Custom arguments for the OSV-Scanner
@@ -31,6 +36,10 @@ jobs:
 
   scan-pr:
     if: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+    permissions:
+      actions: read
+      security-events: write
+      contents: read
     uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.3" # Uses reusable workflow for PR scans
     with:
       scan-args: |-         # Custom arguments for the OSV-Scanner
