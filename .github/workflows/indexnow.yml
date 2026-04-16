@@ -2,31 +2,55 @@ name: Submit Main Page to IndexNow
 
 on:
   push:
-    branches:
-      - main
+    branches: [master]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "next.config.*"
+      - "package.json"
+      - "package-lock.json"
+      - "pnpm-lock.yaml"
+      - "yarn.lock"
+      - ".github/workflows/indexnow.yml"
+  workflow_dispatch: {}
+
+concurrency:
+  group: indexnow-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   submit-indexnow:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Trigger Vercel Build
+      - name: Trigger Vercel Deploy Hook
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
         run: |
-          curl -X POST 'https://api.vercel.com/v1/integrations/deploy/prj_VfVA1c2pnVABiSwM7rqPACF842bq/xZgRvm1mbM' \
-          -d '{"url":"https://emrcgecpkd.vercel.app"}'
+          test -n "$VERCEL_DEPLOY_HOOK_URL"
+          curl --fail-with-body --show-error --silent \
+            --retry 3 --retry-all-errors --max-time 30 \
+            -X POST "$VERCEL_DEPLOY_HOOK_URL"
 
-      - name: Submit Main Page to IndexNow
+      - name: Wait briefly for deploy
+        run: sleep 20
+
+      - name: Submit to IndexNow
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
         run: |
-          curl -X POST 'https://api.indexnow.org/indexnow' \
-          -H 'Content-Type: application/json' \
-          -d '{
-                "host": "emrcgecpkd.vercel.app",
-                "key": "d6c7e9a21f2c436795027ef98a9b4ed9",
-                "keyLocation": "https://emrcgecpkd.vercel.app/d6c7e9a21f2c436795027ef98a9b4ed9.txt",
-                "urlList": [
-                    "https://emrcgecpkd.vercel.app"
-                ]
-              }'
+          test -n "$INDEXNOW_KEY"
+          curl --fail-with-body --show-error --silent \
+            --retry 3 --retry-all-errors --max-time 30 \
+            -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n \
+              --arg host "emrcgecpkd.vercel.app" \
+              --arg key "$INDEXNOW_KEY" \
+              --arg keyLocation "https://emrcgecpkd.vercel.app/$INDEXNOW_KEY.txt" \
+              --arg url "https://emrcgecpkd.vercel.app/" \
+              '{host:$host,key:$key,keyLocation:$keyLocation,urlList:[$url]}')"
