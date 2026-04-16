@@ -20,6 +20,7 @@
     "next": "^16.2.4",
     "next-sitemap": "^4.2.3",
     "postcss": "^8.5.10",
+    "postgres": "^3.4.9",
     "react": "^19.2.4",
     "react-dom": "^19.2.5"
   },
