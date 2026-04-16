@@ -124,6 +124,40 @@ describe('News component', () => {
     expect(updatedItems[1]).toHaveClass('active');
   });
 
+  it('shows "No news available." when fetch throws a network error', async () => {
+    global.fetch = jest.fn().mockRejectedValue(new Error('Network failure'));
+
+    await act(async () => {
+      render(<News />);
+    });
+
+    expect(screen.getByText('No news available.')).toBeInTheDocument();
+  });
+
+  it('renders news item links with correct href, target, and rel attributes', async () => {
+    const mockNews = [
+      {
+        id: 1,
+        title: 'Workshop on Robotics',
+        image_url: 'https://example.com/img1.jpg',
+        url: 'https://example.com/event/1',
+      },
+    ];
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue(mockNews),
+    });
+
+    await act(async () => {
+      render(<News />);
+    });
+
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', 'https://example.com/event/1');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
   it('wraps around to the first item after the last item', async () => {
     const mockNews = [
       { id: 1, title: 'First Item', image_url: 'https://example.com/img1.jpg', url: 'https://example.com/1' },

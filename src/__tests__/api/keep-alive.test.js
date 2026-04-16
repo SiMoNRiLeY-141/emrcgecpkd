@@ -66,4 +66,17 @@ describe('GET /api/keep-alive', () => {
     expect(res.statusCode).toBe(500);
     expect(res.body.message).toBe('Error pinging Supabase');
   });
+
+  it('returns 500 when the Supabase query throws an unexpected exception', async () => {
+    mockSelect.mockReturnValue({
+      limit: jest.fn().mockRejectedValue(new Error('Unexpected crash')),
+    });
+
+    const req = {};
+    const res = createMockRes();
+    await handler(req, res);
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body.message).toBe('Error pinging Supabase');
+  });
 });
