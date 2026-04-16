@@ -18,6 +18,18 @@ This repository contains the source code and assets for the EMRC GEC Palakkad of
 
 View the website at: [EMRC Website](https://emrcgecpkd.vercel.app)
 
+## Environment Variables
+
+Create `.env.local` with the required values:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://jfgkhseftiwquikjuhcv.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable_key>
+NEXT_PUBLIC_CLARITY_PROJECT_ID=<clarity_project_id>
+```
+
+Microsoft Clarity will initialize automatically on the client when `NEXT_PUBLIC_CLARITY_PROJECT_ID` is set.
+
 ## License
 
 All rights reserved. The content of this repository is the property of the Electrical Maintenance and Research Club (EMRC) at Govt. Engineering College, Sreekrishnapuram. Unauthorized copying, distribution, or modification of any files is strictly prohibited without prior written permission from the club.
