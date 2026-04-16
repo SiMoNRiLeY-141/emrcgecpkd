@@ -22,6 +22,11 @@ class MyDocument extends Document {
               `,
             }}
           />
+          <meta
+            name="robots"
+            content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+          />
+          <meta name="bingbot" content="index, follow" />
           {/* Canonical Tag */}
           <link rel="canonical" href="https://emrcgecpkd.vercel.app/" />
         </Head>

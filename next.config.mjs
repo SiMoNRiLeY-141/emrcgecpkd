@@ -16,6 +16,15 @@ export default {
   async headers() {
     return [
       {
+        source: '/',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow',
+          },
+        ],
+      },
+      {
         // Set cache headers for image files
         source: '/_next/image(.*)',
         headers: [
