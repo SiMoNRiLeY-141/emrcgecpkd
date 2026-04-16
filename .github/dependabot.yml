@@ -1,11 +1,53 @@
 version: 2
 updates:
-  - package-ecosystem: 'npm'
-    directory: '/'
+  - package-ecosystem: npm
+    directory: "/"
     schedule:
-      interval: 'weekly'
+      interval: weekly
+
+    # Prevent Dependabot from opening too many PRs at once
+    open-pull-requests-limit: 10
+
+    # Keep PRs up-to-date with master automatically
+    rebase-strategy: auto
+
+    labels:
+      - dependencies
+
     groups:
+      # Security updates: keep as a single PR whenever possible
       npm-security-updates:
         applies-to: security-updates
+        patterns:
+          - "*"
+
+      # Version updates: split by prod/dev and by major vs minor/patch to reduce risk
+      npm-prod-major:
+        dependency-type: production
+        update-types:
+          - "major"
+        patterns:
+          - "*"
+
+      npm-prod-minor-patch:
+        dependency-type: production
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "*"
+
+      npm-dev-major:
+        dependency-type: development
+        update-types:
+          - "major"
+        patterns:
+          - "*"
+
+      npm-dev-minor-patch:
+        dependency-type: development
+        update-types:
+          - "minor"
+          - "patch"
         patterns:
           - "*"
