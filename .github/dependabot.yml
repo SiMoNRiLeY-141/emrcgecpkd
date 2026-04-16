@@ -4,3 +4,8 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+    groups:
+      npm-security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
