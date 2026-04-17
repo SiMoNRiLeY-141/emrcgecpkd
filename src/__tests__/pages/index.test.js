@@ -103,6 +103,23 @@ describe('HomePage (pages/index.js)', () => {
     expect(schema.url).toBe('https://emrcgecpkd.vercel.app');
   });
 
+  it('includes canonical and robots directives for crawlers', async () => {
+    render(<HomePage />);
+    await act(async () => {});
+
+    const canonical = document.querySelector('link[rel="canonical"]');
+    expect(canonical).not.toBeNull();
+    expect(canonical.getAttribute('href')).toBe('https://emrcgecpkd.vercel.app');
+
+    const robots = document.querySelector('meta[name="robots"]');
+    expect(robots).not.toBeNull();
+    expect(robots.getAttribute('content')).toContain('index, follow');
+
+    const bingbot = document.querySelector('meta[name="bingbot"]');
+    expect(bingbot).not.toBeNull();
+    expect(bingbot.getAttribute('content')).toBe('index, follow');
+  });
+
   it('JSON-LD schema contains committee member info', async () => {
     const { container } = render(<HomePage />);
     await act(async () => {});

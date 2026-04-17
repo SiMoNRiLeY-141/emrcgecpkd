@@ -9,13 +9,14 @@ const Committee = lazy(() => import("../components/Committee"));
 const ContactSection = lazy(() => import("../components/ContactSection"));
 const News = lazy(() => import("../components/News"));
 const Newsletter = lazy(() => import("../components/Newsletter"));
+const siteUrl = "https://emrcgecpkd.vercel.app";
 const schemaMarkup = {
   "@context": "https://schema.org",
   "@type": "CollegeOrUniversity",
   name: "EMRC GEC Palakkad",
   alternateName: "Electrical Maintenance and Research Club GEC Palakkad",
-  url: "https://emrcgecpkd.vercel.app",
-  logo: "https://emrcgecpkd.vercel.app/_next/image?url=https%3A%2F%2Fjfgkhseftiwquikjuhcv.supabase.co%2Fstorage%2Fv1%2Fobject%2Fsign%2Fassets%2Flogos%2Femrc.webp%3Ftoken%3DeyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81ZjY3MzJmMi0zYjEzLTQzM2UtYTZhYy02MmRjYjgxZWU3NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZW1yYy53ZWJwIiwiaWF0IjoxNzY3ODAzNDcxLCJleHAiOjIwODMxNjM0NzF9.442mNilSOJn3gO0CpuKXEbAp6oZWaMp0UDlANM7C4lU%26w%3D128%26q%3D75",
+  url: siteUrl,
+  logo: `${siteUrl}/_next/image?url=https%3A%2F%2Fjfgkhseftiwquikjuhcv.supabase.co%2Fstorage%2Fv1%2Fobject%2Fsign%2Fassets%2Flogos%2Femrc.webp%3Ftoken%3DeyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81ZjY3MzJmMi0zYjEzLTQzM2UtYTZhYy02MmRjYjgxZWU3NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZW1yYy53ZWJwIiwiaWF0IjoxNzY3ODAzNDcxLCJleHAiOjIwODMxNjM0NzF9.442mNilSOJn3gO0CpuKXEbAp6oZWaMp0UDlANM7C4lU%26w%3D128%26q%3D75`,
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "",
@@ -58,6 +59,12 @@ const HomePage = () => {
           content="Electrical Maintenance and Research Club at Govt. Engineering College, Sreekrishnapuram. Stay updated with our news, events, and research activities."
         />
         <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+        <meta name="bingbot" content="index, follow" />
+        <link rel="canonical" href={siteUrl} />
+        <meta
           name="google-site-verification"
           content="RsmQDkTKhMkEqmP3ipd5IGfsQoeIZd3glUMDWGcEhUI"
         />
@@ -80,7 +87,7 @@ const HomePage = () => {
         />
         <meta property="og:image:width" content="500" />
         <meta property="og:image:height" content="281" />
-        <meta property="og:url" content="https://emrcgecpkd.vercel.app" />
+        <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
         <script
           type="application/ld+json"
