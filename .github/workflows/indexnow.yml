@@ -1,4 +1,4 @@
-name: Submit Main Page to IndexNow
+name: Submit URLs to IndexNow (after Vercel deploy)
 
 on:
   push:
@@ -18,39 +18,95 @@ concurrency:
   group: indexnow-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   submit-indexnow:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
+
+    env:
+      SITE_HOST: emrcgecpkd.vercel.app
+      SITE_URL: https://emrcgecpkd.vercel.app
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Validate required secrets
+        shell: bash
+        run: |
+          if [[ -z "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}" ]]; then
+            echo "Missing secret: VERCEL_DEPLOY_HOOK_URL" >&2
+            exit 1
+          fi
+          if [[ -z "${{ secrets.INDEXNOW_KEY }}" ]]; then
+            echo "Missing secret: INDEXNOW_KEY" >&2
+            exit 1
+          fi
+
+      - name: Install jq (deterministic)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
       - name: Trigger Vercel Deploy Hook
         env:
           VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
         run: |
-          test -n "$VERCEL_DEPLOY_HOOK_URL"
           curl --fail-with-body --show-error --silent \
             --retry 3 --retry-all-errors --max-time 30 \
             -X POST "$VERCEL_DEPLOY_HOOK_URL"
 
-      - name: Wait briefly for deploy
-        run: sleep 20
+      - name: Wait for site to become reachable
+        shell: bash
+        run: |
+          echo "Waiting for ${SITE_URL}/ to respond..."
+          for i in {1..30}; do
+            code="$(curl -s -o /dev/null -w "%{http_code}" "${SITE_URL}/" || true)"
+            if [[ "$code" == "200" || "$code" == "304" ]]; then
+              echo "Site is reachable (HTTP $code)."
+              exit 0
+            fi
+            echo "Attempt $i/30: HTTP $code. Retrying in 5s..."
+            sleep 5
+          done
+          echo "Timed out waiting for site to become reachable." >&2
+          exit 1
 
-      - name: Submit to IndexNow
+      - name: (Optional) Verify IndexNow key file is accessible
+        shell: bash
         env:
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
         run: |
-          test -n "$INDEXNOW_KEY"
+          code="$(curl -s -o /dev/null -w "%{http_code}" "${SITE_URL}/${INDEXNOW_KEY}.txt" || true)"
+          if [[ "$code" != "200" && "$code" != "304" ]]; then
+            echo "Warning: key file not accessible at ${SITE_URL}/${INDEXNOW_KEY}.txt (HTTP $code)" >&2
+            # don't fail the workflow; comment the next line in if you want it strict:
+            # exit 1
+          else
+            echo "Key file accessible (HTTP $code)."
+          fi
+
+      - name: Submit URLs to IndexNow
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          payload="$(jq -n \
+            --arg host "${SITE_HOST}" \
+            --arg key "${INDEXNOW_KEY}" \
+            --arg keyLocation "${SITE_URL}/${INDEXNOW_KEY}.txt" \
+            --arg url1 "${SITE_URL}/" \
+            --arg url2 "${SITE_URL}/sitemap.xml" \
+            --arg url3 "${SITE_URL}/robots.txt" \
+            '{host:$host,key:$key,keyLocation:$keyLocation,urlList:[$url1,$url2,$url3]}')"
+
+          echo "Submitting payload:"
+          echo "$payload" | jq '.'
+
           curl --fail-with-body --show-error --silent \
             --retry 3 --retry-all-errors --max-time 30 \
             -X POST "https://api.indexnow.org/indexnow" \
             -H "Content-Type: application/json" \
-            -d "$(jq -n \
-              --arg host "emrcgecpkd.vercel.app" \
-              --arg key "$INDEXNOW_KEY" \
-              --arg keyLocation "https://emrcgecpkd.vercel.app/$INDEXNOW_KEY.txt" \
-              --arg url "https://emrcgecpkd.vercel.app/" \
-              '{host:$host,key:$key,keyLocation:$keyLocation,urlList:[$url]}')"
+            -d "$payload"
