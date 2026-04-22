@@ -58,6 +58,13 @@ describe('HomePage (pages/index.js)', () => {
     expect(screen.getByTestId('social-media-overlay')).toBeInTheDocument();
   });
 
+  it('renders a main landmark for page content', async () => {
+    const { container } = render(<HomePage />);
+    await act(async () => {});
+
+    expect(container.querySelector('main')).toBeInTheDocument();
+  });
+
   it('includes a <title> tag with the correct page title', async () => {
     render(<HomePage />);
     await act(async () => {});

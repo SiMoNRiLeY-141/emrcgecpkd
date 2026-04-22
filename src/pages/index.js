@@ -95,11 +95,13 @@ const HomePage = () => {
         />
       </Head>
       <Suspense fallback={<div>Loading...</div>}>
-        <Header />
-        <News />
-        <Committee />
-        <Newsletter />
-        <ContactSection />
+        <main>
+          <Header />
+          <News />
+          <Committee />
+          <Newsletter />
+          <ContactSection />
+        </main>
         <SocialMediaOverlay />
       </Suspense>
     </div>
