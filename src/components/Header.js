@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import Head from "next/head";
 
 const Header = () => {
   const logo1Url =
@@ -9,12 +8,7 @@ const Header = () => {
     "https://jfgkhseftiwquikjuhcv.supabase.co/storage/v1/object/sign/assets/logos/gec.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81ZjY3MzJmMi0zYjEzLTQzM2UtYTZhYy02MmRjYjgxZWU3NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZ2VjLndlYnAiLCJpYXQiOjE3Njc4MDE5NDUsImV4cCI6MjA4MzE2MTk0NX0.UH7bIc1XdtoAHdOJi8IeLRGNjwuTRI0Fzrdrehdak5E";
 
   return (
-    <>
-      <Head>
-        <link rel="preload" as="image" href={logo1Url} />
-        <link rel="preload" as="image" href={logo2Url} />
-      </Head>
-      <div className="logo-container">
+    <div className="logo-container">
         <div className="logo-wrapper">
           <Image
             src={logo1Url}
@@ -22,6 +16,10 @@ const Header = () => {
             className="logo"
             width={100}
             height={100}
+            loading="lazy"
+            fetchPriority="low"
+            quality={65}
+            sizes="100px"
           />
         </div>
         <h1>
@@ -36,10 +34,13 @@ const Header = () => {
             className="logo"
             width={128}
             height={153}
+            loading="lazy"
+            fetchPriority="low"
+            quality={65}
+            sizes="128px"
           />
         </div>
       </div>
-    </>
   );
 };
 
