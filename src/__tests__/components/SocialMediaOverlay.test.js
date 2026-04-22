@@ -2,20 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import SocialMediaOverlay from '../../components/SocialMediaOverlay';
 
-// Mock FontAwesome to render simple placeholders
-jest.mock('@fortawesome/react-fontawesome', () => ({
-  FontAwesomeIcon: ({ 'aria-label': ariaLabel, ...props }) => (
-    <span data-testid="fa-icon" aria-label={ariaLabel} />
-  ),
-}));
-jest.mock('@fortawesome/free-brands-svg-icons', () => ({
-  faInstagram: 'faInstagram',
-  faLinkedin: 'faLinkedin',
-}));
-jest.mock('@fortawesome/free-solid-svg-icons', () => ({
-  faEnvelope: 'faEnvelope',
-}));
-
 describe('SocialMediaOverlay component', () => {
   it('renders the Instagram link with the correct href and aria-label', () => {
     render(<SocialMediaOverlay />);

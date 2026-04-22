@@ -10,7 +10,7 @@ This repository contains the source code and assets for the EMRC GEC Palakkad of
 
 - **Responsive Design**: The website is optimized for various screen sizes, ensuring a seamless experience across devices.
 - **Dynamic Content**: Content such as news updates, committee member details, and contact information are dynamically loaded from data sources.
-- **Lazy Loading**: Components are lazily loaded to improve performance, especially on slower connections.
+- **Pre-rendered Content**: News and committee sections are pre-rendered with periodic revalidation for fast first loads.
 - **Contact Section**: Allows visitors to get in touch with the club for inquiries, collaborations, or other purposes.
 - **Social Media Integration**: Quick access to the club's social media profiles for updates and announcements.
 

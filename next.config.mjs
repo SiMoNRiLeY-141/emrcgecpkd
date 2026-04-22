@@ -3,6 +3,7 @@ export default {
     // Add smaller breakpoints so Next can serve tighter image sizes for member cards.
     deviceSizes: [180, 256, 384, 640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 180, 232, 256, 384, 512],
+    qualities: [65, 68, 75],
     remotePatterns: [
       {
         protocol: 'https',
@@ -27,16 +28,6 @@ export default {
           },
         ],
       },
-      {
-        // Set cache headers for other static files (e.g., JavaScript, CSS)
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=604800, must-revalidate',
-          },
-        ],
-      },
     ];
 
     const imageCacheHeader = {
@@ -50,8 +41,19 @@ export default {
       ],
     };
 
+    const staticCacheHeader = {
+      // Set cache headers for other static files (e.g., JavaScript, CSS) in production only.
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=604800, must-revalidate',
+        },
+      ],
+    };
+
     if (process.env.NODE_ENV === 'production') {
-      return [...baseHeaders, imageCacheHeader];
+      return [...baseHeaders, imageCacheHeader, staticCacheHeader];
     }
 
     return baseHeaders;
