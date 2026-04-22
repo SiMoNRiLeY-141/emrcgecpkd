@@ -31,7 +31,7 @@ const Committee = ({ initialCommittee = [] }) => {
     <div className="committee-container">
       <h2>Executive Committee</h2>
       <div className="committee-members">
-          {committee.map((member, index) => (
+          {committee.map((member) => (
               <div key={member.id} className="member-card">
             <div className="image-wrapper">
               <Image
@@ -43,7 +43,7 @@ const Committee = ({ initialCommittee = [] }) => {
                 loading="lazy"
                 fetchPriority="low"
                 quality={68}
-                sizes="(max-width: 768px) 38vw, 185px"
+                sizes="(max-width: 768px) 30vw, 185px"
               />
             </div>
             <h3>{member.name}</h3>

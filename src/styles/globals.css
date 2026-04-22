@@ -178,7 +178,7 @@ h2 {
   }
 
   .member-card {
-    flex: 0 1 calc(60% - 10px);
+    flex: 0 1 calc(50% - 10px);
     min-height: 0;
   }
 }
@@ -229,7 +229,18 @@ h2 {
   transition: transform 0.3s ease-in-out;
 }
 
+.social-media-overlay svg {
+  width: 30px;
+  height: 30px;
+  fill: #111;
+  transition: transform 0.3s ease-in-out;
+}
+
 .social-media-overlay img:hover {
+  transform: scale(1.2);
+}
+
+.social-media-overlay svg:hover {
   transform: scale(1.2);
 }
 
