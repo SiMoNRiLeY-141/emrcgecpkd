@@ -40,7 +40,6 @@ const Committee = ({ initialCommittee = [] }) => {
                 className="member-image"
                 width={512}
                 height={512}
-                priority={index === 0}
                 loading={index === 0 ? 'eager' : 'lazy'}
                 sizes="(max-width: 768px) 60vw, 232px"
               />

@@ -65,9 +65,9 @@ const News = ({ initialNews = [] }) => {
                                 alt={item.title}
                                 width={819}
                                 height={460}
-                                priority={index === 0}
                                 loading={index !== 0 ? "lazy" : "eager"}
-                              sizes="(max-width: 768px) 100vw, 800px"
+                                fetchPriority={index === 0 ? 'high' : 'auto'}
+                                sizes="(max-width: 768px) 100vw, 800px"
                             />
                         </a>
                         <p>{item.title}</p>
