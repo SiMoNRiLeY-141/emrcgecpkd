@@ -153,41 +153,6 @@ h2 {
   min-height: 1.4em;
 }
 
-.member-card-skeleton {
-  pointer-events: none;
-}
-
-.skeleton-circle,
-.skeleton-line {
-  background: linear-gradient(90deg, #e7e7e7 0%, #f4f4f4 50%, #e7e7e7 100%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.4s linear infinite;
-}
-
-.skeleton-line {
-  border-radius: 999px;
-  margin: 14px auto 0;
-}
-
-.skeleton-line-name {
-  width: 68%;
-  height: 20px;
-}
-
-.skeleton-line-role {
-  width: 46%;
-  height: 16px;
-}
-
-@keyframes skeleton-shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
 @media screen and (max-width: 768px) {
   .logo-container {
     flex-direction: row;

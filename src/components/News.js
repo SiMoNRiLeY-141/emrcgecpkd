@@ -60,9 +60,9 @@ const News = () => {
                                 alt={item.title}
                                 width={819}
                                 height={460}
-                                layout="responsive"
                                 priority={index === 0}
                                 loading={index !== 0 ? "lazy" : "eager"}
+                              sizes="(max-width: 768px) 100vw, 800px"
                             />
                         </a>
                         <p>{item.title}</p>

@@ -14,23 +14,13 @@ export default {
     ],
   },
   async headers() {
-    return [
+    const baseHeaders = [
       {
         source: '/',
         headers: [
           {
             key: 'X-Robots-Tag',
             value: 'index, follow',
-          },
-        ],
-      },
-      {
-        // Set cache headers for image files
-        source: '/_next/image(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
@@ -45,6 +35,23 @@ export default {
         ],
       },
     ];
+
+    const imageCacheHeader = {
+      // Set cache headers for optimized image responses in production only.
+      source: '/_next/image(.*)',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable',
+        },
+      ],
+    };
+
+    if (process.env.NODE_ENV === 'production') {
+      return [...baseHeaders, imageCacheHeader];
+    }
+
+    return baseHeaders;
   },
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
