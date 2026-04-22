@@ -2,11 +2,16 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 
-const News = () => {
-  const [news, setNews] = useState([])
+const News = ({ initialNews = [] }) => {
+  const [news, setNews] = useState(initialNews)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const hasInitialData = initialNews.length > 0
 
   useEffect(() => {
+    if (hasInitialData) {
+      return
+    }
+
     const fetchNews = async () => {
       try {
         const response = await fetch('/api/news')
@@ -27,7 +32,7 @@ const News = () => {
       };
 
     fetchNews();
-  }, []);
+  }, [hasInitialData]);
 
     useEffect(() => {
         if (news.length === 0) return;

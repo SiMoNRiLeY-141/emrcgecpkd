@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-const Committee = () => {
-  const [committee, setCommittee] = useState([]);
+const Committee = ({ initialCommittee = [] }) => {
+  const [committee, setCommittee] = useState(initialCommittee);
+  const hasInitialData = initialCommittee.length > 0;
 
   useEffect(() => {
+    if (hasInitialData) {
+      return;
+    }
+
       const fetchCommittee = async () => {
           try {
               const response = await fetch('/api/committee');
@@ -20,7 +25,7 @@ const Committee = () => {
       };
 
     fetchCommittee();
-  }, []);
+  }, [hasInitialData]);
 
     return (
     <div className="committee-container">
@@ -37,6 +42,7 @@ const Committee = () => {
                 height={512}
                 priority={index === 0}
                 loading={index === 0 ? 'eager' : 'lazy'}
+                sizes="(max-width: 768px) 60vw, 232px"
               />
             </div>
             <h3>{member.name}</h3>

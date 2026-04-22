@@ -1,14 +1,12 @@
-import React, { Suspense, lazy } from "react";
+import React from "react";
 import Head from "next/head";
 
-const Header = lazy(() => import("../components/Header"));
-const SocialMediaOverlay = lazy(
-  () => import("../components/SocialMediaOverlay"),
-);
-const Committee = lazy(() => import("../components/Committee"));
-const ContactSection = lazy(() => import("../components/ContactSection"));
-const News = lazy(() => import("../components/News"));
-const Newsletter = lazy(() => import("../components/Newsletter"));
+import Header from "../components/Header";
+import SocialMediaOverlay from "../components/SocialMediaOverlay";
+import Committee from "../components/Committee";
+import ContactSection from "../components/ContactSection";
+import News from "../components/News";
+import Newsletter from "../components/Newsletter";
 const siteUrl = "https://emrcgecpkd.vercel.app";
 const schemaMarkup = {
   "@context": "https://schema.org",
@@ -44,7 +42,7 @@ const schemaMarkup = {
   ],
 };
 
-const HomePage = () => {
+const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
   return (
     <div className="App">
       <Head>
@@ -115,18 +113,46 @@ const HomePage = () => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
         />
       </Head>
-      <Suspense fallback={<div>Loading...</div>}>
-        <main>
-          <Header />
-          <News />
-          <Committee />
-          <Newsletter />
-          <ContactSection />
-        </main>
-        <SocialMediaOverlay />
-      </Suspense>
+      <main>
+        <Header />
+        <News initialNews={initialNews} />
+        <Committee initialCommittee={initialCommittee} />
+        <Newsletter />
+        <ContactSection />
+      </main>
+      <SocialMediaOverlay />
     </div>
   );
 };
+
+export async function getStaticProps() {
+  try {
+    const { default: supabase } = await import("./api/supabase");
+    const [{ data: newsData, error: newsError }, { data: committeeData, error: committeeError }] = await Promise.all([
+      supabase.from("news").select("id, title, image_url, url"),
+      supabase.from("committee").select("id, name, position, photo_url").order("id", { ascending: true }),
+    ]);
+
+    if (newsError || committeeError) {
+      throw new Error(newsError?.message || committeeError?.message);
+    }
+
+    return {
+      props: {
+        initialNews: newsData || [],
+        initialCommittee: committeeData || [],
+      },
+      revalidate: 300,
+    };
+  } catch {
+    return {
+      props: {
+        initialNews: [],
+        initialCommittee: [],
+      },
+      revalidate: 120,
+    };
+  }
+}
 
 export default HomePage;
