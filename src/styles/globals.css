@@ -71,6 +71,11 @@ h2 {
   min-height: 150px;
 }
 
+.committee-container {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+}
+
 .news-item {
   display: none;
 }

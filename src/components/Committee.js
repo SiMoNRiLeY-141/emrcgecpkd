@@ -38,10 +38,12 @@ const Committee = ({ initialCommittee = [] }) => {
                 src={member.photo_url}
                 alt={member.name}
                 className="member-image"
-                width={512}
-                height={512}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                sizes="(max-width: 768px) 60vw, 232px"
+                width={256}
+                height={256}
+                loading="lazy"
+                fetchPriority="low"
+                quality={68}
+                sizes="(max-width: 768px) 38vw, 185px"
               />
             </div>
             <h3>{member.name}</h3>
