@@ -35,5 +35,20 @@
     "jest-environment-jsdom": "^30.3.0",
     "prettier": "^3.8.3",
     "typescript": "^6.0.2"
+  },
+  "browserslist": {
+    "production": [
+      "Chrome >= 109",
+      "Edge >= 109",
+      "Firefox >= 115",
+      "Safari >= 15.6",
+      "iOS >= 15.6",
+      "not dead"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
