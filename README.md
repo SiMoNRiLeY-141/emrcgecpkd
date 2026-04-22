@@ -25,11 +25,8 @@ Create `.env.local` with the required values:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://jfgkhseftiwquikjuhcv.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable_key>
-NEXT_PUBLIC_CLARITY_PROJECT_ID=<clarity_project_id>
 DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.jfgkhseftiwquikjuhcv.supabase.co:5432/postgres
 ```
-
-Microsoft Clarity will initialize automatically on the client when `NEXT_PUBLIC_CLARITY_PROJECT_ID` is set.
 
 ## License
 
