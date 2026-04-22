@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 const Committee = () => {
   const [committee, setCommittee] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
       const fetchCommittee = async () => {
@@ -16,6 +17,8 @@ const Committee = () => {
           } catch (error) {
               console.error('Error fetching committee data:', error);
               setCommittee([]);
+              } finally {
+                setIsLoading(false);
           }
       };
 
@@ -26,7 +29,19 @@ const Committee = () => {
     <div className="committee-container">
       <h2>Executive Committee</h2>
       <div className="committee-members">
-          {committee.map((member) => (
+          {isLoading
+            ? Array.from({ length: 4 }).map((_, index) => (
+                <div
+                  key={`committee-skeleton-${index}`}
+                  className="member-card member-card-skeleton"
+                  aria-hidden="true"
+                >
+                  <div className="image-wrapper skeleton-circle" />
+                  <div className="skeleton-line skeleton-line-name" />
+                  <div className="skeleton-line skeleton-line-role" />
+                </div>
+              ))
+            : committee.map((member) => (
               <div key={member.id} className="member-card">
             <div className="image-wrapper">
               <Image

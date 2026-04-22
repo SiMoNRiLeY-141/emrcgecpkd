@@ -2,18 +2,21 @@
   font-family: "Saira";
   src: url("/fonts/memjYa2wxmKQyPMrZX79wwYZQMhsyuSLiIvSdyqOvg.woff2")
     format("woff2");
-  font-display: swap;
+  font-display: optional;
 }
+
 @font-face {
   font-family: "Kalam";
   src: url("/fonts/YA9Qr0Wd4kDdMtDqHTLMkiQqtbGs.woff2") format("woff2");
-  font-display: swap;
+  font-display: optional;
 }
+
 @font-face {
   font-family: "Kalam";
   src: url("/fonts/YA9dr0Wd4kDdMthROCfhsCkA.woff2") format("woff2");
-  font-display: swap;
+  font-display: optional;
 }
+
 body {
   background-color: #f8f8f8;
   background-image: url("https://jfgkhseftiwquikjuhcv.supabase.co/storage/v1/object/sign/assets/logos/bg.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81ZjY3MzJmMi0zYjEzLTQzM2UtYTZhYy02MmRjYjgxZWU3NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvYmcud2VicCIsImlhdCI6MTc2NzgwMjAwNiwiZXhwIjoyMDgzMTYyMDA2fQ.c9yuRXgPBh1jk4f2rZsiCZmh7oM4mMjEVj693j3BkJQ");
@@ -93,6 +96,8 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  align-items: stretch;
+  min-height: 420px;
 }
 
 .member-card {
@@ -104,7 +109,8 @@ h2 {
   padding: 20px;
   box-shadow: 0 10px 20px #0000001a;
   transition: transform 0.3s ease-in-out;
-  text-align: center; /* Center text and images */
+  text-align: center;
+  min-height: 380px;
 }
 
 .member-card:hover {
@@ -112,10 +118,10 @@ h2 {
 }
 
 .image-wrapper {
-  width: 70%; /* Adjust size as needed */
+  width: 70%;
   max-width: 512px;
-  height: auto; /* Adjust size as needed */
-  margin: 0 auto 5px; /* Center the wrapper and add bottom margin */
+  height: auto;
+  margin: 0 auto 5px;
   overflow: hidden;
   border-radius: 50%;
   aspect-ratio: 512/512;
@@ -134,6 +140,8 @@ h2 {
   font-size: 120%;
   font-weight: bold;
   font-family: "Kalam", Courier, monospace;
+  line-height: 1.35;
+  min-height: 2.7em;
 }
 
 .member-card p {
@@ -141,6 +149,43 @@ h2 {
   color: rgb(0, 0, 0);
   font-size: 1em;
   font-family: "Kalam", Cambria, serif;
+  line-height: 1.4;
+  min-height: 1.4em;
+}
+
+.member-card-skeleton {
+  pointer-events: none;
+}
+
+.skeleton-circle,
+.skeleton-line {
+  background: linear-gradient(90deg, #e7e7e7 0%, #f4f4f4 50%, #e7e7e7 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s linear infinite;
+}
+
+.skeleton-line {
+  border-radius: 999px;
+  margin: 14px auto 0;
+}
+
+.skeleton-line-name {
+  width: 68%;
+  height: 20px;
+}
+
+.skeleton-line-role {
+  width: 46%;
+  height: 16px;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -159,10 +204,12 @@ h2 {
 
   .committee-members {
     justify-content: center;
+    min-height: 0;
   }
 
   .member-card {
     flex: 0 1 calc(60% - 10px);
+    min-height: 0;
   }
 }
 
@@ -173,6 +220,8 @@ h2 {
 .contact-section p {
   margin: 5px 0;
   font-size: 20px;
+  line-height: 1.5;
+  min-height: 1.5em;
 }
 
 .social-links a {

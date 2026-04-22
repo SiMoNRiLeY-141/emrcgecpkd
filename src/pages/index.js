@@ -72,6 +72,27 @@ const HomePage = () => {
           name="keywords"
           content="EMRC, GEC, EMRC GEC, GEC Palakkad, GECPKD, Government Engineering College, Sreekrishnapuram, Electrical Maintenance and Research Club Palakkad, Electrical Engineering, EMRC Palakkad, EMRC GEC PKD, GECSKP, GECPKD "
         ></meta>
+        <link
+          rel="preload"
+          href="/fonts/memjYa2wxmKQyPMrZX79wwYZQMhsyuSLiIvSdyqOvg.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/YA9Qr0Wd4kDdMtDqHTLMkiQqtbGs.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/YA9dr0Wd4kDdMthROCfhsCkA.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           property="og:title"
