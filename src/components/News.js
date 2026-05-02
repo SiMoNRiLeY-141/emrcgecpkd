@@ -58,9 +58,9 @@ const News = ({ initialNews = [] }) => {
                 <AnimatePresence mode="popLayout" initial={false}>
                     <m.div
                         key={currentIndex}
-                        initial={{ opacity: 0, scale: 1.05, filter: "blur(5px)" }}
-                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, scale: 0.95, filter: "blur(5px)" }}
+                        initial={{ opacity: 0, scale: 1.05 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.8, ease: "easeInOut" }}
                         className="news-item active"
                         style={{ position: 'absolute', width: '100%', height: '100%' }}
