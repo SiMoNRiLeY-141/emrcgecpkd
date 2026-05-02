@@ -52,16 +52,10 @@ const News = ({ initialNews = [] }) => {
   }
 
     return (
-        <motion.div 
-            className="glass-panel news-container"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-        >
+        <div className="glass-panel news-container">
             <h2>Latest News</h2>
             <div className="news-slider">
-                <AnimatePresence mode="popLayout">
+                <AnimatePresence mode="popLayout" initial={false}>
                     <motion.div
                         key={currentIndex}
                         initial={{ opacity: 0, scale: 1.05, filter: "blur(5px)" }}
@@ -89,7 +83,7 @@ const News = ({ initialNews = [] }) => {
                     </motion.div>
                 </AnimatePresence>
             </div>
-        </motion.div>
+        </div>
     );
 }
 
