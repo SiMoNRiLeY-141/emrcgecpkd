@@ -1,12 +1,15 @@
 import React from "react";
 import Head from "next/head";
+import dynamic from "next/dynamic";
 
 import Header from "../components/Header";
-import SocialMediaOverlay from "../components/SocialMediaOverlay";
-import Committee from "../components/Committee";
-import ContactSection from "../components/ContactSection";
 import News from "../components/News";
-import Newsletter from "../components/Newsletter";
+
+const Committee = dynamic(() => import("../components/Committee"), { ssr: true });
+const Newsletter = dynamic(() => import("../components/Newsletter"), { ssr: false });
+const ContactSection = dynamic(() => import("../components/ContactSection"), { ssr: true });
+const SocialMediaOverlay = dynamic(() => import("../components/SocialMediaOverlay"), { ssr: false });
+
 const siteUrl = "https://emrcgecpkd.vercel.app";
 const schemaMarkup = {
   "@context": "https://schema.org",
