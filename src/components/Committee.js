@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const Committee = ({ initialCommittee = [] }) => {
   const [committee, setCommittee] = useState(initialCommittee);
@@ -44,7 +44,7 @@ const Committee = ({ initialCommittee = [] }) => {
   };
 
     return (
-    <motion.div 
+    <m.div 
       className="glass-panel"
       initial="hidden"
       whileInView="visible"
@@ -54,7 +54,7 @@ const Committee = ({ initialCommittee = [] }) => {
       <h2>Executive Committee</h2>
       <div className="committee-members">
           {committee.map((member) => (
-              <motion.div key={member.id} className="member-card" variants={itemVariants}>
+              <m.div key={member.id} className="member-card" variants={itemVariants}>
             <div className="image-wrapper">
               <Image
                 src={member.photo_url}
@@ -70,10 +70,10 @@ const Committee = ({ initialCommittee = [] }) => {
             </div>
             <h3>{member.name}</h3>
             <p>{member.position}</p>
-              </motion.div>
+              </m.div>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

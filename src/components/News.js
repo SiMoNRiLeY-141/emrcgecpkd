@@ -1,7 +1,7 @@
 // components/News.js
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 
 const News = ({ initialNews = [] }) => {
   const [news, setNews] = useState(initialNews)
@@ -56,7 +56,7 @@ const News = ({ initialNews = [] }) => {
             <h2>Latest News</h2>
             <div className="news-slider">
                 <AnimatePresence mode="popLayout" initial={false}>
-                    <motion.div
+                    <m.div
                         key={currentIndex}
                         initial={{ opacity: 0, scale: 1.05, filter: "blur(5px)" }}
                         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -80,7 +80,7 @@ const News = ({ initialNews = [] }) => {
                                 {news[currentIndex].title}
                             </div>
                         </a>
-                    </motion.div>
+                    </m.div>
                 </AnimatePresence>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const Header = () => {
   const logo1Url =
@@ -10,7 +10,7 @@ const Header = () => {
 
   return (
     <div className="logo-container">
-        <motion.div 
+        <m.div 
           className="logo-wrapper"
           whileHover={{ scale: 1.1, rotate: 5 }}
           transition={{ type: "spring", stiffness: 300 }}
@@ -25,7 +25,7 @@ const Header = () => {
             quality={65}
             sizes="100px"
           />
-        </motion.div>
+        </m.div>
         
         <h1>
           Electrical Maintenance and Research Club (EMRC)
@@ -37,7 +37,7 @@ const Header = () => {
           </span>
         </h1>
 
-        <motion.div 
+        <m.div 
           className="logo-wrapper"
           whileHover={{ scale: 1.1, rotate: -5 }}
           transition={{ type: "spring", stiffness: 300 }}
@@ -52,7 +52,7 @@ const Header = () => {
             quality={65}
             sizes="128px"
           />
-        </motion.div>
+        </m.div>
       </div>
   );
 };

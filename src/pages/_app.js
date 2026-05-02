@@ -1,6 +1,6 @@
 import '@/styles/globals.css';
 import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion';
 
 export default function App({ Component, pageProps }) {
   const [loading, setLoading] = useState(true);
@@ -14,10 +14,10 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <>
+    <LazyMotion features={domAnimation} strict>
       <AnimatePresence>
         {loading && (
-          <motion.div
+          <m.div
             key="loading"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
@@ -27,11 +27,11 @@ export default function App({ Component, pageProps }) {
           >
             <div className="loader-circuit"></div>
             <div className="loading-text">INITIALIZING</div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
       
       <Component {...pageProps} />
-    </>
+    </LazyMotion>
   );
 }

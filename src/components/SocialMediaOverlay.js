@@ -1,6 +1,6 @@
 // components/SocialMediaOverlay.js
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -38,13 +38,13 @@ const SocialMediaOverlay = () => {
   };
 
   return (
-    <motion.div 
+    <m.div 
       className="social-media-overlay"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <motion.a
+      <m.a
         href="https://www.instagram.com/emrc_gec"
         target="_blank"
         rel="noopener noreferrer"
@@ -54,8 +54,8 @@ const SocialMediaOverlay = () => {
         whileTap={{ scale: 0.9 }}
       >
         <InstagramIcon />
-      </motion.a>
-      <motion.a
+      </m.a>
+      <m.a
         href="https://www.linkedin.com/company/emrc-gecpkd"
         target="_blank"
         rel="noopener noreferrer"
@@ -65,8 +65,8 @@ const SocialMediaOverlay = () => {
         whileTap={{ scale: 0.9 }}
       >
         <LinkedInIcon />
-      </motion.a>
-      <motion.a
+      </m.a>
+      <m.a
         href="mailto:emrc@gecskp.ac.in"
         aria-label="Send us an email"
         variants={itemVariants}
@@ -74,8 +74,8 @@ const SocialMediaOverlay = () => {
         whileTap={{ scale: 0.9 }}
       >
         <MailIcon />
-      </motion.a>
-    </motion.div>
+      </m.a>
+    </m.div>
   );
 };
 

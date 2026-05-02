@@ -1,6 +1,6 @@
 // components/ContactSection.js
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const MailIcon = () => (
   <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--accent-primary)">
@@ -22,7 +22,7 @@ const LinkedInIcon = () => (
 
 const ContactSection = () => {
   return (
-    <motion.div 
+    <m.div 
       className="glass-panel contact-section"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -31,15 +31,15 @@ const ContactSection = () => {
       style={{ textAlign: 'center' }}
     >
       <h2>Contact Us</h2>
-      <motion.div 
+      <m.div 
         className="contact-email"
         whileHover={{ scale: 1.05 }}
       >
         <MailIcon />
         <p>emrc[at]gecskp[dot]ac[dot]in</p>
-      </motion.div>
+      </m.div>
       <div className="social-links">
-        <motion.a
+        <m.a
           href="https://www.instagram.com/emrc_gec"
           target="_blank"
           rel="noopener noreferrer"
@@ -47,8 +47,8 @@ const ContactSection = () => {
           whileHover={{ background: 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', scale: 1.1 }}
         >
           <InstagramIcon /> Instagram
-        </motion.a>
-        <motion.a
+        </m.a>
+        <m.a
           href="https://www.linkedin.com/company/emrc-gecpkd"
           target="_blank"
           rel="noopener noreferrer"
@@ -56,9 +56,9 @@ const ContactSection = () => {
           whileHover={{ background: '#0077b5', scale: 1.1 }}
         >
           <LinkedInIcon /> LinkedIn
-        </motion.a>
+        </m.a>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

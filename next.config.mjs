@@ -1,4 +1,10 @@
-export default {
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+const nextConfig = {
   images: {
     // Add smaller breakpoints so Next can serve tighter image sizes for member cards.
     deviceSizes: [180, 256, 384, 640, 750, 828, 1080, 1200, 1920],
@@ -63,3 +69,5 @@ export default {
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   },
 };
+
+export default withBundleAnalyzer(nextConfig);

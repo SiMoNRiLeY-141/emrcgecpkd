@@ -1,6 +1,6 @@
 // components/Newsletter.js
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
@@ -48,7 +48,7 @@ const Newsletter = () => {
   };
 
   return (
-    <motion.div 
+    <m.div 
       className="glass-panel newsletter-container"
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
@@ -63,24 +63,24 @@ const Newsletter = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <motion.button 
+        <m.button 
           type="submit"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           Subscribe
-        </motion.button>
+        </m.button>
       </form>
       {status && (
-        <motion.p 
+        <m.p 
           className="status-message" style={{ color: "var(--accent-primary)" }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >
           {status}
-        </motion.p>
+        </m.p>
       )}
-    </motion.div>
+    </m.div>
   );
 };
 
