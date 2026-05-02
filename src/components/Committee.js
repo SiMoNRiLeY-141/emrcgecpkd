@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const Committee = ({ initialCommittee = [] }) => {
   const [committee, setCommittee] = useState(initialCommittee);
@@ -27,12 +28,33 @@ const Committee = ({ initialCommittee = [] }) => {
     fetchCommittee();
   }, [hasInitialData]);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  };
+
     return (
-    <div className="committee-container">
+    <motion.div 
+      className="glass-panel"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={containerVariants}
+    >
       <h2>Executive Committee</h2>
       <div className="committee-members">
           {committee.map((member) => (
-              <div key={member.id} className="member-card">
+              <motion.div key={member.id} className="member-card" variants={itemVariants}>
             <div className="image-wrapper">
               <Image
                 src={member.photo_url}
@@ -48,12 +70,11 @@ const Committee = ({ initialCommittee = [] }) => {
             </div>
             <h3>{member.name}</h3>
             <p>{member.position}</p>
-              </div>
+              </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 export default Committee;
-

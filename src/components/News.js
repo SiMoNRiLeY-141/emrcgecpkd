@@ -1,6 +1,7 @@
 // components/News.js
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const News = ({ initialNews = [] }) => {
   const [news, setNews] = useState(initialNews)
@@ -47,34 +48,48 @@ const News = ({ initialNews = [] }) => {
     }, [news.length]);
 
   if (news.length === 0) {
-    return <div>No news available.</div>;
+    return <div className="glass-panel" style={{ textAlign: "center" }}>No news available.</div>;
   }
 
     return (
-        <div className="news-container">
+        <motion.div 
+            className="glass-panel news-container"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+        >
             <h2>Latest News</h2>
-            <div className="news-scroll">
-                {news.map((item, index) => (
-                    <div
-                        key={item.id}
-                        className={`news-item ${index === currentIndex ? 'active' : ''}`}
+            <div className="news-slider">
+                <AnimatePresence mode="popLayout">
+                    <motion.div
+                        key={currentIndex}
+                        initial={{ opacity: 0, scale: 1.05, filter: "blur(5px)" }}
+                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, scale: 0.95, filter: "blur(5px)" }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        className="news-item active"
+                        style={{ position: 'absolute', width: '100%', height: '100%' }}
                     >
-                        <a href={item.url} target="_blank" rel="noopener noreferrer">
+                        <a href={news[currentIndex].url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
                             <Image
-                                src={item.image_url}
-                                alt={item.title}
+                                src={news[currentIndex].image_url}
+                                alt={news[currentIndex].title}
                                 width={819}
                                 height={460}
-                                loading={index !== 0 ? "lazy" : "eager"}
-                                fetchPriority={index === 0 ? 'high' : 'auto'}
+                                loading="eager"
+                                fetchPriority="high"
                                 sizes="(max-width: 768px) 100vw, 800px"
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
+                            <div className="news-title-overlay">
+                                {news[currentIndex].title}
+                            </div>
                         </a>
-                        <p>{item.title}</p>
-                    </div>
-                ))}
+                    </motion.div>
+                </AnimatePresence>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
