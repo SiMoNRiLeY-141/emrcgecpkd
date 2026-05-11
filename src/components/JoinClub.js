@@ -1,8 +1,9 @@
 import React, { useState, useRef } from "react";
 import { m } from "framer-motion";
-import { UserPlus, Download, Cpu } from "lucide-react";
+import { UserPlus, Download, Cpu, UploadCloud } from "lucide-react";
 import { toPng } from "html-to-image";
 import supabase from "../pages/api/supabase";
+import AvatarEditor from "react-avatar-editor";
 
 const JoinClub = () => {
   const [formData, setFormData] = useState({
@@ -13,30 +14,72 @@ const JoinClub = () => {
   });
   const [memberId, setMemberId] = useState(null);
   const cardRef = useRef(null);
+  
+  // Image editing states
+  const editorRef = useRef(null);
+  const [image, setImage] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [scale, setScale] = useState(1);
+  const [isEditingImg, setIsEditingImg] = useState(false);
+  const [isExistingMember, setIsExistingMember] = useState(false);
+
+  const handleSaveImage = () => {
+    if (editorRef.current) {
+      const canvasScaled = editorRef.current.getImageScaledToCanvas();
+      setCroppedImage(canvasScaled.toDataURL());
+      setIsEditingImg(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Generate Unique ID
-    const year = new Date().getFullYear();
-    const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-    const newId = `EMRC-${year}-${randomNum}`;
-    setMemberId(newId);
     
     try {
-      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-        const { error } = await supabase
-          .from('members')
-          .insert([{ 
-            name: formData.name, 
-            email: formData.email, 
-            department: formData.department, 
-            batch: formData.batch, 
-            member_id: newId 
-          }]);
-        if (error) console.log("Note: Could not insert member. Please check Supabase table configuration.");
+      // 1. Check if user exists by email
+      const { data: existingUser } = await supabase
+        .from('members')
+        .select('*')
+        .eq('email', formData.email)
+        .single();
+
+      if (existingUser) {
+        // User exists! Reuse their details.
+        setFormData({
+          name: existingUser.name,
+          email: existingUser.email,
+          department: existingUser.department,
+          batch: existingUser.batch
+        });
+        setMemberId(existingUser.member_id);
+        setIsExistingMember(true);
+        return;
       }
+
+      // 2. Generate Unique ID if new
+      const year = new Date().getFullYear();
+      const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      const newId = `EMRC-${year}-${randomNum}`;
+      setMemberId(newId);
+      setIsExistingMember(false);
+      
+      const { error } = await supabase
+        .from('members')
+        .insert([{ 
+          name: formData.name, 
+          email: formData.email, 
+          department: formData.department, 
+          batch: formData.batch, 
+          member_id: newId 
+        }]);
+      if (error) console.log("Note: Could not insert member. Please check Supabase table configuration.", error);
     } catch (err) {
-      console.log("Database connection not fully configured yet. ID generated locally.");
+      console.log("Error checking or inserting to supabase:", err);
+      // Fallback local ID generation if DB is completely unavailable
+      if (!memberId) {
+        const year = new Date().getFullYear();
+        const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        setMemberId(`EMRC-${year}-${randomNum}`);
+      }
     }
   };
 
@@ -111,12 +154,71 @@ const JoinClub = () => {
               onChange={(e) => setFormData({...formData, batch: e.target.value})}
             />
           </div>
-          <button type="submit" className="primary-btn">
+
+          {isEditingImg && image ? (
+            <div className="image-editor-container">
+              <AvatarEditor
+                ref={editorRef}
+                image={image}
+                width={150}
+                height={150}
+                border={20}
+                borderRadius={75}
+                color={[0, 0, 0, 0.6]}
+                scale={scale}
+                rotate={0}
+                className="avatar-editor"
+              />
+              <input 
+                type="range" 
+                value={scale} 
+                min="1" 
+                max="3" 
+                step="0.05" 
+                onChange={(e) => setScale(parseFloat(e.target.value))} 
+                className="zoom-slider"
+              />
+              <button type="button" onClick={handleSaveImage} className="primary-btn small-btn">
+                Crop & Save Photo
+              </button>
+            </div>
+          ) : (
+            <div className="form-group file-upload-group">
+              <label htmlFor="photo-upload" className="file-upload-label">
+                <UploadCloud className="inline-icon" />
+                {croppedImage ? "Change Profile Photo" : "Upload Profile Photo (Optional)"}
+              </label>
+              <input 
+                id="photo-upload"
+                type="file" 
+                accept="image/*" 
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    setImage(e.target.files[0]);
+                    setIsEditingImg(true);
+                  }
+                }} 
+                style={{ display: 'none' }}
+              />
+              {croppedImage && !isEditingImg && (
+                <div className="preview-avatar-mini">
+                  <img src={croppedImage} alt="Preview" />
+                </div>
+              )}
+            </div>
+          )}
+
+          <button type="submit" className="primary-btn" disabled={isEditingImg}>
             Generate Member ID
           </button>
         </form>
       ) : (
         <div className="id-card-container">
+          {isExistingMember && (
+            <p className="welcome-back-msg" style={{ color: 'var(--accent-primary)', fontWeight: 'bold' }}>
+              Welcome back! Here is your existing ID card.
+            </p>
+          )}
           <m.div 
             initial={{ scale: 0.8, rotateY: 90 }}
             animate={{ scale: 1, rotateY: 0 }}
@@ -132,7 +234,11 @@ const JoinClub = () => {
               </div>
               <div className="id-body">
                 <div className="id-avatar">
-                  {formData.name.charAt(0).toUpperCase()}
+                  {croppedImage ? (
+                    <img src={croppedImage} alt="Profile" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                  ) : (
+                    formData.name.charAt(0).toUpperCase()
+                  )}
                 </div>
                 <div className="id-details">
                   <p className="id-name">{formData.name}</p>
