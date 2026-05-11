@@ -9,6 +9,10 @@ const Committee = dynamic(() => import("../components/Committee"), { ssr: true }
 const Newsletter = dynamic(() => import("../components/Newsletter"), { ssr: false });
 const ContactSection = dynamic(() => import("../components/ContactSection"), { ssr: true });
 const SocialMediaOverlay = dynamic(() => import("../components/SocialMediaOverlay"), { ssr: false });
+const JoinClub = dynamic(() => import("../components/JoinClub"), { ssr: false });
+const MaintenancePortal = dynamic(() => import("../components/MaintenancePortal"), { ssr: false });
+const ThemeToggle = dynamic(() => import("../components/ThemeToggle"), { ssr: false });
+const CircuitBackground = dynamic(() => import("../components/CircuitBackground"), { ssr: false });
 
 const siteUrl = "https://emrcgecpkd.vercel.app";
 const schemaMarkup = {
@@ -116,9 +120,13 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
         />
       </Head>
-      <main>
+      <CircuitBackground />
+      <ThemeToggle />
+      <main style={{ position: 'relative', zIndex: 10 }}>
         <Header />
+        <JoinClub />
         <News initialNews={initialNews} />
+        <MaintenancePortal />
         <Committee initialCommittee={initialCommittee} />
         <Newsletter />
         <ContactSection />

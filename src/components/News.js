@@ -52,7 +52,13 @@ const News = ({ initialNews = [] }) => {
   }
 
     return (
-        <div className="glass-panel news-container">
+        <m.div 
+          className="glass-panel news-container"
+          initial={{ opacity: 0, scale: 0.85, y: 50 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 1.2, type: "spring", bounce: 0.3 }}
+        >
             <h2>Latest News</h2>
             <div className="news-slider">
                 <AnimatePresence mode="popLayout" initial={false}>
@@ -83,7 +89,7 @@ const News = ({ initialNews = [] }) => {
                     </m.div>
                 </AnimatePresence>
             </div>
-        </div>
+        </m.div>
     );
 }
 

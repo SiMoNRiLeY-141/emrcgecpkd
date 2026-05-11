@@ -39,8 +39,8 @@ const Committee = ({ initialCommittee = [] }) => {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 0.8 } }
   };
 
     return (
@@ -48,7 +48,7 @@ const Committee = ({ initialCommittee = [] }) => {
       className="glass-panel"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-50px" }}
       variants={containerVariants}
     >
       <h2>Executive Committee</h2>
