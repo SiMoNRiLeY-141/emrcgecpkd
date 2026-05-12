@@ -10,11 +10,11 @@ const JoinClub = () => {
     name: "",
     department: "",
     batch: "",
-    email: ""
+    email: "",
   });
   const [memberId, setMemberId] = useState(null);
   const cardRef = useRef(null);
-  
+
   // Image editing states
   const editorRef = useRef(null);
   const [image, setImage] = useState(null);
@@ -33,13 +33,13 @@ const JoinClub = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       // 1. Check if user exists by email
       const { data: existingUser } = await supabase
-        .from('members')
-        .select('*')
-        .eq('email', formData.email)
+        .from("members")
+        .select("*")
+        .eq("email", formData.email)
         .single();
 
       if (existingUser) {
@@ -48,7 +48,7 @@ const JoinClub = () => {
           name: existingUser.name,
           email: existingUser.email,
           department: existingUser.department,
-          batch: existingUser.batch
+          batch: existingUser.batch,
         });
         setMemberId(existingUser.member_id);
         setIsExistingMember(true);
@@ -57,27 +57,35 @@ const JoinClub = () => {
 
       // 2. Generate Unique ID if new
       const year = new Date().getFullYear();
-      const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      const randomNum = Math.floor(Math.random() * 1000)
+        .toString()
+        .padStart(3, "0");
       const newId = `EMRC-${year}-${randomNum}`;
       setMemberId(newId);
       setIsExistingMember(false);
-      
-      const { error } = await supabase
-        .from('members')
-        .insert([{ 
-          name: formData.name, 
-          email: formData.email, 
-          department: formData.department, 
-          batch: formData.batch, 
-          member_id: newId 
-        }]);
-      if (error) console.log("Note: Could not insert member. Please check Supabase table configuration.", error);
+
+      const { error } = await supabase.from("members").insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          department: formData.department,
+          batch: formData.batch,
+          member_id: newId,
+        },
+      ]);
+      if (error)
+        console.log(
+          "Note: Could not insert member. Please check Supabase table configuration.",
+          error,
+        );
     } catch (err) {
       console.log("Error checking or inserting to supabase:", err);
       // Fallback local ID generation if DB is completely unavailable
       if (!memberId) {
         const year = new Date().getFullYear();
-        const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        const randomNum = Math.floor(Math.random() * 1000)
+          .toString()
+          .padStart(3, "0");
         setMemberId(`EMRC-${year}-${randomNum}`);
       }
     }
@@ -86,9 +94,12 @@ const JoinClub = () => {
   const downloadIdCard = async () => {
     if (cardRef.current) {
       try {
-        const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 });
-        const link = document.createElement('a');
-        link.download = `${formData.name.replace(/\s+/g, '_')}_EMRC_ID.png`;
+        const dataUrl = await toPng(cardRef.current, {
+          cacheBust: true,
+          pixelRatio: 2,
+        });
+        const link = document.createElement("a");
+        link.download = `${formData.name.replace(/\s+/g, "_")}_EMRC_ID.png`;
         link.href = dataUrl;
         link.click();
       } catch (error) {
@@ -98,45 +109,62 @@ const JoinClub = () => {
   };
 
   return (
-    <m.div 
-      className="glass-panel" id="join"
+    <m.div
+      className="glass-panel"
+      id="join"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 1.2, type: "spring", bounce: 0.3 }}
     >
-      <h2><UserPlus className="inline-icon" /> Join the Club</h2>
-      <p style={{ textAlign: 'center', marginBottom: '30px', color: 'var(--text-secondary)' }}>
+      <h2>
+        <UserPlus className="inline-icon" /> Join the Club
+      </h2>
+      <p
+        style={{
+          textAlign: "center",
+          marginBottom: "30px",
+          color: "var(--text-secondary)",
+        }}
+      >
         Become a part of the EMRC family. Sign up to get your unique Member ID!
       </p>
 
       {!memberId ? (
         <form onSubmit={handleSubmit} className="custom-form">
           <div className="form-group">
-            <input 
-              type="text" 
-              placeholder="Full Name" 
-              required 
+            <input
+              type="text"
+              placeholder="Full Name"
+              required
               value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
           </div>
           <div className="form-group">
-            <input 
-              type="email" 
-              placeholder="College Email ID" 
-              required 
+            <input
+              type="email"
+              placeholder="College Email ID"
+              required
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
           </div>
           <div className="form-group">
-            <select 
+            <select
               required
               value={formData.department}
-              onChange={(e) => setFormData({...formData, department: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, department: e.target.value })
+              }
             >
-              <option value="" disabled>Select Department</option>
+              <option value="" disabled>
+                Select Department
+              </option>
               <option value="CE">Civil Engineering</option>
               <option value="CSE">Computer Science & Engineering</option>
               <option value="ECE">Electronics & Communication</option>
@@ -146,12 +174,14 @@ const JoinClub = () => {
             </select>
           </div>
           <div className="form-group">
-            <input 
-              type="text" 
-              placeholder="Batch (e.g. 2023-2027)" 
-              required 
+            <input
+              type="text"
+              placeholder="Batch (e.g. 2023-2027)"
+              required
               value={formData.batch}
-              onChange={(e) => setFormData({...formData, batch: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, batch: e.target.value })
+              }
             />
           </div>
 
@@ -169,16 +199,20 @@ const JoinClub = () => {
                 rotate={0}
                 className="avatar-editor"
               />
-              <input 
-                type="range" 
-                value={scale} 
-                min="1" 
-                max="3" 
-                step="0.05" 
-                onChange={(e) => setScale(parseFloat(e.target.value))} 
+              <input
+                type="range"
+                value={scale}
+                min="1"
+                max="3"
+                step="0.05"
+                onChange={(e) => setScale(parseFloat(e.target.value))}
                 className="zoom-slider"
               />
-              <button type="button" onClick={handleSaveImage} className="primary-btn small-btn">
+              <button
+                type="button"
+                onClick={handleSaveImage}
+                className="primary-btn small-btn"
+              >
                 Crop & Save Photo
               </button>
             </div>
@@ -186,19 +220,21 @@ const JoinClub = () => {
             <div className="form-group file-upload-group">
               <label htmlFor="photo-upload" className="file-upload-label">
                 <UploadCloud className="inline-icon" />
-                {croppedImage ? "Change Profile Photo" : "Upload Profile Photo (Optional)"}
+                {croppedImage
+                  ? "Change Profile Photo"
+                  : "Upload Profile Photo (Optional)"}
               </label>
-              <input 
+              <input
                 id="photo-upload"
-                type="file" 
-                accept="image/*" 
+                type="file"
+                accept="image/*"
                 onChange={(e) => {
                   if (e.target.files && e.target.files.length > 0) {
                     setImage(e.target.files[0]);
                     setIsEditingImg(true);
                   }
-                }} 
-                style={{ display: 'none' }}
+                }}
+                style={{ display: "none" }}
               />
               {croppedImage && !isEditingImg && (
                 <div className="preview-avatar-mini">
@@ -215,18 +251,24 @@ const JoinClub = () => {
       ) : (
         <div className="id-card-container">
           {isExistingMember && (
-            <p className="welcome-back-msg" style={{ color: 'var(--accent-primary)', fontWeight: 'bold' }}>
+            <p
+              className="welcome-back-msg"
+              style={{ color: "var(--accent-primary)", fontWeight: "bold" }}
+            >
               Welcome back! Here is your existing ID card.
             </p>
           )}
-          <m.div 
+          <m.div
             initial={{ scale: 0.8, rotateY: 90 }}
             animate={{ scale: 1, rotateY: 0 }}
             transition={{ type: "spring", stiffness: 100 }}
           >
             <div className="id-card" ref={cardRef}>
               <div className="id-header">
-                <Cpu className="id-logo" style={{ color: "var(--accent-primary)" }} />
+                <Cpu
+                  className="id-logo"
+                  style={{ color: "var(--accent-primary)" }}
+                />
                 <div>
                   <h4>EMRC GEC Palakkad</h4>
                   <p>Official Member</p>
@@ -235,7 +277,16 @@ const JoinClub = () => {
               <div className="id-body">
                 <div className="id-avatar">
                   {croppedImage ? (
-                    <img src={croppedImage} alt="Profile" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                    <img
+                      src={croppedImage}
+                      alt="Profile"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                      }}
+                    />
                   ) : (
                     formData.name.charAt(0).toUpperCase()
                   )}
@@ -244,8 +295,10 @@ const JoinClub = () => {
                   <p className="id-name">{formData.name}</p>
                   <p className="id-number">{memberId}</p>
                   <div className="id-info-grid">
-                    <span className="id-label">Dept:</span><span>{formData.department}</span>
-                    <span className="id-label">Batch:</span><span>{formData.batch}</span>
+                    <span className="id-label">Dept:</span>
+                    <span>{formData.department}</span>
+                    <span className="id-label">Batch:</span>
+                    <span>{formData.batch}</span>
                   </div>
                 </div>
               </div>

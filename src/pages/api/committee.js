@@ -1,11 +1,11 @@
-import supabase from './supabase';
+import supabase from "./supabase";
 
 export default async function handler(req, res) {
   try {
     const { data, error } = await supabase
-      .from('committee')
-      .select('*')
-      .order('id', { ascending: true });
+      .from("committee")
+      .select("*")
+      .order("id", { ascending: true });
     if (error) {
       throw error;
     }

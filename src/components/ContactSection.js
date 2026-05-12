@@ -1,6 +1,6 @@
 // components/ContactSection.js
-import React from 'react';
-import { m } from 'framer-motion';
+import React from "react";
+import { m } from "framer-motion";
 
 const MailIcon = () => (
   <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--accent-primary)">
@@ -22,19 +22,16 @@ const LinkedInIcon = () => (
 
 const ContactSection = () => {
   return (
-    <m.div 
+    <m.div
       className="glass-panel contact-section"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      style={{ textAlign: 'center' }}
+      style={{ textAlign: "center" }}
     >
       <h2>Contact Us</h2>
-      <m.div 
-        className="contact-email"
-        whileHover={{ scale: 1.05 }}
-      >
+      <m.div className="contact-email" whileHover={{ scale: 1.05 }}>
         <MailIcon />
         <p>emrc[at]gecskp[dot]ac[dot]in</p>
       </m.div>
@@ -44,7 +41,11 @@ const ContactSection = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="social-btn"
-          whileHover={{ background: 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', scale: 1.1 }}
+          whileHover={{
+            background:
+              "linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+            scale: 1.1,
+          }}
         >
           <InstagramIcon /> Instagram
         </m.a>
@@ -53,7 +54,7 @@ const ContactSection = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="social-btn"
-          whileHover={{ background: '#0077b5', scale: 1.1 }}
+          whileHover={{ background: "#0077b5", scale: 1.1 }}
         >
           <LinkedInIcon /> LinkedIn
         </m.a>

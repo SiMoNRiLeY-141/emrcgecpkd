@@ -1,22 +1,32 @@
-import React from 'react';
-import { render, screen, act } from '@testing-library/react';
-import Committee from '../../components/Committee';
+import React from "react";
+import { render, screen, act } from "@testing-library/react";
+import Committee from "../../components/Committee";
 
 // Mock next/image
-jest.mock('next/image', () => ({
+jest.mock("next/image", () => ({
   __esModule: true,
   default: ({ src, alt, ...props }) => <img src={src} alt={alt} {...props} />,
 }));
 
-describe('Committee component', () => {
+describe("Committee component", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it('renders committee members returned by the API', async () => {
+  it("renders committee members returned by the API", async () => {
     const mockMembers = [
-      { id: 1, name: 'Alice', position: 'Chairperson', photo_url: 'https://example.com/alice.jpg' },
-      { id: 2, name: 'Bob', position: 'Secretary', photo_url: 'https://example.com/bob.jpg' },
+      {
+        id: 1,
+        name: "Alice",
+        position: "Chairperson",
+        photo_url: "https://example.com/alice.jpg",
+      },
+      {
+        id: 2,
+        name: "Bob",
+        position: "Secretary",
+        photo_url: "https://example.com/bob.jpg",
+      },
     ];
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
@@ -27,10 +37,10 @@ describe('Committee component', () => {
       render(<Committee />);
     });
 
-    expect(screen.getByText('Alice')).toBeInTheDocument();
-    expect(screen.getByText('Chairperson')).toBeInTheDocument();
-    expect(screen.getByText('Bob')).toBeInTheDocument();
-    expect(screen.getByText('Secretary')).toBeInTheDocument();
+    expect(screen.getByText("Alice")).toBeInTheDocument();
+    expect(screen.getByText("Chairperson")).toBeInTheDocument();
+    expect(screen.getByText("Bob")).toBeInTheDocument();
+    expect(screen.getByText("Secretary")).toBeInTheDocument();
   });
 
   it('renders the "Executive Committee" heading', async () => {
@@ -43,12 +53,17 @@ describe('Committee component', () => {
       render(<Committee />);
     });
 
-    expect(screen.getByText('Executive Committee')).toBeInTheDocument();
+    expect(screen.getByText("Executive Committee")).toBeInTheDocument();
   });
 
-  it('renders member photos with correct alt text', async () => {
+  it("renders member photos with correct alt text", async () => {
     const mockMembers = [
-      { id: 1, name: 'Alice', position: 'Chairperson', photo_url: 'https://example.com/alice.jpg' },
+      {
+        id: 1,
+        name: "Alice",
+        position: "Chairperson",
+        photo_url: "https://example.com/alice.jpg",
+      },
     ];
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
@@ -59,12 +74,12 @@ describe('Committee component', () => {
       render(<Committee />);
     });
 
-    const img = screen.getByAltText('Alice');
+    const img = screen.getByAltText("Alice");
     expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute('src', 'https://example.com/alice.jpg');
+    expect(img).toHaveAttribute("src", "https://example.com/alice.jpg");
   });
 
-  it('renders an empty member list gracefully when the API fails', async () => {
+  it("renders an empty member list gracefully when the API fails", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       status: 500,
@@ -75,19 +90,19 @@ describe('Committee component', () => {
     });
 
     // Heading should still be there
-    expect(screen.getByText('Executive Committee')).toBeInTheDocument();
+    expect(screen.getByText("Executive Committee")).toBeInTheDocument();
     // No member cards should be rendered
-    expect(document.querySelectorAll('.member-card').length).toBe(0);
+    expect(document.querySelectorAll(".member-card").length).toBe(0);
   });
 
-  it('renders an empty list when fetch throws a network error', async () => {
-    global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+  it("renders an empty list when fetch throws a network error", async () => {
+    global.fetch = jest.fn().mockRejectedValue(new Error("Network error"));
 
     await act(async () => {
       render(<Committee />);
     });
 
-    expect(screen.getByText('Executive Committee')).toBeInTheDocument();
-    expect(document.querySelectorAll('.member-card').length).toBe(0);
+    expect(screen.getByText("Executive Committee")).toBeInTheDocument();
+    expect(document.querySelectorAll(".member-card").length).toBe(0);
   });
 });

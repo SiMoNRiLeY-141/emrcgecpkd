@@ -5,14 +5,33 @@ import dynamic from "next/dynamic";
 import Header from "../components/Header";
 import News from "../components/News";
 
-const Committee = dynamic(() => import("../components/Committee"), { ssr: true });
-const Newsletter = dynamic(() => import("../components/Newsletter"), { ssr: false });
-const ContactSection = dynamic(() => import("../components/ContactSection"), { ssr: true });
-const SocialMediaOverlay = dynamic(() => import("../components/SocialMediaOverlay"), { ssr: false });
-const JoinClub = dynamic(() => import("../components/JoinClub"), { ssr: false });
-const MaintenancePortal = dynamic(() => import("../components/MaintenancePortal"), { ssr: false });
-const ThemeToggle = dynamic(() => import("../components/ThemeToggle"), { ssr: false });
-const CircuitBackground = dynamic(() => import("../components/CircuitBackground"), { ssr: false });
+const Committee = dynamic(() => import("../components/Committee"), {
+  ssr: true,
+});
+const Newsletter = dynamic(() => import("../components/Newsletter"), {
+  ssr: false,
+});
+const ContactSection = dynamic(() => import("../components/ContactSection"), {
+  ssr: true,
+});
+const SocialMediaOverlay = dynamic(
+  () => import("../components/SocialMediaOverlay"),
+  { ssr: false },
+);
+const JoinClub = dynamic(() => import("../components/JoinClub"), {
+  ssr: false,
+});
+const MaintenancePortal = dynamic(
+  () => import("../components/MaintenancePortal"),
+  { ssr: false },
+);
+const ThemeToggle = dynamic(() => import("../components/ThemeToggle"), {
+  ssr: false,
+});
+const CircuitBackground = dynamic(
+  () => import("../components/CircuitBackground"),
+  { ssr: false },
+);
 
 const siteUrl = "https://emrcgecpkd.vercel.app";
 const schemaMarkup = {
@@ -55,10 +74,7 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
       <Head>
         <title>Electrical Maintenance and Research Club, GEC Palakkad</title>
         <meta charSet="UTF-8" />
-        <link
-          rel="icon"
-          href="https://emrcgecpkd.vercel.app/favicon.svg"
-        />
+        <link rel="icon" href="https://emrcgecpkd.vercel.app/favicon.svg" />
         <meta
           name="description"
           content="Electrical Maintenance and Research Club at Govt. Engineering College, Sreekrishnapuram. Stay updated with our news, events, and research activities."
@@ -122,7 +138,7 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
       </Head>
       <CircuitBackground />
       <ThemeToggle />
-      <main style={{ position: 'relative', zIndex: 10 }}>
+      <main style={{ position: "relative", zIndex: 10 }}>
         <Header />
         <JoinClub />
         <News initialNews={initialNews} />
@@ -139,9 +155,15 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
 export async function getStaticProps() {
   try {
     const { default: supabase } = await import("./api/supabase");
-    const [{ data: newsData, error: newsError }, { data: committeeData, error: committeeError }] = await Promise.all([
+    const [
+      { data: newsData, error: newsError },
+      { data: committeeData, error: committeeError },
+    ] = await Promise.all([
       supabase.from("news").select("id, title, image_url, url"),
-      supabase.from("committee").select("id, name, position, photo_url").order("id", { ascending: true }),
+      supabase
+        .from("committee")
+        .select("id, name, position, photo_url")
+        .order("id", { ascending: true }),
     ]);
 
     if (newsError || committeeError) {

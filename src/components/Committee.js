@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { m } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { m } from "framer-motion";
 
 const Committee = ({ initialCommittee = [] }) => {
   const [committee, setCommittee] = useState(initialCommittee);
@@ -11,19 +11,19 @@ const Committee = ({ initialCommittee = [] }) => {
       return;
     }
 
-      const fetchCommittee = async () => {
-          try {
-              const response = await fetch('/api/committee');
-              if (!response.ok) {
-                  throw new Error(`HTTP error! status: ${response.status}`);
-              }
-              const data = await response.json();
-              setCommittee(data);
-          } catch (error) {
-              console.error('Error fetching committee data:', error);
-              setCommittee([]);
-          }
-      };
+    const fetchCommittee = async () => {
+      try {
+        const response = await fetch("/api/committee");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setCommittee(data);
+      } catch (error) {
+        console.error("Error fetching committee data:", error);
+        setCommittee([]);
+      }
+    };
 
     fetchCommittee();
   }, [hasInitialData]);
@@ -33,18 +33,27 @@ const Committee = ({ initialCommittee = [] }) => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 0.8 } }
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        duration: 0.8,
+      },
+    },
   };
 
-    return (
-    <m.div 
+  return (
+    <m.div
       className="glass-panel"
       initial="hidden"
       whileInView="visible"
@@ -53,8 +62,12 @@ const Committee = ({ initialCommittee = [] }) => {
     >
       <h2>Executive Committee</h2>
       <div className="committee-members">
-          {committee.map((member) => (
-              <m.div key={member.id} className="member-card" variants={itemVariants}>
+        {committee.map((member) => (
+          <m.div
+            key={member.id}
+            className="member-card"
+            variants={itemVariants}
+          >
             <div className="image-wrapper">
               <Image
                 src={member.photo_url}
@@ -70,7 +83,7 @@ const Committee = ({ initialCommittee = [] }) => {
             </div>
             <h3>{member.name}</h3>
             <p>{member.position}</p>
-              </m.div>
+          </m.div>
         ))}
       </div>
     </m.div>

@@ -1,15 +1,15 @@
 // components/Newsletter.js
-import React, { useState, useEffect } from 'react';
-import { m } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { m } from "framer-motion";
 
 const Newsletter = () => {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('');
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     if (status) {
       const timer = setTimeout(() => {
-        setStatus('');
+        setStatus("");
       }, 5000);
 
       return () => clearTimeout(timer);
@@ -20,35 +20,35 @@ const Newsletter = () => {
     e.preventDefault();
 
     if (!email) {
-      setStatus('Please enter a valid email address.');
+      setStatus("Please enter a valid email address.");
       return;
     }
 
-      try {
-        const response = await fetch('/api/subscribe', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
-        });
-  
-        const data = await response.json();
-  
-        if (response.ok) {
-          setStatus(data.message);
-          setEmail('');
-        } else {
-          setStatus(data.error || 'Subscription failed. Please try again later.');
-        }
-      } catch (error) {
-        console.error('Error subscribing:', error);
-        setStatus('Subscription failed. Please try again later.');
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus(data.message);
+        setEmail("");
+      } else {
+        setStatus(data.error || "Subscription failed. Please try again later.");
       }
+    } catch (error) {
+      console.error("Error subscribing:", error);
+      setStatus("Subscription failed. Please try again later.");
+    }
   };
 
   return (
-    <m.div 
+    <m.div
       className="glass-panel newsletter-container"
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
@@ -63,7 +63,7 @@ const Newsletter = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <m.button 
+        <m.button
           type="submit"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -72,8 +72,9 @@ const Newsletter = () => {
         </m.button>
       </form>
       {status && (
-        <m.p 
-          className="status-message" style={{ color: "var(--accent-primary)" }}
+        <m.p
+          className="status-message"
+          style={{ color: "var(--accent-primary)" }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >

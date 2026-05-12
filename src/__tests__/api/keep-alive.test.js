@@ -3,7 +3,7 @@ const mockSelect = jest.fn();
 const mockFrom = jest.fn(() => ({ select: mockSelect }));
 const mockLimit = jest.fn();
 
-jest.mock('@supabase/supabase-js', () => ({
+jest.mock("@supabase/supabase-js", () => ({
   createClient: jest.fn(() => ({
     from: mockFrom,
   })),
@@ -12,7 +12,7 @@ jest.mock('@supabase/supabase-js', () => ({
 // Import after mock setup
 let handler;
 beforeAll(async () => {
-  handler = (await import('../../pages/api/keep-alive')).default;
+  handler = (await import("../../pages/api/keep-alive")).default;
 });
 
 function createMockRes() {
@@ -31,13 +31,13 @@ function createMockRes() {
   return res;
 }
 
-describe('GET /api/keep-alive', () => {
+describe("GET /api/keep-alive", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('returns 200 with success message when Supabase ping succeeds', async () => {
-    const mockData = [{ id: 1, title: 'Test News' }];
+  it("returns 200 with success message when Supabase ping succeeds", async () => {
+    const mockData = [{ id: 1, title: "Test News" }];
     mockSelect.mockReturnValue({
       limit: jest.fn().mockResolvedValue({ data: mockData, error: null }),
     });
@@ -48,13 +48,13 @@ describe('GET /api/keep-alive', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
-      message: 'Supabase pinged successfully',
+      message: "Supabase pinged successfully",
       data: mockData,
     });
   });
 
-  it('returns 500 when Supabase returns an error', async () => {
-    const mockError = new Error('Connection timeout');
+  it("returns 500 when Supabase returns an error", async () => {
+    const mockError = new Error("Connection timeout");
     mockSelect.mockReturnValue({
       limit: jest.fn().mockResolvedValue({ data: null, error: mockError }),
     });
@@ -64,12 +64,12 @@ describe('GET /api/keep-alive', () => {
     await handler(req, res);
 
     expect(res.statusCode).toBe(500);
-    expect(res.body.message).toBe('Error pinging Supabase');
+    expect(res.body.message).toBe("Error pinging Supabase");
   });
 
-  it('returns 500 when the Supabase query throws an unexpected exception', async () => {
+  it("returns 500 when the Supabase query throws an unexpected exception", async () => {
     mockSelect.mockReturnValue({
-      limit: jest.fn().mockRejectedValue(new Error('Unexpected crash')),
+      limit: jest.fn().mockRejectedValue(new Error("Unexpected crash")),
     });
 
     const req = {};
@@ -77,6 +77,6 @@ describe('GET /api/keep-alive', () => {
     await handler(req, res);
 
     expect(res.statusCode).toBe(500);
-    expect(res.body.message).toBe('Error pinging Supabase');
+    expect(res.body.message).toBe("Error pinging Supabase");
   });
 });

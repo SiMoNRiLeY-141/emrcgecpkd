@@ -1,6 +1,6 @@
 // components/SocialMediaOverlay.js
-import React from 'react';
-import { m } from 'framer-motion';
+import React from "react";
+import { m } from "framer-motion";
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -27,18 +27,18 @@ const SocialMediaOverlay = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.5
-      }
-    }
+        delayChildren: 0.5,
+      },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, scale: 0.5 },
-    visible: { opacity: 1, scale: 1 }
+    visible: { opacity: 1, scale: 1 },
   };
 
   return (
-    <m.div 
+    <m.div
       className="social-media-overlay"
       variants={containerVariants}
       initial="hidden"
@@ -80,4 +80,3 @@ const SocialMediaOverlay = () => {
 };
 
 export default SocialMediaOverlay;
-

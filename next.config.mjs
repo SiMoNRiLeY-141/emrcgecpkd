@@ -1,7 +1,7 @@
-import bundleAnalyzer from '@next/bundle-analyzer';
+import bundleAnalyzer from "@next/bundle-analyzer";
 
 const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
+  enabled: process.env.ANALYZE === "true",
 });
 
 const nextConfig = {
@@ -12,42 +12,46 @@ const nextConfig = {
     qualities: [65, 68, 75],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'jfgkhseftiwquikjuhcv.supabase.co',
-        pathname: '/storage/v1/object/public/**',
+        protocol: "https",
+        hostname: "jfgkhseftiwquikjuhcv.supabase.co",
+        pathname: "/storage/v1/object/public/**",
       },
       {
-        protocol: 'https',
-        hostname: 'jfgkhseftiwquikjuhcv.supabase.co',
-        pathname: '/storage/v1/object/sign/**',
+        protocol: "https",
+        hostname: "jfgkhseftiwquikjuhcv.supabase.co",
+        pathname: "/storage/v1/object/sign/**",
       },
     ],
   },
   async headers() {
     const securityHeaders = [
-      { key: 'X-DNS-Prefetch-Control', value: 'on' },
-      { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },
-      { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-      { key: 'X-Content-Type-Options', value: 'nosniff' },
-      { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
-      { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+      { key: "X-DNS-Prefetch-Control", value: "on" },
       {
-        key: 'Content-Security-Policy',
-        value: "default-src 'self'; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; require-trusted-types-for 'script';"
-      }
+        key: "Strict-Transport-Security",
+        value: "max-age=31536000; includeSubDomains; preload",
+      },
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "origin-when-cross-origin" },
+      { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+      {
+        key: "Content-Security-Policy",
+        value:
+          "default-src 'self'; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; require-trusted-types-for 'script';",
+      },
     ];
 
     const baseHeaders = [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: securityHeaders,
       },
       {
-        source: '/',
+        source: "/",
         headers: [
           {
-            key: 'X-Robots-Tag',
-            value: 'index, follow',
+            key: "X-Robots-Tag",
+            value: "index, follow",
           },
         ],
       },
@@ -55,27 +59,27 @@ const nextConfig = {
 
     const imageCacheHeader = {
       // Set cache headers for optimized image responses in production only.
-      source: '/_next/image(.*)',
+      source: "/_next/image(.*)",
       headers: [
         {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable',
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
         },
       ],
     };
 
     const staticCacheHeader = {
       // Set cache headers for other static files (e.g., JavaScript, CSS) in production only.
-      source: '/:path*',
+      source: "/:path*",
       headers: [
         {
-          key: 'Cache-Control',
-          value: 'public, max-age=604800, must-revalidate',
+          key: "Cache-Control",
+          value: "public, max-age=604800, must-revalidate",
         },
       ],
     };
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production") {
       return [...baseHeaders, imageCacheHeader, staticCacheHeader];
     }
 
@@ -83,7 +87,8 @@ const nextConfig = {
   },
   env: {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   },
 };
 

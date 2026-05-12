@@ -10,50 +10,55 @@ const Header = () => {
 
   return (
     <div className="logo-container">
-        <m.div 
-          className="logo-wrapper"
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          <Image
-            src={logo1Url}
-            alt="Logo 1"
-            className="logo"
-            width={100}
-            height={100}
-            priority={true}
-            quality={65}
-            sizes="100px"
-          />
-        </m.div>
-        
-        <h1>
-          Electrical Maintenance and Research Club (EMRC)
-          <br />
-          <span 
-            style={{ fontSize: '0.6em', color: 'var(--text-secondary)', background: 'none', WebkitTextFillColor: 'var(--text-secondary)' }}
-          >
-            Govt. Engineering College, Sreekrishnapuram
-          </span>
-        </h1>
+      <m.div
+        className="logo-wrapper"
+        whileHover={{ scale: 1.1, rotate: 5 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
+        <Image
+          src={logo1Url}
+          alt="Logo 1"
+          className="logo"
+          width={100}
+          height={100}
+          priority={true}
+          quality={65}
+          sizes="100px"
+        />
+      </m.div>
 
-        <m.div 
-          className="logo-wrapper"
-          whileHover={{ scale: 1.1, rotate: -5 }}
-          transition={{ type: "spring", stiffness: 300 }}
+      <h1>
+        Electrical Maintenance and Research Club (EMRC)
+        <br />
+        <span
+          style={{
+            fontSize: "0.6em",
+            color: "var(--text-secondary)",
+            background: "none",
+            WebkitTextFillColor: "var(--text-secondary)",
+          }}
         >
-          <Image
-            src={logo2Url}
-            alt="Logo 2"
-            className="logo"
-            width={128}
-            height={153}
-            priority={true}
-            quality={65}
-            sizes="128px"
-          />
-        </m.div>
-      </div>
+          Govt. Engineering College, Sreekrishnapuram
+        </span>
+      </h1>
+
+      <m.div
+        className="logo-wrapper"
+        whileHover={{ scale: 1.1, rotate: -5 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
+        <Image
+          src={logo2Url}
+          alt="Logo 2"
+          className="logo"
+          width={128}
+          height={153}
+          priority={true}
+          quality={65}
+          sizes="128px"
+        />
+      </m.div>
+    </div>
   );
 };
 

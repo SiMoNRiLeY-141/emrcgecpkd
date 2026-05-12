@@ -7,18 +7,18 @@ name: OSV-Scanner
 
 on:
   pull_request:
-    branches: [ "master" ]  # Triggers the workflow when a PR targets the master branch
+    branches: ["master"] # Triggers the workflow when a PR targets the master branch
   merge_group:
-    branches: [ "master" ]  # Triggers the workflow when a merge group targets the master branch
+    branches: ["master"] # Triggers the workflow when a merge group targets the master branch
   schedule:
-    - cron: '30 12 * * 0'   # Schedules the workflow to run at 12:30 PM UTC every Sunday
+    - cron: "30 12 * * 0" # Schedules the workflow to run at 12:30 PM UTC every Sunday
   push:
-    branches: [ "master" ]  # Triggers the workflow when code is pushed to the master branch
+    branches: ["master"] # Triggers the workflow when code is pushed to the master branch
 
 permissions:
-  actions: read             # Required by reusable workflow for SARIF/code scanning integration
-  security-events: write    # Allows writing security events to upload SARIF files to the security tab
-  contents: read            # Allows reading commit contents
+  actions: read # Required by reusable workflow for SARIF/code scanning integration
+  security-events: write # Allows writing security events to upload SARIF files to the security tab
+  contents: read # Allows reading commit contents
 
 jobs:
   scan-scheduled:
@@ -29,7 +29,7 @@ jobs:
       contents: read
     uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.3" # Uses reusable workflow for scheduled scans
     with:
-      scan-args: |-         # Custom arguments for the OSV-Scanner
+      scan-args: |- # Custom arguments for the OSV-Scanner
         -r                 # Recursive scan
         --skip-git         # Skip scanning git-specific files
         ./
@@ -42,7 +42,7 @@ jobs:
       contents: read
     uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.3" # Uses reusable workflow for PR scans
     with:
-      scan-args: |-         # Custom arguments for the OSV-Scanner
+      scan-args: |- # Custom arguments for the OSV-Scanner
         -r                 # Recursive scan
         --skip-git         # Skip scanning git-specific files
         ./

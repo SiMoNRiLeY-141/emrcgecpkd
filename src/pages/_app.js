@@ -1,18 +1,22 @@
-import '@/styles/globals.css';
-import { useState, useEffect } from 'react';
-import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion';
+import "@/styles/globals.css";
+import { useState, useEffect } from "react";
+import { AnimatePresence, m, LazyMotion, domAnimation } from "framer-motion";
 
-if (typeof window !== 'undefined' && window.trustedTypes && window.trustedTypes.createPolicy) {
+if (
+  typeof window !== "undefined" &&
+  window.trustedTypes &&
+  window.trustedTypes.createPolicy
+) {
   try {
     if (!window.trustedTypes.defaultPolicy) {
-      window.trustedTypes.createPolicy('default', {
+      window.trustedTypes.createPolicy("default", {
         createHTML: (string) => string,
         createScript: (string) => string,
         createScriptURL: (string) => string,
       });
     }
   } catch (e) {
-    console.error('TrustedTypes policy creation failed', e);
+    console.error("TrustedTypes policy creation failed", e);
   }
 }
 
@@ -44,7 +48,7 @@ export default function App({ Component, pageProps }) {
           </m.div>
         )}
       </AnimatePresence>
-      
+
       <Component {...pageProps} />
     </LazyMotion>
   );

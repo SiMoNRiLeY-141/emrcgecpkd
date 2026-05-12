@@ -8,6 +8,7 @@
     "start": "next start",
     "test": "jest",
     "lint": "next lint",
+    "format": "prettier --write .",
     "postbuild": "next-sitemap"
   },
   "dependencies": {
