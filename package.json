@@ -11,7 +11,7 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.103.3",
+    "@supabase/supabase-js": "^2.105.4",
     "framer-motion": "^12.38.0",
     "html-to-image": "^1.11.13",
     "html2canvas": "^1.4.1",
