@@ -12,12 +12,12 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.103.3",
-    "framer-motion": "^12.38.0",
+    "@supabase/supabase-js": "^2.106.0",
+    "framer-motion": "^12.39.0",
     "html-to-image": "^1.11.13",
     "html2canvas": "^1.4.1",
     "indexnow": "^0.1.0",
-    "lucide-react": "^1.14.0",
+    "lucide-react": "^1.16.0",
     "next": "^16.2.6",
     "next-sitemap": "^4.2.3",
     "postcss": "^8.5.14",
