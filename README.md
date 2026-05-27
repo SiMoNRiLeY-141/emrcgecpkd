@@ -28,6 +28,22 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable_key>
 DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.jfgkhseftiwquikjuhcv.supabase.co:5432/postgres
 ```
 
+## Database Setup
+
+This project uses Supabase for database storage.
+
+> [!IMPORTANT]
+> **Supabase API Grant Breaking Change**: In recent Supabase projects, tables in the `public` schema are no longer exposed to the Data (REST and GraphQL) API automatically. To allow the Next.js API routes (using the client-side `anon` role) to query and insert data, explicit SQL `GRANT` privileges must be set up.
+
+To set up the database and permissions:
+
+1. Navigate to the **SQL Editor** in your Supabase Dashboard.
+2. Open the [schema.sql](file:///d:/Gits/emrcgecpkd/schema.sql) file located in the root of this project.
+3. Copy and execute the SQL commands in the Supabase SQL Editor. This will:
+   - Create the necessary tables (`news`, `committee`, `newsletter_subscribers`, and `maintenance_requests`).
+   - Enable Row Level Security (RLS) and configure the access control policies.
+   - Explicitly grant privileges (`GRANT SELECT`, `GRANT INSERT`) to the `anon`, `authenticated`, and `service_role` database roles so they are exposed to the API correctly.
+
 ## License
 
 All rights reserved. The content of this repository is the property of the Electrical Maintenance and Research Club (EMRC) at Govt. Engineering College, Sreekrishnapuram. Unauthorized copying, distribution, or modification of any files is strictly prohibited without prior written permission from the club.
