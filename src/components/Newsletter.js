@@ -2,6 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { m } from "framer-motion";
 
+const headingText = "Subscribe to our Newsletter";
+const placeholderText = "Enter your email";
+const buttonText = "Subscribe";
+
 const Newsletter = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
@@ -55,11 +59,11 @@ const Newsletter = () => {
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, type: "spring" }}
     >
-      <h2>Subscribe to our Newsletter</h2>
+      <h2>{headingText}</h2>
       <form onSubmit={handleSubmit} className="newsletter-form">
         <input
           type="email"
-          placeholder="Enter your email"
+          placeholder={placeholderText}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -68,7 +72,7 @@ const Newsletter = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          Subscribe
+          {buttonText}
         </m.button>
       </form>
       {status && (

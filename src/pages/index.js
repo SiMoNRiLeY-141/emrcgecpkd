@@ -34,6 +34,7 @@ const CircuitBackground = dynamic(
 );
 
 const siteUrl = "https://emrcgecpkd.vercel.app";
+const titleText = "Electrical Maintenance and Research Club, GEC Palakkad";
 const schemaMarkup = {
   "@context": "https://schema.org",
   "@type": "CollegeOrUniversity",
@@ -72,7 +73,7 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
   return (
     <div className="App">
       <Head>
-        <title>Electrical Maintenance and Research Club, GEC Palakkad</title>
+        <title>{titleText}</title>
         <meta charSet="UTF-8" />
         <link rel="icon" href="https://emrcgecpkd.vercel.app/favicon.svg" />
         <meta
@@ -131,10 +132,9 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
         <meta property="og:image:height" content="281" />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
-        />
+        <script type="application/ld+json">
+          {JSON.stringify(schemaMarkup)}
+        </script>
       </Head>
       <CircuitBackground />
       <ThemeToggle />

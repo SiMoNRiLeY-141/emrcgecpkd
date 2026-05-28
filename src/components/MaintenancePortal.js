@@ -3,6 +3,16 @@ import { m } from "framer-motion";
 import { Wrench, CheckCircle } from "lucide-react";
 import supabase from "../pages/api/supabase";
 
+const portalTitle = " Maintenance Request";
+const portalDesc = "Report electrical issues around the campus. Our club members will review and assist in repairs.";
+const successTitle = "Request Submitted successfully!";
+const successDesc = "We'll look into the issue as soon as possible.";
+const submitBtnText = "Submit Request";
+const placeholderName = "Your Name / Designation";
+const placeholderDept = "Department";
+const placeholderLoc = "Location of Issue (e.g. Lab 3, Block A)";
+const placeholderDesc = "Describe the electrical issue...";
+
 const MaintenancePortal = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -44,7 +54,7 @@ const MaintenancePortal = () => {
       transition={{ duration: 1.2, type: "spring", bounce: 0.3 }}
     >
       <h2>
-        <Wrench className="inline-icon" /> Maintenance Request
+        <Wrench className="inline-icon" />{portalTitle}
       </h2>
       <p
         style={{
@@ -53,8 +63,7 @@ const MaintenancePortal = () => {
           color: "var(--text-secondary)",
         }}
       >
-        Report electrical issues around the campus. Our club members will review
-        and assist in repairs.
+        {portalDesc}
       </p>
 
       {submitted ? (
@@ -64,15 +73,15 @@ const MaintenancePortal = () => {
           animate={{ scale: 1, opacity: 1 }}
         >
           <CheckCircle size={48} color="var(--accent-primary)" />
-          <h3>Request Submitted successfully!</h3>
-          <p>We'll look into the issue as soon as possible.</p>
+          <h3>{successTitle}</h3>
+          <p>{successDesc}</p>
         </m.div>
       ) : (
         <form onSubmit={handleSubmit} className="custom-form">
           <div className="form-group">
             <input
               type="text"
-              placeholder="Your Name / Designation"
+              placeholder={placeholderName}
               required
               value={formData.name}
               onChange={(e) =>
@@ -83,7 +92,7 @@ const MaintenancePortal = () => {
           <div className="form-group">
             <input
               type="text"
-              placeholder="Department"
+              placeholder={placeholderDept}
               required
               value={formData.department}
               onChange={(e) =>
@@ -94,7 +103,7 @@ const MaintenancePortal = () => {
           <div className="form-group">
             <input
               type="text"
-              placeholder="Location of Issue (e.g. Lab 3, Block A)"
+              placeholder={placeholderLoc}
               required
               value={formData.location}
               onChange={(e) =>
@@ -104,7 +113,7 @@ const MaintenancePortal = () => {
           </div>
           <div className="form-group">
             <textarea
-              placeholder="Describe the electrical issue..."
+              placeholder={placeholderDesc}
               rows="4"
               required
               value={formData.issue}
@@ -114,7 +123,7 @@ const MaintenancePortal = () => {
             ></textarea>
           </div>
           <button type="submit" className="primary-btn">
-            Submit Request
+            {submitBtnText}
           </button>
         </form>
       )}

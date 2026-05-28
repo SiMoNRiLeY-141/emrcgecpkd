@@ -1,6 +1,9 @@
 import "@/styles/globals.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AnimatePresence, m, LazyMotion, domAnimation } from "framer-motion";
+
+const loadingText = "INITIALIZING";
+
 
 if (
   typeof window !== "undefined" &&
@@ -44,12 +47,12 @@ export default function App({ Component, pageProps }) {
             style={{ zIndex: 9999 }}
           >
             <div className="loader-circuit"></div>
-            <div className="loading-text">INITIALIZING</div>
+            <div className="loading-text">{loadingText}</div>
           </m.div>
         )}
       </AnimatePresence>
 
-      <Component {...pageProps} />
+      {React.createElement(Component, pageProps)}
     </LazyMotion>
   );
 }

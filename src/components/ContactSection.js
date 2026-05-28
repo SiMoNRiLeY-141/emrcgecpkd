@@ -20,6 +20,11 @@ const LinkedInIcon = () => (
   </svg>
 );
 
+const contactTitle = "Contact Us";
+const contactEmail = "emrc[at]gecskp[dot]ac[dot]in";
+const instagramText = " Instagram";
+const linkedinText = " LinkedIn";
+
 const ContactSection = () => {
   return (
     <m.div
@@ -30,10 +35,10 @@ const ContactSection = () => {
       transition={{ duration: 0.5 }}
       style={{ textAlign: "center" }}
     >
-      <h2>Contact Us</h2>
+      <h2>{contactTitle}</h2>
       <m.div className="contact-email" whileHover={{ scale: 1.05 }}>
         <MailIcon />
-        <p>emrc[at]gecskp[dot]ac[dot]in</p>
+        <p>{contactEmail}</p>
       </m.div>
       <div className="social-links">
         <m.a
@@ -47,7 +52,7 @@ const ContactSection = () => {
             scale: 1.1,
           }}
         >
-          <InstagramIcon /> Instagram
+          <InstagramIcon />{instagramText}
         </m.a>
         <m.a
           href="https://www.linkedin.com/company/emrc-gecpkd"
@@ -56,7 +61,7 @@ const ContactSection = () => {
           className="social-btn"
           whileHover={{ background: "#0077b5", scale: 1.1 }}
         >
-          <LinkedInIcon /> LinkedIn
+          <LinkedInIcon />{linkedinText}
         </m.a>
       </div>
     </m.div>

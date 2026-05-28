@@ -1,5 +1,8 @@
 version: 2
 updates:
+  # ----------------------------------------
+  # NPM Dependencies
+  # ----------------------------------------
   - package-ecosystem: npm
     directory: "/"
     schedule:
@@ -49,5 +52,25 @@ updates:
         update-types:
           - "minor"
           - "patch"
+        patterns:
+          - "*"
+
+  # ----------------------------------------
+  # GitHub Actions
+  # ----------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: weekly
+
+    open-pull-requests-limit: 10
+    rebase-strategy: auto
+
+    labels:
+      - dependencies
+
+    groups:
+      # Group all GitHub Action updates into a single PR to reduce noise
+      action-updates:
         patterns:
           - "*"

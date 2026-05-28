@@ -2,6 +2,9 @@ import React from "react";
 import Image from "next/image";
 import { m } from "framer-motion";
 
+const titleText = "Electrical Maintenance and Research Club (EMRC)";
+const subTitleText = "Govt. Engineering College, Sreekrishnapuram";
+
 const Header = () => {
   const logo1Url =
     "https://jfgkhseftiwquikjuhcv.supabase.co/storage/v1/object/sign/assets/logos/emrc.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81ZjY3MzJmMi0zYjEzLTQzM2UtYTZhYy02MmRjYjgxZWU3NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbG9nb3MvZW1yYy53ZWJwIiwiaWF0IjoxNzY3ODAxNzk3LCJleHAiOjIwODMxNjE3OTd9.W7JCUShYHSVZwNLqBFRjbCuaRVwrb5LcQVgW0-vaHoA";
@@ -28,7 +31,7 @@ const Header = () => {
       </m.div>
 
       <h1>
-        Electrical Maintenance and Research Club (EMRC)
+        {titleText}
         <br />
         <span
           style={{
@@ -38,7 +41,7 @@ const Header = () => {
             WebkitTextFillColor: "var(--text-secondary)",
           }}
         >
-          Govt. Engineering College, Sreekrishnapuram
+          {subTitleText}
         </span>
       </h1>
 

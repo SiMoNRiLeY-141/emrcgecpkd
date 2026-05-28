@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { m, AnimatePresence } from "framer-motion";
 
+const NO_NEWS_TEXT = "No news available.";
+const LATEST_NEWS_TEXT = "Latest News";
+
 const News = ({ initialNews = [] }) => {
   const [news, setNews] = useState(initialNews);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -50,10 +53,12 @@ const News = ({ initialNews = [] }) => {
   if (news.length === 0) {
     return (
       <div className="glass-panel" style={{ textAlign: "center" }}>
-        No news available.
+        {NO_NEWS_TEXT}
       </div>
     );
   }
+
+  const currentNewsItem = news.at(currentIndex);
 
   return (
     <m.div
@@ -63,7 +68,7 @@ const News = ({ initialNews = [] }) => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 1.2, type: "spring", bounce: 0.3 }}
     >
-      <h2>Latest News</h2>
+      <h2>{LATEST_NEWS_TEXT}</h2>
       <div className="news-slider">
         <AnimatePresence mode="popLayout" initial={false}>
           <m.div
@@ -76,14 +81,14 @@ const News = ({ initialNews = [] }) => {
             style={{ position: "absolute", width: "100%", height: "100%" }}
           >
             <a
-              href={news[currentIndex].url}
+              href={currentNewsItem.url}
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: "block", width: "100%", height: "100%" }}
             >
               <Image
-                src={news[currentIndex].image_url}
-                alt={news[currentIndex].title}
+                src={currentNewsItem.image_url}
+                alt={currentNewsItem.title}
                 width={819}
                 height={460}
                 loading="eager"
@@ -92,7 +97,7 @@ const News = ({ initialNews = [] }) => {
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
               <div className="news-title-overlay">
-                {news[currentIndex].title}
+                {currentNewsItem.title}
               </div>
             </a>
           </m.div>

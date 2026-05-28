@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { m } from "framer-motion";
 
+const titleText = "Executive Committee";
+
 const Committee = ({ initialCommittee = [] }) => {
   const [committee, setCommittee] = useState(initialCommittee);
   const hasInitialData = initialCommittee.length > 0;
@@ -60,7 +62,7 @@ const Committee = ({ initialCommittee = [] }) => {
       viewport={{ once: true, margin: "-50px" }}
       variants={containerVariants}
     >
-      <h2>Executive Committee</h2>
+      <h2>{titleText}</h2>
       <div className="committee-members">
         {committee.map((member) => (
           <m.div

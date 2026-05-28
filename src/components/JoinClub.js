@@ -5,6 +5,30 @@ import { toPng } from "html-to-image";
 import supabase from "../pages/api/supabase";
 import AvatarEditor from "react-avatar-editor";
 
+const joinTitle = " Join the Club";
+const joinDesc = "Become a part of the EMRC family. Sign up to get your unique Member ID!";
+const placeholderName = "Full Name";
+const placeholderEmail = "College Email ID";
+const selectDeptText = "Select Department";
+const deptCE = "Civil Engineering";
+const deptCSE = "Computer Science & Engineering";
+const deptECE = "Electronics & Communication";
+const deptEEE = "Electrical & Electronics";
+const deptIT = "Information Technology";
+const deptME = "Mechanical Engineering";
+const placeholderBatch = "Batch (e.g. 2023-2027)";
+const cropSaveText = "Crop & Save Photo";
+const photoChangeText = "Change Profile Photo";
+const photoUploadText = "Upload Profile Photo (Optional)";
+const generateBtnText = "Generate Member ID";
+const welcomeBackText = "Welcome back! Here is your existing ID card.";
+const cardTitle = "EMRC GEC Palakkad";
+const cardSubtitle = "Official Member";
+const labelDept = "Dept:";
+const labelBatch = "Batch:";
+const cardFooterText = "Electrical Maintenance and Research Club";
+const downloadBtnText = " Download ID Card";
+
 const JoinClub = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -118,7 +142,7 @@ const JoinClub = () => {
       transition={{ duration: 1.2, type: "spring", bounce: 0.3 }}
     >
       <h2>
-        <UserPlus className="inline-icon" /> Join the Club
+        <UserPlus className="inline-icon" />{joinTitle}
       </h2>
       <p
         style={{
@@ -127,7 +151,7 @@ const JoinClub = () => {
           color: "var(--text-secondary)",
         }}
       >
-        Become a part of the EMRC family. Sign up to get your unique Member ID!
+        {joinDesc}
       </p>
 
       {!memberId ? (
@@ -135,7 +159,7 @@ const JoinClub = () => {
           <div className="form-group">
             <input
               type="text"
-              placeholder="Full Name"
+              placeholder={placeholderName}
               required
               value={formData.name}
               onChange={(e) =>
@@ -146,7 +170,7 @@ const JoinClub = () => {
           <div className="form-group">
             <input
               type="email"
-              placeholder="College Email ID"
+              placeholder={placeholderEmail}
               required
               value={formData.email}
               onChange={(e) =>
@@ -163,20 +187,20 @@ const JoinClub = () => {
               }
             >
               <option value="" disabled>
-                Select Department
+                {selectDeptText}
               </option>
-              <option value="CE">Civil Engineering</option>
-              <option value="CSE">Computer Science & Engineering</option>
-              <option value="ECE">Electronics & Communication</option>
-              <option value="EEE">Electrical & Electronics</option>
-              <option value="IT">Information Technology</option>
-              <option value="ME">Mechanical Engineering</option>
+              <option value="CE">{deptCE}</option>
+              <option value="CSE">{deptCSE}</option>
+              <option value="ECE">{deptECE}</option>
+              <option value="EEE">{deptEEE}</option>
+              <option value="IT">{deptIT}</option>
+              <option value="ME">{deptME}</option>
             </select>
           </div>
           <div className="form-group">
             <input
               type="text"
-              placeholder="Batch (e.g. 2023-2027)"
+              placeholder={placeholderBatch}
               required
               value={formData.batch}
               onChange={(e) =>
@@ -213,16 +237,14 @@ const JoinClub = () => {
                 onClick={handleSaveImage}
                 className="primary-btn small-btn"
               >
-                Crop & Save Photo
+                {cropSaveText}
               </button>
             </div>
           ) : (
             <div className="form-group file-upload-group">
               <label htmlFor="photo-upload" className="file-upload-label">
                 <UploadCloud className="inline-icon" />
-                {croppedImage
-                  ? "Change Profile Photo"
-                  : "Upload Profile Photo (Optional)"}
+                {croppedImage ? photoChangeText : photoUploadText}
               </label>
               <input
                 id="photo-upload"
@@ -245,7 +267,7 @@ const JoinClub = () => {
           )}
 
           <button type="submit" className="primary-btn" disabled={isEditingImg}>
-            Generate Member ID
+            {generateBtnText}
           </button>
         </form>
       ) : (
@@ -255,7 +277,7 @@ const JoinClub = () => {
               className="welcome-back-msg"
               style={{ color: "var(--accent-primary)", fontWeight: "bold" }}
             >
-              Welcome back! Here is your existing ID card.
+              {welcomeBackText}
             </p>
           )}
           <m.div
@@ -270,8 +292,8 @@ const JoinClub = () => {
                   style={{ color: "var(--accent-primary)" }}
                 />
                 <div>
-                  <h4>EMRC GEC Palakkad</h4>
-                  <p>Official Member</p>
+                  <h4>{cardTitle}</h4>
+                  <p>{cardSubtitle}</p>
                 </div>
               </div>
               <div className="id-body">
@@ -295,21 +317,23 @@ const JoinClub = () => {
                   <p className="id-name">{formData.name}</p>
                   <p className="id-number">{memberId}</p>
                   <div className="id-info-grid">
-                    <span className="id-label">Dept:</span>
+                    <span className="id-label">{labelDept}</span>
                     <span>{formData.department}</span>
-                    <span className="id-label">Batch:</span>
+                    <span className="id-label">{labelBatch}</span>
                     <span>{formData.batch}</span>
                   </div>
                 </div>
               </div>
-              <div className="id-footer">
-                <p>Electrical Maintenance and Research Club</p>
+              <div className="id-card-footer">
+                <p>{cardFooterText}</p>
               </div>
             </div>
           </m.div>
 
           <button onClick={downloadIdCard} className="primary-btn download-btn">
-            <Download size={20} /> Download ID Card
+            <m.span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              <Download size={20} />{downloadBtnText}
+            </m.span>
           </button>
         </div>
       )}
