@@ -27,7 +27,7 @@ jobs:
       actions: read
       security-events: write
       contents: read
-    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.3" # Uses reusable workflow for scheduled scans
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.8" # Uses reusable workflow for scheduled scans
     with:
       scan-args: |- # Custom arguments for the OSV-Scanner
         -r                 # Recursive scan
@@ -40,7 +40,7 @@ jobs:
       actions: read
       security-events: write
       contents: read
-    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.3" # Uses reusable workflow for PR scans
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.8" # Uses reusable workflow for PR scans
     with:
       scan-args: |- # Custom arguments for the OSV-Scanner
         -r                 # Recursive scan
