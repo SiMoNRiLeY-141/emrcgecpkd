@@ -6,6 +6,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const nextConfig = {
   images: {
+    unoptimized: true,
     // Add smaller breakpoints so Next can serve tighter image sizes for member cards.
     deviceSizes: [180, 256, 384, 640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 180, 232, 256, 384, 512],

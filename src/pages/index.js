@@ -71,7 +71,7 @@ const schemaMarkup = {
 
 const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
   return (
-    <div className="App">
+    <div className="App max-w-[1200px] mx-auto p-5 pb-20 md:pb-[80px]">
       <Head>
         <title>{titleText}</title>
         <meta charSet="UTF-8" />
@@ -138,7 +138,7 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
       </Head>
       <CircuitBackground />
       <ThemeToggle />
-      <main style={{ position: "relative", zIndex: 10 }}>
+      <main className="relative z-10">
         <Header />
         <JoinClub />
         <News initialNews={initialNews} />

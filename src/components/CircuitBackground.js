@@ -3,7 +3,7 @@ import { m } from "framer-motion";
 
 const CircuitBackground = () => {
   return (
-    <div className="circuit-bg">
+    <div className="circuit-bg fixed top-0 left-0 w-screen h-screen z-0 pointer-events-none overflow-hidden opacity-60">
       <svg
         width="100%"
         height="100%"

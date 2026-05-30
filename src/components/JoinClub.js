@@ -134,29 +134,23 @@ const JoinClub = () => {
 
   return (
     <m.div
-      className="glass-panel"
+      className="glass-panel bg-glass-bg backdrop-blur-[16px] border border-glass-border rounded-[20px] md:rounded-[24px] p-[25px_15px] md:p-10 mb-10 md:mb-[60px] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]"
       id="join"
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 1.2, type: "spring", bounce: 0.3 }}
     >
-      <h2>
-        <UserPlus className="inline-icon" />{joinTitle}
+      <h2 className="text-[clamp(1.8rem,4vw,2.2rem)] text-text-primary m-[0_auto_40px] text-center relative w-fit block font-bold after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-[60px] after:h-1 after:bg-gradient-to-r after:from-accent-primary after:to-accent-secondary after:rounded-[4px]">
+        <UserPlus className="inline-icon inline-block mr-2 text-accent-primary align-middle" />{joinTitle}
       </h2>
-      <p
-        style={{
-          textAlign: "center",
-          marginBottom: "30px",
-          color: "var(--text-secondary)",
-        }}
-      >
+      <p className="text-center mb-[30px] text-text-secondary">
         {joinDesc}
       </p>
 
       {!memberId ? (
-        <form onSubmit={handleSubmit} className="custom-form">
-          <div className="form-group">
+        <form onSubmit={handleSubmit} className="custom-form max-w-[600px] mx-auto flex flex-col gap-5">
+          <div className="form-group w-full">
             <input
               type="text"
               placeholder={placeholderName}
@@ -165,9 +159,10 @@ const JoinClub = () => {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
+              className="w-full p-[15px_20px] rounded-xl border border-glass-border bg-[rgba(0,0,0,0.2)] [[data-theme=light]_&]:bg-[rgba(255,255,255,0.5)] text-text-primary text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
             />
           </div>
-          <div className="form-group">
+          <div className="form-group w-full">
             <input
               type="email"
               placeholder={placeholderEmail}
@@ -176,15 +171,17 @@ const JoinClub = () => {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
+              className="w-full p-[15px_20px] rounded-xl border border-glass-border bg-[rgba(0,0,0,0.2)] [[data-theme=light]_&]:bg-[rgba(255,255,255,0.5)] text-text-primary text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
             />
           </div>
-          <div className="form-group">
+          <div className="form-group w-full">
             <select
               required
               value={formData.department}
               onChange={(e) =>
                 setFormData({ ...formData, department: e.target.value })
               }
+              className="w-full p-[15px_20px] rounded-xl border border-glass-border bg-[rgba(0,0,0,0.2)] [[data-theme=light]_&]:bg-[rgba(255,255,255,0.5)] text-text-primary text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
             >
               <option value="" disabled>
                 {selectDeptText}
@@ -197,7 +194,7 @@ const JoinClub = () => {
               <option value="ME">{deptME}</option>
             </select>
           </div>
-          <div className="form-group">
+          <div className="form-group w-full">
             <input
               type="text"
               placeholder={placeholderBatch}
@@ -206,11 +203,12 @@ const JoinClub = () => {
               onChange={(e) =>
                 setFormData({ ...formData, batch: e.target.value })
               }
+              className="w-full p-[15px_20px] rounded-xl border border-glass-border bg-[rgba(0,0,0,0.2)] [[data-theme=light]_&]:bg-[rgba(255,255,255,0.5)] text-text-primary text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
             />
           </div>
 
           {isEditingImg && image ? (
-            <div className="image-editor-container">
+            <div className="image-editor-container flex flex-col items-center gap-[15px] bg-[rgba(0,0,0,0.2)] p-5 rounded-xl border border-dashed border-glass-border">
               <AvatarEditor
                 ref={editorRef}
                 image={image}
@@ -221,7 +219,7 @@ const JoinClub = () => {
                 color={[0, 0, 0, 0.6]}
                 scale={scale}
                 rotate={0}
-                className="avatar-editor"
+                className="avatar-editor rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)]"
               />
               <input
                 type="range"
@@ -230,20 +228,20 @@ const JoinClub = () => {
                 max="3"
                 step="0.05"
                 onChange={(e) => setScale(parseFloat(e.target.value))}
-                className="zoom-slider"
+                className="zoom-slider w-full max-w-[200px] accent-accent-primary"
               />
               <button
                 type="button"
                 onClick={handleSaveImage}
-                className="primary-btn small-btn"
+                className="primary-btn small-btn p-[10px_20px] text-[0.9rem] rounded-[50px] border-none bg-gradient-to-br from-accent-primary to-accent-secondary text-white font-bold cursor-pointer transition-all duration-300 font-inherit uppercase tracking-[1px] flex items-center justify-center gap-2.5 hover:-translate-y-[3px] hover:scale-[1.02] hover:shadow-[0_10px_25px_rgba(112,0,255,0.4)]"
               >
                 {cropSaveText}
               </button>
             </div>
           ) : (
-            <div className="form-group file-upload-group">
-              <label htmlFor="photo-upload" className="file-upload-label">
-                <UploadCloud className="inline-icon" />
+            <div className="form-group file-upload-group w-full">
+              <label htmlFor="photo-upload" className="file-upload-label flex items-center justify-center gap-2.5 p-[15px_20px] rounded-xl border border-dashed border-accent-primary bg-[rgba(0,240,255,0.05)] text-text-primary cursor-pointer transition-all duration-300 font-semibold text-center hover:bg-[rgba(0,240,255,0.15)] hover:-translate-y-0.5">
+                <UploadCloud className="inline-icon text-accent-primary align-middle mr-2" />
                 {croppedImage ? photoChangeText : photoUploadText}
               </label>
               <input
@@ -259,24 +257,25 @@ const JoinClub = () => {
                 style={{ display: "none" }}
               />
               {croppedImage && !isEditingImg && (
-                <div className="preview-avatar-mini">
-                  <img src={croppedImage} alt="Preview" />
+                <div className="preview-avatar-mini w-[50px] h-[50px] rounded-full overflow-hidden mx-auto mt-4 border-2 border-accent-primary">
+                  <img src={croppedImage} alt="Preview" className="w-full h-full object-cover" />
                 </div>
               )}
             </div>
           )}
 
-          <button type="submit" className="primary-btn" disabled={isEditingImg}>
+          <button
+            type="submit"
+            className="primary-btn p-[15px_30px] rounded-[50px] border-none bg-gradient-to-br from-accent-primary to-accent-secondary text-white font-bold text-[1.1rem] cursor-pointer transition-all duration-300 font-inherit uppercase tracking-[1px] flex items-center justify-center gap-2.5 hover:-translate-y-[3px] hover:scale-[1.02] hover:shadow-[0_10px_25px_rgba(112,0,255,0.4)]"
+            disabled={isEditingImg}
+          >
             {generateBtnText}
           </button>
         </form>
       ) : (
-        <div className="id-card-container">
+        <div className="id-card-container flex flex-col items-center gap-[30px]">
           {isExistingMember && (
-            <p
-              className="welcome-back-msg"
-              style={{ color: "var(--accent-primary)", fontWeight: "bold" }}
-            >
+            <p className="welcome-back-msg text-center bg-[rgba(0,240,255,0.1)] p-[10px_20px] rounded-[50px] border border-accent-primary mb-0 font-bold text-accent-primary">
               {welcomeBackText}
             </p>
           )}
@@ -285,53 +284,47 @@ const JoinClub = () => {
             animate={{ scale: 1, rotateY: 0 }}
             transition={{ type: "spring", stiffness: 100 }}
           >
-            <div className="id-card" ref={cardRef}>
-              <div className="id-header">
+            <div className="id-card w-[350px] bg-gradient-to-br from-[#1a1f2e] to-[#111520] rounded-2xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.5)] border border-white/10 relative text-white before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[5px] before:bg-gradient-to-r before:from-accent-primary before:to-accent-secondary" ref={cardRef}>
+              <div className="id-header p-5 flex items-center gap-[15px] border-b border-white/5">
                 <Cpu
-                  className="id-logo"
-                  style={{ color: "var(--accent-primary)" }}
+                  className="id-logo text-accent-primary w-10 h-10 rounded-lg"
                 />
                 <div>
-                  <h4>{cardTitle}</h4>
-                  <p>{cardSubtitle}</p>
+                  <h4 className="m-0 text-[1.1rem] text-white font-bold">{cardTitle}</h4>
+                  <p className="m-0 text-[0.8rem] text-accent-primary uppercase tracking-[1px]">{cardSubtitle}</p>
                 </div>
               </div>
-              <div className="id-body">
-                <div className="id-avatar">
+              <div className="id-body p-[30px_20px] flex flex-col items-center text-center bg-[radial-gradient(circle_at_50%_0%,rgba(112,0,255,0.15),transparent_70%)]">
+                <div className="id-avatar w-[90px] h-[90px] rounded-full bg-gradient-to-br from-accent-primary to-accent-secondary flex items-center justify-center text-[2.5rem] font-bold text-[#111520] mb-[15px] border-4 border-[#1a1f2e] shadow-[0_5px_15px_rgba(0,0,0,0.3)] overflow-hidden">
                   {croppedImage ? (
                     <img
                       src={croppedImage}
                       alt="Profile"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
+                      className="w-full h-full object-cover rounded-full"
                     />
                   ) : (
                     formData.name.charAt(0).toUpperCase()
                   )}
                 </div>
                 <div className="id-details">
-                  <p className="id-name">{formData.name}</p>
-                  <p className="id-number">{memberId}</p>
-                  <div className="id-info-grid">
-                    <span className="id-label">{labelDept}</span>
+                  <p className="id-name text-[1.4rem] font-bold m-[0_0_5px_0] text-white">{formData.name}</p>
+                  <p className="id-number font-mono text-[1.1rem] text-[#a0aec0] bg-[rgba(0,0,0,0.3)] p-[4px_12px] rounded-[20px] m-[0_0_20px_0] inline-block">{memberId}</p>
+                  <div className="id-info-grid grid grid-cols-[auto_1fr] gap-[8px_15px] text-left w-full text-[0.9rem]">
+                    <span className="id-label text-[#a0aec0] font-semibold">{labelDept}</span>
                     <span>{formData.department}</span>
-                    <span className="id-label">{labelBatch}</span>
+                    <span className="id-label text-[#a0aec0] font-semibold">{labelBatch}</span>
                     <span>{formData.batch}</span>
                   </div>
                 </div>
               </div>
-              <div className="id-card-footer">
-                <p>{cardFooterText}</p>
+              <div className="id-card-footer p-[15px] bg-[rgba(0,0,0,0.3)] text-center text-[0.8rem] text-[#718096] border-t border-white/5">
+                <p className="m-0">{cardFooterText}</p>
               </div>
             </div>
           </m.div>
 
-          <button onClick={downloadIdCard} className="primary-btn download-btn">
-            <m.span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+          <button onClick={downloadIdCard} className="primary-btn download-btn p-[15px_30px] rounded-[50px] border-none bg-gradient-to-br from-accent-primary to-accent-secondary text-white font-bold text-[1.1rem] cursor-pointer transition-all duration-300 font-inherit uppercase tracking-[1px] flex items-center justify-center gap-2.5 hover:-translate-y-[3px] hover:scale-[1.02] hover:shadow-[0_10px_25px_rgba(112,0,255,0.4)] max-w-[250px] w-full">
+            <m.span className="inline-flex items-center gap-2">
               <Download size={20} />{downloadBtnText}
             </m.span>
           </button>

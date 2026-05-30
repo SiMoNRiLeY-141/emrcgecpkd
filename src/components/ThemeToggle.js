@@ -20,7 +20,7 @@ const ThemeToggle = () => {
 
   return (
     <m.button
-      className="theme-toggle-btn"
+      className="theme-toggle-btn fixed bottom-5 left-5 z-[1000] bg-glass-bg border border-glass-border text-accent-primary rounded-full w-[50px] h-[50px] flex items-center justify-center cursor-pointer shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
       onClick={toggleTheme}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}

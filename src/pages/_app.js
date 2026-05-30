@@ -43,11 +43,10 @@ export default function App({ Component, pageProps }) {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
             transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="loading-screen"
-            style={{ zIndex: 9999 }}
+            className="loading-screen fixed inset-0 bg-bg-color flex flex-col justify-center items-center z-[9999]"
           >
             <div className="loader-circuit"></div>
-            <div className="loading-text">{loadingText}</div>
+            <div className="loading-text mt-5 font-saira font-bold tracking-[4px] bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text [-webkit-text-fill-color:transparent] animate-[pulse_1.5s_ease-in-out_infinite]">{loadingText}</div>
           </m.div>
         )}
       </AnimatePresence>

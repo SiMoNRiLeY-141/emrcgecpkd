@@ -39,7 +39,7 @@ const SocialMediaOverlay = () => {
 
   return (
     <m.div
-      className="social-media-overlay"
+      className="social-media-overlay fixed z-[1000] bg-glass-bg backdrop-blur-[16px] border border-glass-border shadow-[0_10px_30px_rgba(0,0,0,0.5)] rounded-[30px] flex flex-row md:flex-col gap-[15px] p-[10px_20px] md:p-[15px] w-fit bottom-5 md:bottom-auto left-1/2 md:left-auto right-auto md:right-5 top-auto md:top-1/2 -translate-x-1/2 md:translate-x-0 md:-translate-y-1/2"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -52,6 +52,7 @@ const SocialMediaOverlay = () => {
         variants={itemVariants}
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.9 }}
+        className="flex items-center justify-center w-[45px] h-[45px] rounded-full bg-white/5 text-text-primary transition-all duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:bg-gradient-to-br hover:from-accent-primary hover:to-accent-secondary hover:text-black"
       >
         <InstagramIcon />
       </m.a>
@@ -63,6 +64,7 @@ const SocialMediaOverlay = () => {
         variants={itemVariants}
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.9 }}
+        className="flex items-center justify-center w-[45px] h-[45px] rounded-full bg-white/5 text-text-primary transition-all duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:bg-gradient-to-br hover:from-accent-primary hover:to-accent-secondary hover:text-black"
       >
         <LinkedInIcon />
       </m.a>
@@ -72,6 +74,7 @@ const SocialMediaOverlay = () => {
         variants={itemVariants}
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.9 }}
+        className="flex items-center justify-center w-[45px] h-[45px] rounded-full bg-white/5 text-text-primary transition-all duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:bg-gradient-to-br hover:from-accent-primary hover:to-accent-secondary hover:text-black"
       >
         <MailIcon />
       </m.a>

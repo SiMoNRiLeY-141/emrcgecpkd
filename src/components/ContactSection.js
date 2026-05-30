@@ -28,24 +28,25 @@ const linkedinText = " LinkedIn";
 const ContactSection = () => {
   return (
     <m.div
-      className="glass-panel contact-section"
+      className="glass-panel contact-section bg-glass-bg backdrop-blur-[16px] border border-glass-border rounded-[20px] md:rounded-[24px] p-[25px_15px] md:p-10 mb-10 md:mb-[60px] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] text-center"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      style={{ textAlign: "center" }}
     >
-      <h2>{contactTitle}</h2>
-      <m.div className="contact-email" whileHover={{ scale: 1.05 }}>
+      <h2 className="text-[clamp(1.8rem,4vw,2.2rem)] text-text-primary m-[0_auto_40px] text-center relative w-fit block font-bold after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-[60px] after:h-1 after:bg-gradient-to-r after:from-accent-primary after:to-accent-secondary after:rounded-[4px]">
+        {contactTitle}
+      </h2>
+      <m.div className="contact-email flex items-center justify-center gap-2.5 mb-5 cursor-pointer" whileHover={{ scale: 1.05 }}>
         <MailIcon />
-        <p>{contactEmail}</p>
+        <p className="m-0 text-[1.2rem] text-text-secondary leading-[1.6]">{contactEmail}</p>
       </m.div>
-      <div className="social-links">
+      <div className="social-links flex flex-col md:flex-row justify-center items-center gap-2.5 md:gap-5 mt-5">
         <m.a
           href="https://www.instagram.com/emrc_gec"
           target="_blank"
           rel="noopener noreferrer"
-          className="social-btn"
+          className="social-btn flex items-center gap-2 py-2.5 px-5 bg-white/5 rounded-[30px] text-text-primary no-underline transition-all duration-300"
           whileHover={{
             background:
               "linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
@@ -58,7 +59,7 @@ const ContactSection = () => {
           href="https://www.linkedin.com/company/emrc-gecpkd"
           target="_blank"
           rel="noopener noreferrer"
-          className="social-btn"
+          className="social-btn flex items-center gap-2 py-2.5 px-5 bg-white/5 rounded-[30px] text-text-primary no-underline transition-all duration-300"
           whileHover={{ background: "#0077b5", scale: 1.1 }}
         >
           <LinkedInIcon />{linkedinText}
