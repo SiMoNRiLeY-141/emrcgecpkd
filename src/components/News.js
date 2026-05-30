@@ -95,11 +95,13 @@ const News = ({ initialNews = [] }) => {
                 <Image
                   src={item.image_url}
                   alt={item.title}
-                  width={819}
-                  height={460}
+                  width={640}
+                  height={360}
+                  priority
                   loading="eager"
                   fetchPriority="high"
-                  sizes="(max-width: 768px) 100vw, 800px"
+                  quality={75}
+                  sizes="(max-width: 768px) 100vw, 640px"
                   className="w-full h-full object-cover"
                 />
                 <div className={`news-title-overlay absolute bottom-0 left-0 right-0 p-[40px_20px_20px] md:p-[60px_30px_30px] bg-gradient-to-t from-[rgba(0,0,0,0.9)] via-[rgba(0,0,0,0.6)] to-transparent text-white text-lg md:text-2xl font-semibold text-left transition-all duration-500 ease-out delay-300 ${isActive ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}>

@@ -3,6 +3,22 @@ import Image from "next/image";
 import { m } from "framer-motion";
 
 const titleText = "Executive Committee";
+const OPTIMIZED_COMMITTEE_PREFIX =
+  "/storage/v1/object/public/images/committee/optimized/";
+
+const getOptimizedCommitteePhotoUrl = (photoUrl) => {
+  if (!photoUrl || !photoUrl.includes("/storage/v1/object/public/images/committee/")) {
+    return photoUrl;
+  }
+
+  const fileName = photoUrl.split("/").pop();
+  if (!fileName) {
+    return photoUrl;
+  }
+
+  const baseName = fileName.replace(/\.[^.]+$/, "");
+  return `${photoUrl.split("/storage/v1/object/public/images/committee/")[0]}${OPTIMIZED_COMMITTEE_PREFIX}${baseName}-w232.webp`;
+};
 
 const Committee = ({ initialCommittee = [] }) => {
   const [committee, setCommittee] = useState(initialCommittee);
@@ -74,15 +90,15 @@ const Committee = ({ initialCommittee = [] }) => {
           >
             <div className="image-wrapper w-[130px] h-[130px] md:w-40 md:h-40 mx-auto mb-5 rounded-full p-1 bg-gradient-to-br from-accent-primary to-accent-secondary transition-transform duration-400 ease-out group-hover:scale-105 group-hover:rotate-[5deg]">
               <Image
-                src={member.photo_url}
+                src={getOptimizedCommitteePhotoUrl(member.photo_url)}
                 alt={member.name}
                 className="member-image w-full h-full object-cover rounded-full border-4 border-bg-color"
-                width={256}
-                height={256}
+                width={232}
+                height={232}
                 loading="lazy"
                 fetchPriority="low"
                 quality={68}
-                sizes="(max-width: 768px) 30vw, 185px"
+                sizes="(max-width: 768px) 180px, 232px"
               />
             </div>
             <h3 className="text-text-primary font-kalam text-[1.4rem] md:text-[1.6rem] mb-1.5">{member.name}</h3>
