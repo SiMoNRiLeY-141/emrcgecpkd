@@ -36,7 +36,7 @@
 @theme {
   --font-saira: "Saira", system-ui, sans-serif;
   --font-kalam: "Kalam", cursive;
-  
+
   --color-bg-color: var(--bg-color);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
@@ -60,13 +60,21 @@
         rgba(112, 0, 255, 0.08),
         transparent 25%
       ),
-      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.08), transparent 25%);
+      radial-gradient(
+        circle at 85% 30%,
+        rgba(0, 240, 255, 0.08),
+        transparent 25%
+      );
     background-attachment: fixed;
     color: var(--text-primary);
     margin: 0;
     padding: 0;
     font-family: var(--font-saira);
     overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 }
 
@@ -75,7 +83,7 @@
   width: 80px;
   height: 80px;
   position: relative;
-  
+
   &::before,
   &::after {
     content: "";
@@ -104,5 +112,52 @@
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@layer components {
+  .scroll-section-3d {
+    transform-origin: center center;
+    will-change: transform, opacity;
+  }
+
+  .scroll-section-3d > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .scroll-section-3d > *::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(120deg, rgba(255, 255, 255, 0.16), transparent 28%),
+      linear-gradient(300deg, rgba(0, 240, 255, 0.08), transparent 42%);
+    opacity: 0.35;
+    mix-blend-mode: screen;
+  }
+
+  .scroll-scene-3d {
+    perspective: 1200px;
+    perspective-origin: 50% 44%;
+  }
+}
+
+@media (max-width: 767px) {
+  .scroll-scene-3d {
+    opacity: 0.62;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .scroll-section-3d {
+    transform: none !important;
+    opacity: 1 !important;
   }
 }

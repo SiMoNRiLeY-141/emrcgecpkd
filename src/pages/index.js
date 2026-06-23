@@ -32,6 +32,12 @@ const CircuitBackground = dynamic(
   () => import("../components/CircuitBackground"),
   { ssr: false },
 );
+const ScrollScene3D = dynamic(() => import("../components/ScrollScene3D"), {
+  ssr: false,
+});
+const ScrollSection = dynamic(() => import("../components/ScrollSection"), {
+  ssr: false,
+});
 
 const siteUrl = "https://emrcgecpkd.vercel.app";
 const titleText = "Electrical Maintenance and Research Club, GEC Palakkad";
@@ -70,8 +76,21 @@ const schemaMarkup = {
 };
 
 const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
+  const sections = [
+    { key: "header", component: <Header /> },
+    { key: "join", component: <JoinClub /> },
+    { key: "news", component: <News initialNews={initialNews} /> },
+    { key: "maintenance", component: <MaintenancePortal /> },
+    {
+      key: "committee",
+      component: <Committee initialCommittee={initialCommittee} />,
+    },
+    { key: "newsletter", component: <Newsletter /> },
+    { key: "contact", component: <ContactSection /> },
+  ];
+
   return (
-    <div className="App max-w-[1200px] mx-auto p-5 pb-20 md:pb-[80px]">
+    <div className="App min-h-screen overflow-x-clip">
       <Head>
         <title>{titleText}</title>
         <meta charSet="UTF-8" />
@@ -137,15 +156,14 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
         </script>
       </Head>
       <CircuitBackground />
+      <ScrollScene3D />
       <ThemeToggle />
-      <main className="relative z-10">
-        <Header />
-        <JoinClub />
-        <News initialNews={initialNews} />
-        <MaintenancePortal />
-        <Committee initialCommittee={initialCommittee} />
-        <Newsletter />
-        <ContactSection />
+      <main className="relative z-10 mx-auto max-w-[1200px] p-5 pb-20 md:pb-[80px] [perspective:1400px] [perspective-origin:50%_18vh]">
+        {sections.map((section, index) => (
+          <ScrollSection key={section.key} depth={index}>
+            {section.component}
+          </ScrollSection>
+        ))}
       </main>
       <SocialMediaOverlay />
     </div>
