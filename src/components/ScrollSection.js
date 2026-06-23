@@ -42,43 +42,47 @@ const ScrollSection = ({ children, depth = 0, className = "" }) => {
   const reduceMotion = useReducedMotion();
   const sectionProgress = useElementProgress(ref);
   const smoothProgress = useSpring(sectionProgress, {
-    stiffness: 120,
-    damping: 26,
-    mass: 0.35,
+    stiffness: 90,
+    damping: 24,
+    mass: 0.4,
   });
 
-  const rotateX = useTransform(smoothProgress, [0, 0.45, 1], [10, 0, -8]);
-  const rotateY = useTransform(
-    smoothProgress,
-    [0, 0.5, 1],
-    [depth % 2 === 0 ? -9 : 9, 0, depth % 2 === 0 ? 7 : -7],
-  );
-  const z = useTransform(smoothProgress, [0, 0.5, 1], [-90, 70, -70]);
+  // Immersive 3D appearance (scale & tilt, instead of simple translation)
   const opacity = useTransform(
     smoothProgress,
-    [0, 0.15, 0.88, 1],
-    [0.62, 1, 1, 0.72],
+    [0, 0.25, 0.75, 1],
+    [0, 1, 1, 0]
   );
-  const scale = useTransform(smoothProgress, [0, 0.5, 1], [0.94, 1, 0.96]);
+  
+  const scale = useTransform(
+    smoothProgress,
+    [0, 0.5, 1],
+    [0.78, 1, 0.82]
+  );
+
+  const rotateX = useTransform(
+    smoothProgress,
+    [0, 0.5, 1],
+    [22, 0, -22]
+  );
 
   return (
     <m.section
       ref={ref}
-      className={`scroll-section-3d relative z-10 [transform-style:preserve-3d] ${className}`}
+      className={`relative z-10 w-full min-h-[75vh] flex flex-col justify-center my-20 md:my-36 pointer-events-none [transform-style:preserve-3d] ${className}`}
       style={
         reduceMotion
-          ? { position: "relative" }
+          ? { opacity: 1 }
           : {
-              position: "relative",
-              rotateX,
-              rotateY,
-              z,
               opacity,
               scale,
+              rotateX,
             }
       }
     >
-      {children}
+      <div className="w-full pointer-events-auto">
+        {children}
+      </div>
     </m.section>
   );
 };

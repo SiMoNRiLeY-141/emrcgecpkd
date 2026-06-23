@@ -16,6 +16,7 @@
     "@tailwindcss/postcss": "4.3.0",
     "dotenv": "^17.4.2",
     "framer-motion": "12.38.0",
+    "gsap": "^3.15.0",
     "html-to-image": "1.11.13",
     "html2canvas": "1.4.1",
     "indexnow": "0.1.0",
@@ -30,7 +31,8 @@
     "react-dom": "19.2.6",
     "react-easy-crop": "5.5.7",
     "sharp": "^0.34.5",
-    "tailwindcss": "4.3.0"
+    "tailwindcss": "4.3.0",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "16.2.4",

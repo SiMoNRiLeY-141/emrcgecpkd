@@ -1,19 +1,21 @@
 import React, { useState } from "react";
-import { m } from "framer-motion";
-import { Wrench, CheckCircle } from "lucide-react";
+import { m, AnimatePresence } from "framer-motion";
+import { Wrench, CheckCircle, Terminal, ChevronDown, ChevronUp } from "lucide-react";
 import supabase from "../pages/api/supabase";
+import { playClick, playHover, playSuccess } from "../utils/audio";
 
-const portalTitle = " Maintenance Request";
-const portalDesc = "Report electrical issues around the campus. Our club members will review and assist in repairs.";
-const successTitle = "Request Submitted successfully!";
-const successDesc = "We'll look into the issue as soon as possible.";
-const submitBtnText = "Submit Request";
-const placeholderName = "Your Name / Designation";
-const placeholderDept = "Department";
-const placeholderLoc = "Location of Issue (e.g. Lab 3, Block A)";
-const placeholderDesc = "Describe the electrical issue...";
+const portalTitle = " CAMPUS MAINTENANCE TERMINAL";
+const portalDesc = "Report campus electrical issues directly to EMRC technicians.";
+const successTitle = "TRANSMISSION SUCCESSFUL";
+const successDesc = "Directive logged. Dispatching technicians to localized coordinates.";
+const submitBtnText = "EXECUTE DIRECTIVE";
+const placeholderName = "OPERATOR_NAME / DESIGNATION";
+const placeholderDept = "DEPARTMENT_ID";
+const placeholderLoc = "LOCATION_COORDINATES (e.g. Lab 3, Block A)";
+const placeholderDesc = "DESCRIBE_FAULT_ANOMALY...";
 
 const MaintenancePortal = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     department: "",
@@ -21,9 +23,23 @@ const MaintenancePortal = () => {
     issue: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [terminalLog, setTerminalLog] = useState([]);
+
+  const addToLog = (msg) => {
+    setTerminalLog((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`].slice(-4));
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    playHover();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    playClick();
+    addToLog("INITIALIZING SECURITY HANDSHAKE...");
+    addToLog("UPLOADING COORDINATES TO SUPABASE NODE...");
+
     try {
       const { error } = await supabase.from("maintenance_requests").insert([
         {
@@ -33,101 +49,159 @@ const MaintenancePortal = () => {
           issue: formData.issue,
         },
       ]);
-      if (error) console.error("Error inserting request:", error);
+      if (error) {
+        console.error("Error inserting request:", error);
+        addToLog("ERROR: CONNECTION TIMEOUT.");
+      } else {
+        addToLog("TRANSMISSION ESTABLISHED. DISPATCH CODE: EMRC-OK.");
+        playSuccess();
+      }
     } catch (err) {
       console.error(err);
+      addToLog("CRITICAL: DISPATCH EXCEPTION ENCOUNTERED.");
     }
+
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
       setFormData({ name: "", department: "", location: "", issue: "" });
-    }, 5000);
+      setTerminalLog([]);
+    }, 6000);
+  };
+
+  const handleToggleExpand = () => {
+    playClick();
+    setIsExpanded(!isExpanded);
   };
 
   return (
     <m.div
-      className="glass-panel bg-glass-bg backdrop-blur-[16px] border border-glass-border rounded-[20px] md:rounded-[24px] p-[25px_15px] md:p-10 mb-10 md:mb-[60px] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]"
+      className="hud-panel rounded-[24px] p-6 md:p-10 mb-10 md:mb-[60px]"
       id="maintenance"
-      initial={{ opacity: 0, y: 100 }}
+      initial={{ opacity: 0, y: 80 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 1.2, type: "spring", bounce: 0.3 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 1.0, type: "spring", bounce: 0.2 }}
     >
-      <h2 className="text-[clamp(1.8rem,4vw,2.2rem)] text-text-primary m-[0_auto_40px] text-center relative w-fit block font-bold after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-[60px] after:h-1 after:bg-gradient-to-r after:from-accent-primary after:to-accent-secondary after:rounded-[4px]">
-        <Wrench className="inline-icon inline-block mr-2 text-accent-primary align-middle" />{portalTitle}
+      <h2 className="text-[clamp(1.4rem,3vw,1.8rem)] text-accent-primary m-[0_auto_16px] text-center font-bold tracking-[2px] flex items-center justify-center gap-2 text-glow-cyan">
+        <Wrench className="inline-block text-accent-primary align-middle animate-pulse" />
+        {portalTitle}
       </h2>
-      <p className="text-center mb-[30px] text-text-secondary">
-        {portalDesc}
-      </p>
 
-      {submitted ? (
-        <m.div
-          className="success-message text-center p-10 bg-[rgba(0,240,255,0.1)] rounded-2xl border border-accent-primary"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-        >
-          <CheckCircle size={48} className="mx-auto text-accent-primary" />
-          <h3 className="mt-[15px] text-text-primary font-bold text-xl">{successTitle}</h3>
-          <p className="mt-2 text-text-secondary">{successDesc}</p>
-        </m.div>
-      ) : (
-        <form onSubmit={handleSubmit} className="custom-form max-w-[600px] mx-auto flex flex-col gap-5">
-          <div className="form-group w-full">
-            <input
-              type="text"
-              placeholder={placeholderName}
-              required
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="w-full p-[15px_20px] rounded-xl border border-glass-border bg-[rgba(0,0,0,0.2)] [[data-theme=light]_&]:bg-[rgba(255,255,255,0.5)] text-text-primary text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
-            />
-          </div>
-          <div className="form-group w-full">
-            <input
-              type="text"
-              placeholder={placeholderDept}
-              required
-              value={formData.department}
-              onChange={(e) =>
-                setFormData({ ...formData, department: e.target.value })
-              }
-              className="w-full p-[15px_20px] rounded-xl border border-glass-border bg-[rgba(0,0,0,0.2)] [[data-theme=light]_&]:bg-[rgba(255,255,255,0.5)] text-text-primary text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
-            />
-          </div>
-          <div className="form-group w-full">
-            <input
-              type="text"
-              placeholder={placeholderLoc}
-              required
-              value={formData.location}
-              onChange={(e) =>
-                setFormData({ ...formData, location: e.target.value })
-              }
-              className="w-full p-[15px_20px] rounded-xl border border-glass-border bg-[rgba(0,0,0,0.2)] [[data-theme=light]_&]:bg-[rgba(255,255,255,0.5)] text-text-primary text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
-            />
-          </div>
-          <div className="form-group w-full">
-            <textarea
-              placeholder={placeholderDesc}
-              rows="4"
-              required
-              value={formData.issue}
-              onChange={(e) =>
-                setFormData({ ...formData, issue: e.target.value })
-              }
-              className="w-full p-[15px_20px] rounded-xl border border-glass-border bg-[rgba(0,0,0,0.2)] [[data-theme=light]_&]:bg-[rgba(255,255,255,0.5)] text-text-primary text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="primary-btn p-[15px_30px] rounded-[50px] border-none bg-gradient-to-br from-accent-primary to-accent-secondary text-white font-bold text-[1.1rem] cursor-pointer transition-all duration-300 font-inherit uppercase tracking-[1px] flex items-center justify-center gap-2.5 hover:-translate-y-[3px] hover:scale-[1.02] hover:shadow-[0_10px_25px_rgba(112,0,255,0.4)]"
+      <div className="hud-line mb-6" />
+
+      {/* Accompanied telemetry contextual copy */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mb-6">
+        <div className="md:col-span-8 font-mono text-xs text-text-secondary leading-relaxed uppercase tracking-[1px]">
+          <p className="mb-2">Campus maintenance dispatch order form. Registered requests are verified, prioritized by electrical fault hazards, and routed directly to active technical response squads.</p>
+          <p className="text-accent-primary/80">Open a maintenance dispatch ticket to file a new repair directive.</p>
+        </div>
+        <div className="md:col-span-4 flex justify-center">
+          {!submitted && (
+            <button
+              onClick={handleToggleExpand}
+              onMouseEnter={playHover}
+              className="flex items-center gap-2 px-5 py-3 rounded-full bg-accent-primary/10 border border-accent-primary/30 text-accent-primary font-bold font-mono text-[11px] tracking-[2px] transition-all duration-300 hover:bg-accent-primary/20 hover:border-accent-primary/60 select-none pointer-events-auto"
+            >
+              {isExpanded ? (
+                <>COLLAPSE DISPATCH <ChevronUp className="w-3.5 h-3.5" /></>
+              ) : (
+                <>INITIALIZE DISPATCH <ChevronDown className="w-3.5 h-3.5" /></>
+              )}
+            </button>
+          )}
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {(isExpanded || submitted) && (
+          <m.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="overflow-hidden"
           >
-            {submitBtnText}
-          </button>
-        </form>
-      )}
+            <div className="pt-4 border-t border-accent-primary/10">
+              {submitted ? (
+                <m.div
+                  className="success-message text-center p-8 bg-[rgba(0,240,255,0.04)] rounded-xl border border-accent-primary/40 shadow-[0_0_24px_rgba(0,240,255,0.1)]"
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                >
+                  <CheckCircle size={40} className="mx-auto text-accent-primary mb-4 animate-bounce" />
+                  <h3 className="font-mono tracking-[3px] text-accent-primary font-bold text-lg">{successTitle}</h3>
+                  <p className="mt-2 text-xs font-mono text-text-secondary uppercase">{successDesc}</p>
+                  
+                  <div className="mt-6 p-4 rounded bg-black/90 border border-white/5 text-left font-mono text-[10px] text-emerald-400/90 leading-relaxed shadow-inner">
+                    <div className="flex items-center gap-1.5 border-b border-white/5 pb-2 mb-2 text-white/40">
+                      <Terminal className="w-3.5 h-3.5" />
+                      <span>TERMINAL STATUS READOUT</span>
+                    </div>
+                    {terminalLog.map((log, i) => (
+                      <div key={i} className="animate-pulse">{log}</div>
+                    ))}
+                  </div>
+                </m.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="custom-form max-w-[560px] mx-auto flex flex-col gap-4 font-mono text-sm pointer-events-auto">
+                  <div className="form-group w-full">
+                    <input
+                      type="text"
+                      placeholder={placeholderName}
+                      required
+                      value={formData.name}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      onFocus={playClick}
+                      className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
+                    />
+                  </div>
+                  <div className="form-group w-full">
+                    <input
+                      type="text"
+                      placeholder={placeholderDept}
+                      required
+                      value={formData.department}
+                      onChange={(e) => handleInputChange("department", e.target.value)}
+                      onFocus={playClick}
+                      className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
+                    />
+                  </div>
+                  <div className="form-group w-full">
+                    <input
+                      type="text"
+                      placeholder={placeholderLoc}
+                      required
+                      value={formData.location}
+                      onChange={(e) => handleInputChange("location", e.target.value)}
+                      onFocus={playClick}
+                      className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
+                    />
+                  </div>
+                  <div className="form-group w-full">
+                    <textarea
+                      placeholder={placeholderDesc}
+                      rows="3"
+                      required
+                      value={formData.issue}
+                      onChange={(e) => handleInputChange("issue", e.target.value)}
+                      onFocus={playClick}
+                      className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    onMouseEnter={playHover}
+                    className="p-3.5 rounded-[50px] bg-gradient-to-r from-accent-primary/80 to-accent-secondary/80 text-white font-bold text-xs tracking-[2px] cursor-pointer transition-all duration-300 hover:scale-[1.01] hover:from-accent-primary hover:to-accent-secondary hover:shadow-[0_0_20px_rgba(0,240,255,0.35)] select-none pointer-events-auto"
+                  >
+                    {submitBtnText}
+                  </button>
+                </form>
+              )}
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
     </m.div>
   );
 };

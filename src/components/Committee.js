@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { m } from "framer-motion";
+import { playHover, playClick } from "../utils/audio";
 
-const titleText = "Executive Committee";
+const titleText = " EXECUTIVE_COMMITTEE_NODES";
 const OPTIMIZED_COMMITTEE_PREFIX =
   "/storage/v1/object/public/images/committee/optimized/";
 
@@ -12,9 +13,7 @@ const getOptimizedCommitteePhotoUrl = (photoUrl) => {
   }
 
   const fileName = photoUrl.split("/").pop();
-  if (!fileName) {
-    return photoUrl;
-  }
+  if (!fileName) return photoUrl;
 
   const baseName = fileName.replace(/\.[^.]+$/, "");
   return `${photoUrl.split("/storage/v1/object/public/images/committee/")[0]}${OPTIMIZED_COMMITTEE_PREFIX}${baseName}-w232.webp`;
@@ -25,9 +24,7 @@ const Committee = ({ initialCommittee = [] }) => {
   const hasInitialData = initialCommittee.length > 0;
 
   useEffect(() => {
-    if (hasInitialData) {
-      return;
-    }
+    if (hasInitialData) return;
 
     const fetchCommittee = async () => {
       try {
@@ -36,7 +33,7 @@ const Committee = ({ initialCommittee = [] }) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setCommittee(data);
+        setCommittee(data || []);
       } catch (error) {
         console.error("Error fetching committee data:", error);
         setCommittee([]);
@@ -50,59 +47,73 @@ const Committee = ({ initialCommittee = [] }) => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
+      transition: { staggerChildren: 0.08 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, scale: 0.95 },
     visible: {
       opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-        duration: 0.8,
-      },
+      scale: 1,
+      transition: { type: "spring", stiffness: 100, damping: 18 },
     },
   };
 
   return (
     <m.div
-      className="glass-panel bg-glass-bg backdrop-blur-[16px] border border-glass-border rounded-[20px] md:rounded-[24px] p-[25px_15px] md:p-10 mb-10 md:mb-[60px] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]"
+      className="hud-panel relative overflow-hidden rounded-[24px] p-6 md:p-10 mb-10 md:mb-[60px]"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "-40px" }}
       variants={containerVariants}
     >
-      <h2 className="text-[clamp(1.8rem,4vw,2.2rem)] text-text-primary m-[0_auto_40px] text-center relative w-fit block font-bold after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-[60px] after:h-1 after:bg-gradient-to-r after:from-accent-primary after:to-accent-secondary after:rounded-[4px]">
+      {/* HUD Corner Brackets */}
+      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-accent-primary/45 rounded-tl-lg" />
+      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-accent-primary/45 rounded-tr-lg" />
+      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-accent-primary/45 rounded-bl-lg" />
+      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-accent-primary/45 rounded-br-lg" />
+
+      {/* Live system state */}
+      <div className="absolute top-4 right-6 flex items-center gap-1.5 font-mono text-[9px] text-accent-primary/60 tracking-widest select-none">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <span>NODES_SECURE</span>
+      </div>
+
+      <h2 className="text-[clamp(1.3rem,3vw,1.75rem)] text-accent-primary m-[0_auto_16px] text-center font-bold tracking-[2px] uppercase text-glow-cyan">
         {titleText}
       </h2>
-      <div className="committee-members grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5 md:gap-[30px]">
+
+      <div className="hud-line mb-8" />
+
+      <div className="committee-members grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-6 md:gap-8">
         {committee.map((member) => (
           <m.div
             key={member.id}
-            className="member-card group bg-gradient-to-br from-[rgba(255,255,255,0.03)] to-[rgba(255,255,255,0.01)] border border-glass-border rounded-[20px] p-[20px_15px] md:p-[30px_20px] text-center transition-all duration-400 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] relative overflow-hidden hover:-translate-y-2 hover:border-accent-primary hover:shadow-[0_15px_30px_-10px_rgba(0,240,255,0.2)] before:content-[''] before:absolute before:top-0 before:left-[-100%] before:w-full before:h-full before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent before:transition-[left] before:duration-600 before:ease-in-out hover:before:left-full"
+            onMouseEnter={playHover}
+            onClick={playClick}
+            className="member-card group bg-black/40 border border-accent-primary/10 hover:border-accent-primary/50 rounded-xl p-6 text-center transition-all duration-300 relative overflow-hidden hover:shadow-[0_8px_24px_rgba(0,240,255,0.1)] select-none pointer-events-auto cursor-pointer"
             variants={itemVariants}
           >
-            <div className="image-wrapper w-[130px] h-[130px] md:w-40 md:h-40 mx-auto mb-5 rounded-full p-1 bg-gradient-to-br from-accent-primary to-accent-secondary transition-transform duration-400 ease-out group-hover:scale-105 group-hover:rotate-[5deg]">
+            {/* Card inner bracket guides */}
+            <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-white/10 group-hover:border-accent-primary/50 transition-colors" />
+            <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-white/10 group-hover:border-accent-primary/50 transition-colors" />
+            
+            <div className="image-wrapper w-28 h-28 md:w-32 md:h-32 mx-auto mb-4 rounded-full p-1 bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20 group-hover:from-accent-primary/80 group-hover:to-accent-secondary/80 transition-all duration-300">
               <Image
                 src={getOptimizedCommitteePhotoUrl(member.photo_url)}
                 alt={member.name}
-                className="member-image w-full h-full object-cover rounded-full border-4 border-bg-color"
-                width={232}
-                height={232}
+                className="member-image w-full h-full object-cover rounded-full border-2 border-slate-950"
+                width={128}
+                height={128}
                 loading="lazy"
                 fetchPriority="low"
                 quality={68}
-                sizes="(max-width: 768px) 180px, 232px"
+                sizes="128px"
               />
             </div>
-            <h3 className="text-text-primary font-kalam text-[1.4rem] md:text-[1.6rem] mb-1.5">{member.name}</h3>
-            <p className="text-accent-primary text-[0.95rem] uppercase tracking-[1.5px] m-0 font-semibold">{member.position}</p>
+            <h3 className="text-white font-bold text-base tracking-wide mb-1 transition-colors group-hover:text-accent-primary">{member.name}</h3>
+            <p className="text-text-secondary/70 font-mono text-xs uppercase tracking-[2px] m-0 group-hover:text-accent-secondary transition-colors">{member.position}</p>
           </m.div>
         ))}
       </div>

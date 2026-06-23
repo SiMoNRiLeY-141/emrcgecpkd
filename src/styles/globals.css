@@ -117,26 +117,47 @@
 
 @layer components {
   .scroll-section-3d {
-    transform-origin: center center;
-    will-change: transform, opacity;
+    will-change: opacity, transform;
   }
 
-  .scroll-section-3d > * {
-    position: relative;
-    z-index: 1;
+  /* Premium Glassmorphic Hud Panels */
+  .hud-panel {
+    background: rgba(8, 12, 24, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    box-shadow: 
+      0 8px 32px 0 rgba(0, 0, 0, 0.5),
+      inset 0 0 16px rgba(0, 240, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .scroll-section-3d > *::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background:
-      linear-gradient(120deg, rgba(255, 255, 255, 0.16), transparent 28%),
-      linear-gradient(300deg, rgba(0, 240, 255, 0.08), transparent 42%);
-    opacity: 0.35;
-    mix-blend-mode: screen;
+  .hud-panel:hover {
+    border-color: rgba(0, 240, 255, 0.35);
+    box-shadow: 
+      0 12px 40px 0 rgba(0, 240, 255, 0.1),
+      inset 0 0 24px rgba(0, 240, 255, 0.1);
+  }
+
+  /* Neon Glowing Status utility */
+  .glow-cyan {
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+  }
+  .glow-purple {
+    box-shadow: 0 0 15px rgba(112, 0, 255, 0.6);
+  }
+
+  /* Glowing text */
+  .text-glow-cyan {
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+  }
+
+  /* Sci-fi utility lines */
+  .hud-line {
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+    height: 1px;
+    width: 100%;
+    opacity: 0.4;
   }
 
   .scroll-scene-3d {
@@ -145,19 +166,30 @@
   }
 }
 
+/* Custom High-Tech Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0f19;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 3px;
+  box-shadow: 0 0 8px var(--accent-primary);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
 @media (max-width: 767px) {
   .scroll-scene-3d {
-    opacity: 0.62;
+    opacity: 0.5;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  .scroll-section-3d {
-    transform: none !important;
-    opacity: 1 !important;
   }
 }

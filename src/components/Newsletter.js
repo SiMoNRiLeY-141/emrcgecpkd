@@ -1,10 +1,10 @@
-// components/Newsletter.js
 import React, { useState, useEffect } from "react";
 import { m } from "framer-motion";
+import { playClick, playHover, playSuccess } from "../utils/audio";
 
-const headingText = "Subscribe to our Newsletter";
-const placeholderText = "Enter your email";
-const buttonText = "Subscribe";
+const headingText = " NEWS_LETTER_SUBSCRIPTION";
+const placeholderText = "ENTER_EMAIL_ID...";
+const buttonText = "SUBSCRIBE";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
@@ -15,16 +15,16 @@ const Newsletter = () => {
       const timer = setTimeout(() => {
         setStatus("");
       }, 5000);
-
       return () => clearTimeout(timer);
     }
   }, [status]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    playClick();
 
     if (!email) {
-      setStatus("Please enter a valid email address.");
+      setStatus("ERROR: INVALID_EMAIL_FORMAT.");
       return;
     }
 
@@ -40,49 +40,67 @@ const Newsletter = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setStatus(data.message);
+        setStatus("SUCCESS: SUBSCRIBED_TO_NODE.");
+        playSuccess();
         setEmail("");
       } else {
-        setStatus(data.error || "Subscription failed. Please try again later.");
+        setStatus(data.error || "ERROR: NODE_CONNECTION_REJECTED.");
       }
     } catch (error) {
       console.error("Error subscribing:", error);
-      setStatus("Subscription failed. Please try again later.");
+      setStatus("ERROR: NODE_CONNECTION_REJECTED.");
     }
   };
 
   return (
     <m.div
-      className="glass-panel newsletter-container bg-glass-bg backdrop-blur-[16px] border border-glass-border rounded-[20px] md:rounded-[24px] p-[25px_15px] md:p-10 mb-10 md:mb-[60px] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]"
+      className="hud-panel relative overflow-hidden rounded-[24px] p-6 md:p-10 mb-10 md:mb-[60px]"
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, type: "spring" }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.8 }}
     >
-      <h2 className="text-[clamp(1.8rem,4vw,2.2rem)] text-text-primary m-[0_auto_40px] text-center relative w-fit block font-bold after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-[60px] after:h-1 after:bg-gradient-to-r after:from-accent-primary after:to-accent-secondary after:rounded-[4px]">
+      {/* HUD Brackets */}
+      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-accent-primary/45 rounded-tl-lg" />
+      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-accent-primary/45 rounded-tr-lg" />
+      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-accent-primary/45 rounded-bl-lg" />
+      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-accent-primary/45 rounded-br-lg" />
+
+      {/* Status LED */}
+      <div className="absolute top-4 right-6 flex items-center gap-1.5 font-mono text-[9px] text-accent-primary/60 tracking-widest select-none">
+        <span className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-pulse" />
+        <span>COM_STREAM: OK</span>
+      </div>
+
+      <h2 className="text-[clamp(1.3rem,3vw,1.75rem)] text-accent-primary m-[0_auto_16px] text-center font-bold tracking-[2px] uppercase text-glow-cyan">
         {headingText}
       </h2>
-      <form onSubmit={handleSubmit} className="newsletter-form flex flex-col md:flex-row gap-[15px] max-w-[600px] mx-auto relative">
+
+      <div className="hud-line mb-8" />
+
+      <form onSubmit={handleSubmit} className="newsletter-form flex flex-col md:flex-row gap-4 max-w-[560px] mx-auto relative pointer-events-auto font-mono text-xs">
         <input
           type="email"
           placeholder={placeholderText}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 py-[18px] px-[30px] rounded-[50px] border border-glass-border bg-[rgba(0,0,0,0.4)] text-white text-base font-inherit transition-all duration-300 focus:outline-none focus:border-accent-primary focus:shadow-[0_0_20px_rgba(0,240,255,0.2)] focus:bg-[rgba(0,0,0,0.6)]"
+          onFocus={playClick}
+          className="flex-1 p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
         />
         <m.button
           type="submit"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="py-[15px] px-[35px] rounded-[50px] border-none bg-gradient-to-br from-accent-primary to-accent-secondary text-black font-extrabold text-[1.1rem] cursor-pointer transition-all duration-300 font-inherit uppercase tracking-[1px] w-full md:w-auto hover:-translate-y-[3px] hover:shadow-[0_10px_25px_rgba(112,0,255,0.5)] hover:text-white"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onMouseEnter={playHover}
+          className="p-3.5 px-8 rounded-[50px] bg-gradient-to-r from-accent-primary/80 to-accent-secondary/80 text-white font-bold tracking-[2px] cursor-pointer transition-all duration-300 hover:from-accent-primary hover:to-accent-secondary hover:shadow-[0_0_20px_rgba(0,240,255,0.3)]"
         >
           {buttonText}
         </m.button>
       </form>
       {status && (
         <m.p
-          className="status-message text-accent-primary mt-4 text-center font-semibold"
-          initial={{ opacity: 0, y: 10 }}
+          className={`mt-4 text-center font-mono text-[10px] tracking-widest ${status.startsWith("SUCCESS") ? "text-emerald-400" : "text-rose-400"}`}
+          initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
         >
           {status}
