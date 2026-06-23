@@ -115,7 +115,7 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
   ];
 
   return (
-    <div className="App min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-500/30 overflow-x-hidden relative">
+    <div className="App min-h-screen bg-transparent text-[var(--text-primary)] selection:bg-cyan-500/30 overflow-x-hidden relative">
       <Head>
         <title>{titleText}</title>
         <meta charSet="UTF-8" />

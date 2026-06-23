@@ -30,7 +30,6 @@ const ScrollScene3D = () => {
       return;
     }
 
-    // Dynamic GSAP and ScrollTrigger import to avoid SSR issues
     let gsap, ScrollTrigger;
 
     const initThreeAndGSAP = async () => {
@@ -49,14 +48,20 @@ const ScrollScene3D = () => {
       const container = mountRef.current;
       if (!container) return;
 
-      // 2. Setup Scene, Camera, Renderer
       const width = container.clientWidth;
       const height = container.clientHeight;
       const scene = new THREE.Scene();
 
-      // Black slate background with slight blue fog for depth
-      scene.background = new THREE.Color(0x060913);
-      scene.fog = new THREE.FogExp2(0x060913, 0.015);
+      // Determine initial theme
+      const initialTheme =
+        typeof document !== "undefined"
+          ? document.documentElement.getAttribute("data-theme") || "dark"
+          : "dark";
+      const isLightInitial = initialTheme === "light";
+      const initialBg = isLightInitial ? 0xf4f7fa : 0x060913;
+
+      scene.background = new THREE.Color(initialBg);
+      scene.fog = new THREE.FogExp2(initialBg, 0.015);
 
       const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
       camera.position.set(0, 0, 15);
@@ -66,7 +71,6 @@ const ScrollScene3D = () => {
         alpha: false,
       });
 
-      // Performance Budget Capping
       const isMobile = window.innerWidth < 768;
       const pixelRatio = Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2);
       renderer.setPixelRatio(pixelRatio);
@@ -75,23 +79,34 @@ const ScrollScene3D = () => {
       renderer.toneMappingExposure = 1.0;
       container.appendChild(renderer.domElement);
 
-      // 3. Lighting Setup
-      const ambientLight = new THREE.AmbientLight(0x080f20, 1.5);
+      // Light initial intensities
+      const ambientLight = new THREE.AmbientLight(
+        isLightInitial ? 0xb0c0d8 : 0x080f20,
+        isLightInitial ? 1.2 : 1.8,
+      );
       scene.add(ambientLight);
 
-      const dirLight1 = new THREE.DirectionalLight(0x00f0ff, 2.5);
+      const initAccPrimary = isLightInitial ? 0x0f172a : 0x00f0ff;
+      const initAccSecondary = isLightInitial ? 0x3b0066 : 0x7000ff;
+
+      const dirLight1 = new THREE.DirectionalLight(
+        initAccPrimary,
+        isLightInitial ? 2.0 : 3.0,
+      );
       dirLight1.position.set(5, 10, 7);
       scene.add(dirLight1);
 
-      const dirLight2 = new THREE.DirectionalLight(0x7000ff, 2.0);
+      const dirLight2 = new THREE.DirectionalLight(
+        initAccSecondary,
+        isLightInitial ? 1.5 : 2.5,
+      );
       dirLight2.position.set(-5, -5, -5);
       scene.add(dirLight2);
 
-      const pointLight = new THREE.PointLight(0x00f0ff, 3, 20);
+      const pointLight = new THREE.PointLight(initAccPrimary, 3, 20);
       pointLight.position.set(0, 0, 0);
       scene.add(pointLight);
 
-      // 4. Object Groups
       const mainGroup = new THREE.Group();
       scene.add(mainGroup);
 
@@ -102,7 +117,6 @@ const ScrollScene3D = () => {
       const randomSpeeds = new Float32Array(particleCount);
 
       for (let i = 0; i < particleCount; i++) {
-        // Distribute in a spherical volume
         const r = 10 + Math.random() * 25;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
@@ -119,13 +133,14 @@ const ScrollScene3D = () => {
         new THREE.BufferAttribute(positions, 3),
       );
 
-      // Simple particle shader or point material
       const particleMaterial = new THREE.PointsMaterial({
-        color: 0x00f0ff,
+        color: initAccPrimary,
         size: isMobile ? 0.08 : 0.12,
         transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending,
+        opacity: isLightInitial ? 0.5 : 0.6,
+        blending: isLightInitial
+          ? THREE.NormalBlending
+          : THREE.AdditiveBlending,
         depthWrite: false,
       });
 
@@ -140,12 +155,11 @@ const ScrollScene3D = () => {
       reactorGroup.position.set(0, 0, 0);
       mainGroup.add(reactorGroup);
 
-      // Core sphere
       const coreGeo = new THREE.IcosahedronGeometry(1.6, 2);
       const coreMat = new THREE.MeshPhysicalMaterial({
-        color: 0x00f0ff,
-        emissive: 0x00a0cc,
-        emissiveIntensity: 1.2,
+        color: initAccPrimary,
+        emissive: isLightInitial ? 0x000000 : 0x00a0cc,
+        emissiveIntensity: isLightInitial ? 0.0 : 1.2,
         roughness: 0.1,
         metalness: 0.8,
         wireframe: true,
@@ -155,10 +169,9 @@ const ScrollScene3D = () => {
       const coreMesh = new THREE.Mesh(coreGeo, coreMat);
       reactorGroup.add(coreMesh);
 
-      // Outer mechanical rings
       const ringGeo1 = new THREE.TorusGeometry(2.4, 0.06, 8, 48);
       const ringMat1 = new THREE.MeshStandardMaterial({
-        color: 0x7000ff,
+        color: initAccSecondary,
         roughness: 0.2,
         metalness: 0.9,
       });
@@ -167,7 +180,7 @@ const ScrollScene3D = () => {
 
       const ringGeo2 = new THREE.TorusGeometry(2.8, 0.04, 8, 48);
       const ringMat2 = new THREE.MeshStandardMaterial({
-        color: 0x00f0ff,
+        color: initAccPrimary,
         roughness: 0.2,
         metalness: 0.9,
       });
@@ -185,20 +198,18 @@ const ScrollScene3D = () => {
       circuitGroup.position.set(12, -4, -6);
       mainGroup.add(circuitGroup);
 
-      // Circuit motherboard base plate
       const boardGeo = new THREE.BoxGeometry(7, 0.2, 7);
       const boardMat = new THREE.MeshStandardMaterial({
-        color: 0x0c1424,
+        color: isLightInitial ? 0xcadaec : 0x0c1424,
         roughness: 0.4,
         metalness: 0.8,
       });
       const board = new THREE.Mesh(boardGeo, boardMat);
       circuitGroup.add(board);
 
-      // CPU central processor chip
       const cpuGeo = new THREE.BoxGeometry(2, 0.4, 2);
       const cpuMat = new THREE.MeshStandardMaterial({
-        color: 0x1d2d44,
+        color: isLightInitial ? 0xa2b7cc : 0x1d2d44,
         roughness: 0.2,
         metalness: 0.9,
       });
@@ -206,26 +217,24 @@ const ScrollScene3D = () => {
       cpu.position.set(0, 0.2, 0);
       circuitGroup.add(cpu);
 
-      // Glowing chip core
       const chipCoreGeo = new THREE.BoxGeometry(1.4, 0.42, 1.4);
       const chipCoreMat = new THREE.MeshPhysicalMaterial({
-        color: 0x00f0ff,
-        emissive: 0x00f0ff,
-        emissiveIntensity: 2.0,
+        color: initAccPrimary,
+        emissive: isLightInitial ? 0x000000 : initAccPrimary,
+        emissiveIntensity: isLightInitial ? 0.0 : 2.0,
       });
       const chipCore = new THREE.Mesh(chipCoreGeo, chipCoreMat);
       chipCore.position.set(0, 0.2, 0);
       circuitGroup.add(chipCore);
 
-      // Individual transistors and details
       const detailGeo = new THREE.BoxGeometry(0.3, 0.4, 0.3);
       const detailMat = new THREE.MeshStandardMaterial({
-        color: 0x7000ff,
+        color: initAccSecondary,
         metalness: 0.8,
       });
       for (let x = -2.5; x <= 2.5; x += 1.2) {
         for (let z = -2.5; z <= 2.5; z += 1.2) {
-          if (Math.abs(x) < 1 && Math.abs(z) < 1) continue; // Skip CPU center
+          if (Math.abs(x) < 1 && Math.abs(z) < 1) continue;
           const detail = new THREE.Mesh(detailGeo, detailMat);
           detail.position.set(
             x + (Math.random() - 0.5) * 0.2,
@@ -236,7 +245,6 @@ const ScrollScene3D = () => {
         }
       }
 
-      // Add a dynamic glowing path line around CPU
       const linePoints = [
         new THREE.Vector3(-3, 0.15, -3),
         new THREE.Vector3(3, 0.15, -3),
@@ -245,7 +253,7 @@ const ScrollScene3D = () => {
         new THREE.Vector3(-3, 0.15, -3),
       ];
       const lineGeo = new THREE.BufferGeometry().setFromPoints(linePoints);
-      const lineMat = new THREE.LineBasicMaterial({ color: 0x00f0ff });
+      const lineMat = new THREE.LineBasicMaterial({ color: initAccPrimary });
       const boardLine = new THREE.Line(lineGeo, lineMat);
       circuitGroup.add(boardLine);
 
@@ -255,14 +263,14 @@ const ScrollScene3D = () => {
       mainGroup.add(workshopsGroup);
 
       const workshopMeshes = [];
-      const colors = [0x00f0ff, 0x7000ff, 0x00ff88];
+      const colorsDark = [0x00f0ff, 0x7000ff, 0x00ff88];
+      const colorsLight = [0x0f172a, 0x3b0066, 0x006633];
       const moduleTitles = ["Embedded Systems", "Automation", "Maintenance"];
 
       for (let i = 0; i < 3; i++) {
         const itemGroup = new THREE.Group();
         itemGroup.position.set((i - 1) * 3.8, 0, 0);
 
-        // Dynamic floating offset
         itemGroup.userData = {
           title: moduleTitles[i],
           originalY: 0,
@@ -271,10 +279,11 @@ const ScrollScene3D = () => {
           index: i,
         };
 
-        // Outer glass enclosure
+        const activeColor = isLightInitial ? colorsLight[i] : colorsDark[i];
+
         const boxGeo = new THREE.BoxGeometry(2.4, 3.4, 0.6);
         const boxMat = new THREE.MeshPhysicalMaterial({
-          color: colors[i],
+          color: activeColor,
           roughness: 0.1,
           metalness: 0.1,
           transmission: 0.85,
@@ -286,12 +295,11 @@ const ScrollScene3D = () => {
         const box = new THREE.Mesh(boxGeo, boxMat);
         itemGroup.add(box);
 
-        // Glowing core cylinder inside the box
         const innerGeo = new THREE.CylinderGeometry(0.5, 0.5, 2.0, 16);
         const innerMat = new THREE.MeshPhysicalMaterial({
-          color: colors[i],
-          emissive: colors[i],
-          emissiveIntensity: 0.8,
+          color: activeColor,
+          emissive: isLightInitial ? 0x000000 : activeColor,
+          emissiveIntensity: isLightInitial ? 0.0 : 0.8,
           wireframe: true,
         });
         const inner = new THREE.Mesh(innerGeo, innerMat);
@@ -299,7 +307,7 @@ const ScrollScene3D = () => {
         itemGroup.add(inner);
 
         workshopsGroup.add(itemGroup);
-        workshopMeshes.push(itemGroup); // Keep track of interactive group
+        workshopMeshes.push(itemGroup);
       }
 
       // --- Group E: Maintenance Portal Terminals & Power Lines ---
@@ -307,10 +315,9 @@ const ScrollScene3D = () => {
       terminalGroup.position.set(0, -22, 0);
       mainGroup.add(terminalGroup);
 
-      // Sleek central ring grid
       const gridGeo = new THREE.RingGeometry(2, 4, 32);
       const gridMat = new THREE.MeshBasicMaterial({
-        color: 0x7000ff,
+        color: initAccSecondary,
         wireframe: true,
         transparent: true,
         opacity: 0.25,
@@ -320,16 +327,15 @@ const ScrollScene3D = () => {
       grid.rotation.x = Math.PI / 2;
       terminalGroup.add(grid);
 
-      // Glowing power tubes
       const tubeCount = 5;
       const tubes = [];
       for (let i = 0; i < tubeCount; i++) {
         const radius = 2.5 + i * 0.45;
         const tubeGeo = new THREE.TorusGeometry(radius, 0.03, 8, 64);
         const tubeMat = new THREE.MeshPhysicalMaterial({
-          color: 0x00f0ff,
-          emissive: 0x00f0ff,
-          emissiveIntensity: 1.0,
+          color: initAccPrimary,
+          emissive: isLightInitial ? 0x000000 : initAccPrimary,
+          emissiveIntensity: isLightInitial ? 0.0 : 1.0,
           transparent: true,
           opacity: 0.4,
         });
@@ -339,6 +345,190 @@ const ScrollScene3D = () => {
         tubes.push(tube);
       }
 
+      // --- Dynamic Theme Swapping Logic ---
+      const updateThemeColors = (themeName) => {
+        const isLight = themeName === "light";
+        const bgVal = isLight ? 0xf4f7fa : 0x060913;
+        const accPrimary = isLight ? 0x0f172a : 0x00f0ff;
+        const accSecondary = isLight ? 0x3b0066 : 0x7000ff;
+
+        // Transition background and fog
+        gsap.to(scene.background, {
+          r: ((bgVal >> 16) & 255) / 255,
+          g: ((bgVal >> 8) & 255) / 255,
+          b: (bgVal & 255) / 255,
+          duration: 0.8,
+        });
+
+        gsap.to(scene.fog.color, {
+          r: ((bgVal >> 16) & 255) / 255,
+          g: ((bgVal >> 8) & 255) / 255,
+          b: (bgVal & 255) / 255,
+          duration: 0.8,
+        });
+
+        // Transition lights
+        gsap.to(ambientLight.color, {
+          r: isLight ? 0.69 : 0.03,
+          g: isLight ? 0.75 : 0.06,
+          b: isLight ? 0.85 : 0.12,
+          duration: 0.8,
+        });
+        ambientLight.intensity = isLight ? 1.2 : 1.8;
+
+        gsap.to(dirLight1.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+        dirLight1.intensity = isLight ? 2.0 : 3.0;
+
+        gsap.to(dirLight2.color, {
+          r: ((accSecondary >> 16) & 255) / 255,
+          g: ((accSecondary >> 8) & 255) / 255,
+          b: (accSecondary & 255) / 255,
+          duration: 0.8,
+        });
+        dirLight2.intensity = isLight ? 1.5 : 2.5;
+
+        gsap.to(pointLight.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+
+        // Transition particles
+        gsap.to(particleMaterial.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+        particleMaterial.opacity = isLight ? 0.5 : 0.6;
+        particleMaterial.blending = isLight
+          ? THREE.NormalBlending
+          : THREE.AdditiveBlending;
+
+        // Transition reactor core
+        gsap.to(coreMat.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+
+        gsap.to(coreMat.emissive, {
+          r: isLight ? 0 : ((0x00a0cc >> 16) & 255) / 255,
+          g: isLight ? 0 : ((0x00a0cc >> 8) & 255) / 255,
+          b: isLight ? 0 : (0x00a0cc & 255) / 255,
+          duration: 0.8,
+        });
+        coreMat.emissiveIntensity = isLight ? 0.0 : 1.2;
+
+        // Transition motherboard board colors
+        gsap.to(boardMat.color, {
+          r: isLight ? 0.79 : 0.04,
+          g: isLight ? 0.85 : 0.08,
+          b: isLight ? 0.92 : 0.14,
+          duration: 0.8,
+        });
+
+        gsap.to(cpuMat.color, {
+          r: isLight ? 0.63 : 0.11,
+          g: isLight ? 0.71 : 0.17,
+          b: isLight ? 0.8 : 0.26,
+          duration: 0.8,
+        });
+
+        // Transition line colors
+        gsap.to(lineMat.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+
+        gsap.to(chipCoreMat.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+
+        gsap.to(chipCoreMat.emissive, {
+          r: isLight ? 0 : ((accPrimary >> 16) & 255) / 255,
+          g: isLight ? 0 : ((accPrimary >> 8) & 255) / 255,
+          b: isLight ? 0 : (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+        chipCoreMat.emissiveIntensity = isLight ? 0.0 : 2.0;
+
+        // Transition workshop card meshes
+        workshopMeshes.forEach((mesh, index) => {
+          const actColor = isLight ? colorsLight[index] : colorsDark[index];
+
+          gsap.to(mesh.children[0].material.color, {
+            r: ((actColor >> 16) & 255) / 255,
+            g: ((actColor >> 8) & 255) / 255,
+            b: (actColor & 255) / 255,
+            duration: 0.8,
+          });
+
+          gsap.to(mesh.children[1].material.color, {
+            r: ((actColor >> 16) & 255) / 255,
+            g: ((actColor >> 8) & 255) / 255,
+            b: (actColor & 255) / 255,
+            duration: 0.8,
+          });
+
+          gsap.to(mesh.children[1].material.emissive, {
+            r: isLight ? 0 : ((actColor >> 16) & 255) / 255,
+            g: isLight ? 0 : ((actColor >> 8) & 255) / 255,
+            b: isLight ? 0 : (actColor & 255) / 255,
+            duration: 0.8,
+          });
+          mesh.children[1].material.emissiveIntensity = isLight ? 0.0 : 0.8;
+        });
+
+        // Transition maintenance portal grid
+        gsap.to(gridMat.color, {
+          r: ((accSecondary >> 16) & 255) / 255,
+          g: ((accSecondary >> 8) & 255) / 255,
+          b: (accSecondary & 255) / 255,
+          duration: 0.8,
+        });
+
+        tubes.forEach((tube) => {
+          gsap.to(tube.material.color, {
+            r: ((accPrimary >> 16) & 255) / 255,
+            g: ((accPrimary >> 8) & 255) / 255,
+            b: (accPrimary & 255) / 255,
+            duration: 0.8,
+          });
+          gsap.to(tube.material.emissive, {
+            r: isLight ? 0 : ((accPrimary >> 16) & 255) / 255,
+            g: isLight ? 0 : ((accPrimary >> 8) & 255) / 255,
+            b: isLight ? 0 : (accPrimary & 255) / 255,
+            duration: 0.8,
+          });
+          tube.material.emissiveIntensity = isLight ? 0.0 : 1.0;
+        });
+      };
+
+      // Set up theme MutationObserver
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === "data-theme") {
+            const currentTheme =
+              document.documentElement.getAttribute("data-theme") || "dark";
+            updateThemeColors(currentTheme);
+          }
+        });
+      });
+      observer.observe(document.documentElement, { attributes: true });
+
       // 5. Mouse Interaction Tracking
       const mouse = new THREE.Vector2();
       const targetMouse = new THREE.Vector2();
@@ -346,7 +536,6 @@ const ScrollScene3D = () => {
       let hoveredModule = null;
 
       const onPointerMove = (event) => {
-        // Normalised device coordinates (-1 to +1)
         targetMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         targetMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       };
@@ -354,7 +543,6 @@ const ScrollScene3D = () => {
       const onPointerDown = () => {
         if (hoveredModule) {
           playClick();
-          // Visual pulse displacement on click
           gsap.to(hoveredModule.scale, {
             x: 1.3,
             y: 1.3,
@@ -371,23 +559,17 @@ const ScrollScene3D = () => {
       window.addEventListener("pointerdown", onPointerDown, { passive: true });
 
       // 6. GSAP ScrollTrigger Integration
-      // Link scroll steps smoothly to Three.js camera position & lookAt Target
       const cameraTargets = {
-        // Scroll 0% (Hero)
         p0_pos: { x: 0, y: 0, z: 8 },
         p0_look: { x: 0, y: 0, z: 0 },
-        // Scroll 15-35% (Metrics/About)
         p1_pos: { x: 9.8, y: -4.5, z: -0.5 },
         p1_look: { x: 12, y: -4, z: -6 },
-        // Scroll 40-70% (Workshops)
         p2_pos: { x: -10, y: -12.5, z: 5.5 },
         p2_look: { x: -10, y: -12, z: -3 },
-        // Scroll 75-100% (Maintenance Portal)
         p3_pos: { x: 0, y: -19, z: 6.5 },
         p3_look: { x: 0, y: -22, z: 0 },
       };
 
-      // Current animated properties
       const animState = {
         camX: cameraTargets.p0_pos.x,
         camY: cameraTargets.p0_pos.y,
@@ -402,12 +584,11 @@ const ScrollScene3D = () => {
           trigger: "body",
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.2, // Smooth interpolation
+          scrub: 1.2,
           invalidateOnRefresh: true,
         },
       });
 
-      // Frame 1: Scroll to About/Metrics
       scrollTimeline.to(
         animState,
         {
@@ -422,7 +603,6 @@ const ScrollScene3D = () => {
         0,
       );
 
-      // Frame 2: Scroll to Workshops
       scrollTimeline.to(
         animState,
         {
@@ -437,7 +617,6 @@ const ScrollScene3D = () => {
         1,
       );
 
-      // Frame 3: Scroll to Maintenance Portal
       scrollTimeline.to(
         animState,
         {
@@ -458,56 +637,50 @@ const ScrollScene3D = () => {
       const animate = () => {
         const elapsedTime = clock.getElapsedTime();
 
-        // Let particles drift slightly
         particleSystem.rotation.y = elapsedTime * 0.02;
         particleSystem.rotation.x = elapsedTime * 0.008;
 
-        // Animate landing reactor rings
         coreMesh.rotation.y = elapsedTime * 0.4;
         coreMesh.rotation.x = elapsedTime * 0.25;
         ring1.rotation.y = elapsedTime * 0.6;
         ring2.rotation.x = elapsedTime * 0.5;
         ring3.rotation.z = -elapsedTime * 0.3;
 
-        // Animate metrics circuit motherboard chip pulse
-        chipCoreMat.emissiveIntensity = 1.5 + Math.sin(elapsedTime * 4) * 0.5;
+        const currentTheme =
+          document.documentElement.getAttribute("data-theme") || "dark";
+        const isL = currentTheme === "light";
+        chipCoreMat.emissiveIntensity =
+          (isL ? 0.0 : 1.5) + Math.sin(elapsedTime * 4) * 0.5;
         circuitGroup.rotation.y = Math.sin(elapsedTime * 0.2) * 0.3;
 
-        // Animate workshop cards floating
         workshopMeshes.forEach((mesh) => {
           const ud = mesh.userData;
-          // Float height movement
           mesh.position.y =
             ud.originalY + Math.sin(elapsedTime * 1.5 + ud.floatOffset) * 0.15;
-          // Soft rotational wobble
           mesh.rotation.y = Math.sin(elapsedTime * 0.8 + ud.floatOffset) * 0.08;
           mesh.rotation.x = Math.cos(elapsedTime * 0.8 + ud.floatOffset) * 0.05;
 
-          // Inside core cylinder animation
           const innerCore = mesh.children[1];
           if (innerCore) {
             innerCore.rotation.y = elapsedTime * 1.2;
           }
         });
 
-        // Maintenance Portal Tubes pulsating glow
         tubes.forEach((tube, idx) => {
-          tube.material.emissiveIntensity =
-            0.5 + Math.sin(elapsedTime * 3 - idx * 0.8) * 0.4;
+          tube.material.emissiveIntensity = isL
+            ? 0.0
+            : 0.5 + Math.sin(elapsedTime * 3 - idx * 0.8) * 0.4;
           tube.rotation.z = elapsedTime * 0.08 * (idx % 2 === 0 ? 1 : -1);
         });
 
-        // Smooth mouse parallax damping
         mouse.x += (targetMouse.x - mouse.x) * 0.06;
         mouse.y += (targetMouse.y - mouse.y) * 0.06;
 
-        // Set camera position interpolated by scroll-linked GSAP timeline
         const parallaxOffsetLimit = isMobile ? 0.3 : 1.2;
         camera.position.x = animState.camX + mouse.x * parallaxOffsetLimit;
         camera.position.y = animState.camY + mouse.y * parallaxOffsetLimit;
         camera.position.z = animState.camZ;
 
-        // Render camera looking at dynamic targets
         const targetLook = new THREE.Vector3(
           animState.lookX + mouse.x * parallaxOffsetLimit * 0.4,
           animState.lookY + mouse.y * parallaxOffsetLimit * 0.4,
@@ -515,14 +688,10 @@ const ScrollScene3D = () => {
         );
         camera.lookAt(targetLook);
 
-        // Raycasting for interactive Workshop cards
         if (!isMobile) {
           raycaster.setFromCamera(mouse, camera);
-
-          // Flatten workshop mesh hierarchy for intersection
           const interactiveObjects = [];
           workshopMeshes.forEach((group) => {
-            // Include main box mesh
             interactiveObjects.push(group.children[0]);
           });
 
@@ -534,7 +703,6 @@ const ScrollScene3D = () => {
 
             if (hoveredModule !== parentGroup) {
               if (hoveredModule) {
-                // Return previous to default scale & emission
                 gsap.to(hoveredModule.scale, {
                   x: 1,
                   y: 1,
@@ -548,7 +716,6 @@ const ScrollScene3D = () => {
               }
               hoveredModule = parentGroup;
               playHover();
-              // Animate hover: scale up and increase opacity/neon glow
               gsap.to(parentGroup.scale, {
                 x: 1.15,
                 y: 1.15,
@@ -575,21 +742,19 @@ const ScrollScene3D = () => {
 
       animate();
 
-      // 8. Handle Window Resize
       const handleResize = () => {
         const w = container.clientWidth;
         const h = container.clientHeight;
 
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
-
         renderer.setSize(w, h);
       };
 
       window.addEventListener("resize", handleResize);
 
-      // Cleanups
       return () => {
+        observer.disconnect();
         window.removeEventListener("pointermove", onPointerMove);
         window.removeEventListener("pointerdown", onPointerDown);
         window.removeEventListener("resize", handleResize);

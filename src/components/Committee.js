@@ -95,18 +95,18 @@ const Committee = ({ initialCommittee = [] }) => {
             key={member.id}
             onMouseEnter={playHover}
             onClick={playClick}
-            className="member-card group bg-black/40 border border-accent-primary/10 hover:border-accent-primary/50 rounded-xl p-6 text-center transition-all duration-300 relative overflow-hidden hover:shadow-[0_8px_24px_rgba(0,240,255,0.1)] select-none pointer-events-auto cursor-pointer"
+            className="member-card group bg-slate-200/40 dark:bg-black/40 border border-accent-primary/15 hover:border-accent-primary/60 rounded-xl p-6 text-center transition-all duration-300 relative overflow-hidden hover:shadow-[0_8px_24px_rgba(0,240,255,0.15)] select-none pointer-events-auto cursor-pointer"
             variants={itemVariants}
           >
             {/* Card inner bracket guides */}
-            <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-white/10 group-hover:border-accent-primary/50 transition-colors" />
-            <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-white/10 group-hover:border-accent-primary/50 transition-colors" />
+            <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-accent-primary/20 group-hover:border-accent-primary/60 transition-colors" />
+            <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-accent-primary/20 group-hover:border-accent-primary/60 transition-colors" />
 
             <div className="image-wrapper w-28 h-28 md:w-32 md:h-32 mx-auto mb-4 rounded-full p-1 bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20 group-hover:from-accent-primary/80 group-hover:to-accent-secondary/80 transition-all duration-300">
               <Image
                 src={getOptimizedCommitteePhotoUrl(member.photo_url)}
                 alt={member.name}
-                className="member-image w-full h-full object-cover rounded-full border-2 border-slate-950"
+                className="member-image w-full h-full object-cover rounded-full border-2 border-slate-950 dark:border-slate-800"
                 width={128}
                 height={128}
                 loading="lazy"
@@ -115,7 +115,7 @@ const Committee = ({ initialCommittee = [] }) => {
                 sizes="128px"
               />
             </div>
-            <h3 className="text-white font-bold text-base tracking-wide mb-1 transition-colors group-hover:text-accent-primary">
+            <h3 className="text-text-primary font-bold text-base tracking-wide mb-1 transition-colors group-hover:text-accent-primary">
               {member.name}
             </h3>
             <p className="text-text-secondary/70 font-mono text-xs uppercase tracking-[2px] m-0 group-hover:text-accent-secondary transition-colors">

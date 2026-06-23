@@ -8,11 +8,12 @@ This repository contains the source code and assets for the EMRC GEC Palakkad of
 
 ## Features
 
-- **Responsive Design**: The website is optimized for various screen sizes, ensuring a seamless experience across devices.
-- **Dynamic Content**: Content such as news updates, committee member details, and contact information are dynamically loaded from data sources.
-- **Pre-rendered Content**: News and committee sections are pre-rendered with periodic revalidation for fast first loads.
-- **Contact Section**: Allows visitors to get in touch with the club for inquiries, collaborations, or other purposes.
-- **Social Media Integration**: Quick access to the club's social media profiles for updates and announcements.
+- **Immersive 3D Scroll backdrop**: A full-screen vanilla Three.js and GSAP ScrollTrigger canvas that maps user scrolls to cinematic camera tracking along a 3D spline. Includes floating ambient particle fields (electrons), rotating typographic reactor cores, procedural motherboards, and hoverable floating workshop modules.
+- **Web Audio API Sound Engine**: A procedural synthesizer that generates mechanical ticks, hums, and success chimes dynamically in real time without loading external audio files. Controlled via a smart volume HUD toggle that fades on scroll.
+- **Adaptive Light/Dark Themeing**: A MutationObserver-driven color synchronizer that adjusts WebGL ambient light, fog, spotlight parameters, and material blend modes instantly between dark cyber-neon and clean, high-contrast light-blue styles.
+- **Expandable HUD Panels**: Modernized UI layouts built with custom glassmorphism styles (`.hud-panel`), status indicators, and metallic corner brackets. Major forms (Join Club & Maintenance Order Dispatch) expand smoothly in-place.
+- **Performance Budget Capping**: Caps canvas pixel ratios on retina displays, scales down particle counts, and disables heavy graphics blending on mobile viewports to guarantee 60 FPS across all chips.
+- **Diagnostics Monitor**: Development-only canvas-based FPS tracker to monitor layout rendering health.
 
 ## Website
 
