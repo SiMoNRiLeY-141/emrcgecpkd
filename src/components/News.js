@@ -111,8 +111,12 @@ const News = ({ initialNews = [] }) => {
                   sizes="(max-width: 768px) 100vw, 640px"
                   className="w-full h-full object-cover opacity-80 transition-opacity duration-500 hover:opacity-100"
                 />
-                <div className={`news-title-overlay absolute bottom-0 left-0 right-0 p-6 md:p-8 bg-gradient-to-t from-black/95 via-black/70 to-transparent text-white font-mono text-xs md:text-sm tracking-wider leading-relaxed text-left transition-all duration-500 ease-out delay-200 ${isActive ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
-                  <span className="text-accent-primary font-bold mr-2">[NEWS_DIRECTIVE]:</span>
+                <div
+                  className={`news-title-overlay absolute bottom-0 left-0 right-0 p-6 md:p-8 bg-gradient-to-t from-black/95 via-black/70 to-transparent text-white font-mono text-xs md:text-sm tracking-wider leading-relaxed text-left transition-all duration-500 ease-out delay-200 ${isActive ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
+                >
+                  <span className="text-accent-primary font-bold mr-2">
+                    [NEWS_DIRECTIVE]:
+                  </span>
                   {item.title}
                 </div>
               </a>

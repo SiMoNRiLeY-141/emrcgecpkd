@@ -80,23 +80,23 @@ export const playSuccess = () => {
   if (!ctx) return;
 
   const now = ctx.currentTime;
-  
+
   // Create a futuristic tech sweep/arpeggio
   const notes = [440, 554.37, 659.25, 880];
   notes.forEach((freq, index) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    
+
     osc.connect(gain);
     gain.connect(ctx.destination);
-    
+
     osc.type = "sine";
     osc.frequency.setValueAtTime(freq, now + index * 0.08);
-    
+
     gain.gain.setValueAtTime(0, now + index * 0.08);
     gain.gain.linearRampToValueAtTime(0.05, now + index * 0.08 + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.08 + 0.25);
-    
+
     osc.start(now + index * 0.08);
     osc.stop(now + index * 0.08 + 0.3);
   });

@@ -52,7 +52,7 @@ const ContactSection = () => {
 
       <div className="hud-line mb-8" />
 
-      <m.div 
+      <m.div
         className="contact-email flex items-center justify-center gap-2.5 mb-8 cursor-pointer font-mono text-xs md:text-sm tracking-wider uppercase text-text-secondary hover:text-accent-primary transition-colors pointer-events-auto"
         whileHover={{ scale: 1.02 }}
         onHoverStart={playHover}
@@ -72,7 +72,8 @@ const ContactSection = () => {
           onHoverStart={playHover}
           onClick={playClick}
         >
-          <InstagramIcon />{instagramText}
+          <InstagramIcon />
+          {instagramText}
         </m.a>
         <m.a
           href="https://www.linkedin.com/company/emrc-gecpkd"
@@ -83,7 +84,8 @@ const ContactSection = () => {
           onHoverStart={playHover}
           onClick={playClick}
         >
-          <LinkedInIcon />{linkedinText}
+          <LinkedInIcon />
+          {linkedinText}
         </m.a>
       </div>
     </m.div>

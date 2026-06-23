@@ -47,7 +47,9 @@ const SOURCE_PREFIX = normalizeStoragePrefix(
 const TARGET_PREFIX = normalizeStoragePrefix(
   process.env.TARGET_PREFIX || `${SOURCE_PREFIX}/optimized`,
 );
-const SIZES = (process.env.SIZES || "180,232,320").split(",").map((s) => parseInt(s, 10));
+const SIZES = (process.env.SIZES || "180,232,320")
+  .split(",")
+  .map((s) => parseInt(s, 10));
 const UPDATE_DB = (process.env.UPDATE_DB || "false") === "true";
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
@@ -80,7 +82,9 @@ async function listFiles(prefix, page = 1, results = []) {
 async function optimizeOne(file) {
   try {
     const sourcePath = path.posix.join(SOURCE_PREFIX, file.name);
-    const { data: publicData } = supabase.storage.from(BUCKET).getPublicUrl(sourcePath);
+    const { data: publicData } = supabase.storage
+      .from(BUCKET)
+      .getPublicUrl(sourcePath);
     const publicUrl = publicData?.publicUrl;
     if (!publicUrl) {
       console.warn("No public URL for", sourcePath);
@@ -96,16 +100,25 @@ async function optimizeOne(file) {
     const input = Buffer.from(buffer);
 
     for (const w of SIZES) {
-      const outBuf = await sharp(input).resize({ width: w, withoutEnlargement: true }).webp({ quality: 75 }).toBuffer();
+      const outBuf = await sharp(input)
+        .resize({ width: w, withoutEnlargement: true })
+        .webp({ quality: 75 })
+        .toBuffer();
       const extName = path.parse(file.name).name + `-w${w}.webp`;
       const targetPath = path.posix.join(TARGET_PREFIX, extName);
 
-      const { data: uploadData, error: uploadError } = await supabase.storage.from(BUCKET).upload(targetPath, outBuf, {
-        contentType: "image/webp",
-        upsert: true,
-      });
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from(BUCKET)
+        .upload(targetPath, outBuf, {
+          contentType: "image/webp",
+          upsert: true,
+        });
       if (uploadError) {
-        console.error("Upload error for", targetPath, uploadError.message || uploadError);
+        console.error(
+          "Upload error for",
+          targetPath,
+          uploadError.message || uploadError,
+        );
       } else {
         console.log("Uploaded:", targetPath);
       }
@@ -114,18 +127,34 @@ async function optimizeOne(file) {
     if (UPDATE_DB) {
       // Attempt to update a 'committee' table photo_url field that exactly matches the original publicUrl.
       // This is best-effort — adapt as needed for your schema.
-      const { data: optimizedData } = supabase.storage.from(BUCKET).getPublicUrl(
-        path.posix.join(TARGET_PREFIX, path.parse(file.name).name + `-w${SIZES[0]}.webp`),
-      );
+      const { data: optimizedData } = supabase.storage
+        .from(BUCKET)
+        .getPublicUrl(
+          path.posix.join(
+            TARGET_PREFIX,
+            path.parse(file.name).name + `-w${SIZES[0]}.webp`,
+          ),
+        );
       const optimizedUrl = optimizedData?.publicUrl;
       if (optimizedUrl) {
-        const { data: members, error: selectErr } = await supabase.from("committee").select("id,photo_url").eq("photo_url", publicUrl);
+        const { data: members, error: selectErr } = await supabase
+          .from("committee")
+          .select("id,photo_url")
+          .eq("photo_url", publicUrl);
         if (selectErr) {
           console.warn("DB lookup error:", selectErr.message || selectErr);
         } else if (members && members.length > 0) {
           for (const m of members) {
-            const { error: updErr } = await supabase.from("committee").update({ photo_url: optimizedUrl }).eq("id", m.id);
-            if (updErr) console.warn("DB update error for id", m.id, updErr.message || updErr);
+            const { error: updErr } = await supabase
+              .from("committee")
+              .update({ photo_url: optimizedUrl })
+              .eq("id", m.id);
+            if (updErr)
+              console.warn(
+                "DB update error for id",
+                m.id,
+                updErr.message || updErr,
+              );
             else console.log("Updated DB photo_url for committee id", m.id);
           }
         }
@@ -139,11 +168,17 @@ async function optimizeOne(file) {
 async function main() {
   console.log("Listing files under:", SOURCE_PREFIX);
   const files = await listFiles(SOURCE_PREFIX);
-  const filtered = files.filter((f) => f.name && /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name));
+  const filtered = files.filter(
+    (f) => f.name && /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name),
+  );
   console.log(`Found ${filtered.length} candidate files.`);
 
   for (const file of filtered) {
-    if (file.metadata && file.metadata.mimetype && file.metadata.mimetype.startsWith("image")) {
+    if (
+      file.metadata &&
+      file.metadata.mimetype &&
+      file.metadata.mimetype.startsWith("image")
+    ) {
       await optimizeOne(file);
     } else if (/(jpg|jpeg|png|webp|gif)$/i.test(file.name)) {
       await optimizeOne(file);

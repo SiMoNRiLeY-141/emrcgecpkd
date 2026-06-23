@@ -1,13 +1,21 @@
 import React, { useState, useRef } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { UserPlus, Download, Cpu, UploadCloud, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  UserPlus,
+  Download,
+  Cpu,
+  UploadCloud,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { toPng } from "html-to-image";
 import supabase from "../pages/api/supabase";
 import AvatarEditor from "react-avatar-editor";
 import { playClick, playHover } from "../utils/audio";
 
 const joinTitle = " JOIN THE CLUB";
-const joinDesc = "Become a part of the EMRC family. Sign up to get your unique Member ID!";
+const joinDesc =
+  "Become a part of the EMRC family. Sign up to get your unique Member ID!";
 const placeholderName = "Full Name";
 const placeholderEmail = "College Email ID";
 const selectDeptText = "Select Department";
@@ -151,14 +159,20 @@ const JoinClub = () => {
         <UserPlus className="inline-block text-accent-primary align-middle animate-pulse" />
         {joinTitle}
       </h2>
-      
+
       <div className="hud-line mb-6" />
 
       {/* Accompanying descriptive context box */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mb-6">
         <div className="md:col-span-8 font-mono text-xs text-text-secondary leading-relaxed uppercase tracking-[1px]">
-          <p className="mb-2">EMRC membership grants authenticated access to research laboratories, hardware workshops, component inventories, and high-voltage testing equipment nodes.</p>
-          <p className="text-accent-primary/80">Generate your unique digital identity card to initialize enrollment.</p>
+          <p className="mb-2">
+            EMRC membership grants authenticated access to research
+            laboratories, hardware workshops, component inventories, and
+            high-voltage testing equipment nodes.
+          </p>
+          <p className="text-accent-primary/80">
+            Generate your unique digital identity card to initialize enrollment.
+          </p>
         </div>
         <div className="md:col-span-4 flex justify-center">
           {!memberId && (
@@ -168,9 +182,13 @@ const JoinClub = () => {
               className="flex items-center gap-2 px-5 py-3 rounded-full bg-accent-primary/10 border border-accent-primary/30 text-accent-primary font-bold font-mono text-[11px] tracking-[2px] transition-all duration-300 hover:bg-accent-primary/20 hover:border-accent-primary/60 select-none pointer-events-auto"
             >
               {isExpanded ? (
-                <>COLLAPSE ENROLLMENT <ChevronUp className="w-3.5 h-3.5" /></>
+                <>
+                  COLLAPSE ENROLLMENT <ChevronUp className="w-3.5 h-3.5" />
+                </>
               ) : (
-                <>INITIALIZE ENROLLMENT <ChevronDown className="w-3.5 h-3.5" /></>
+                <>
+                  INITIALIZE ENROLLMENT <ChevronDown className="w-3.5 h-3.5" />
+                </>
               )}
             </button>
           )}
@@ -188,14 +206,19 @@ const JoinClub = () => {
           >
             <div className="pt-4 border-t border-accent-primary/10">
               {!memberId ? (
-                <form onSubmit={handleSubmit} className="custom-form max-w-[560px] mx-auto flex flex-col gap-4 font-mono text-sm pointer-events-auto">
+                <form
+                  onSubmit={handleSubmit}
+                  className="custom-form max-w-[560px] mx-auto flex flex-col gap-4 font-mono text-sm pointer-events-auto"
+                >
                   <div className="form-group w-full">
                     <input
                       type="text"
                       placeholder={placeholderName}
                       required
                       value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("name", e.target.value)
+                      }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
                     />
@@ -206,7 +229,9 @@ const JoinClub = () => {
                       placeholder={placeholderEmail}
                       required
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
                     />
@@ -215,17 +240,33 @@ const JoinClub = () => {
                     <select
                       required
                       value={formData.department}
-                      onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, department: e.target.value })
+                      }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)]"
                     >
-                      <option value="" disabled className="bg-slate-900">{selectDeptText}</option>
-                      <option value="CE" className="bg-slate-900">{deptCE}</option>
-                      <option value="CSE" className="bg-slate-900">{deptCSE}</option>
-                      <option value="ECE" className="bg-slate-900">{deptECE}</option>
-                      <option value="EEE" className="bg-slate-900">{deptEEE}</option>
-                      <option value="IT" className="bg-slate-900">{deptIT}</option>
-                      <option value="ME" className="bg-slate-900">{deptME}</option>
+                      <option value="" disabled className="bg-slate-900">
+                        {selectDeptText}
+                      </option>
+                      <option value="CE" className="bg-slate-900">
+                        {deptCE}
+                      </option>
+                      <option value="CSE" className="bg-slate-900">
+                        {deptCSE}
+                      </option>
+                      <option value="ECE" className="bg-slate-900">
+                        {deptECE}
+                      </option>
+                      <option value="EEE" className="bg-slate-900">
+                        {deptEEE}
+                      </option>
+                      <option value="IT" className="bg-slate-900">
+                        {deptIT}
+                      </option>
+                      <option value="ME" className="bg-slate-900">
+                        {deptME}
+                      </option>
                     </select>
                   </div>
                   <div className="form-group w-full">
@@ -234,7 +275,9 @@ const JoinClub = () => {
                       placeholder={placeholderBatch}
                       required
                       value={formData.batch}
-                      onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, batch: e.target.value })
+                      }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
                     />
@@ -273,7 +316,10 @@ const JoinClub = () => {
                     </div>
                   ) : (
                     <div className="form-group file-upload-group w-full">
-                      <label htmlFor="photo-upload" className="file-upload-label flex items-center justify-center gap-2 p-3.5 rounded-xl border border-dashed border-accent-primary bg-accent-primary/5 text-text-primary cursor-pointer transition-all duration-300 font-semibold text-center hover:bg-accent-primary/10 hover:border-accent-primary/40 text-xs">
+                      <label
+                        htmlFor="photo-upload"
+                        className="file-upload-label flex items-center justify-center gap-2 p-3.5 rounded-xl border border-dashed border-accent-primary bg-accent-primary/5 text-text-primary cursor-pointer transition-all duration-300 font-semibold text-center hover:bg-accent-primary/10 hover:border-accent-primary/40 text-xs"
+                      >
                         <UploadCloud className="inline-icon text-accent-primary align-middle mr-2" />
                         {croppedImage ? photoChangeText : photoUploadText}
                       </label>
@@ -291,7 +337,11 @@ const JoinClub = () => {
                       />
                       {croppedImage && !isEditingImg && (
                         <div className="preview-avatar-mini w-[50px] h-[50px] rounded-full overflow-hidden mx-auto mt-4 border border-accent-primary shadow-[0_0_10px_rgba(0,240,255,0.3)]">
-                          <img src={croppedImage} alt="Preview" className="w-full h-full object-cover" />
+                          <img
+                            src={croppedImage}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
                         </div>
                       )}
                     </div>
@@ -317,42 +367,71 @@ const JoinClub = () => {
                     animate={{ scale: 1, rotateY: 0 }}
                     transition={{ type: "spring", stiffness: 100 }}
                   >
-                    <div className="id-card w-[320px] bg-gradient-to-br from-[#101524] to-[#070b13] rounded-2xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.6)] border border-accent-primary/10 relative text-white before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[3px] before:bg-gradient-to-r before:from-accent-primary before:to-accent-secondary" ref={cardRef}>
+                    <div
+                      className="id-card w-[320px] bg-gradient-to-br from-[#101524] to-[#070b13] rounded-2xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.6)] border border-accent-primary/10 relative text-white before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-[3px] before:bg-gradient-to-r before:from-accent-primary before:to-accent-secondary"
+                      ref={cardRef}
+                    >
                       <div className="id-header p-4 flex items-center gap-[12px] border-b border-white/5">
                         <Cpu className="id-logo text-accent-primary w-8 h-8" />
                         <div>
-                          <h4 className="m-0 text-xs text-white font-bold tracking-wide">{cardTitle}</h4>
-                          <p className="m-0 text-[9px] text-accent-primary uppercase tracking-[1px] font-mono">{cardSubtitle}</p>
+                          <h4 className="m-0 text-xs text-white font-bold tracking-wide">
+                            {cardTitle}
+                          </h4>
+                          <p className="m-0 text-[9px] text-accent-primary uppercase tracking-[1px] font-mono">
+                            {cardSubtitle}
+                          </p>
                         </div>
                       </div>
                       <div className="id-body p-6 flex flex-col items-center text-center bg-[radial-gradient(circle_at_50%_0%,rgba(112,0,255,0.08),transparent_70%)]">
                         <div className="id-avatar w-[80px] h-[80px] rounded-full bg-gradient-to-br from-accent-primary to-accent-secondary flex items-center justify-center text-2xl font-bold text-[#111520] mb-4 border-2 border-slate-900 shadow-[0_4px_12px_rgba(0,0,0,0.3)] overflow-hidden">
                           {croppedImage ? (
-                            <img src={croppedImage} alt="Profile" className="w-full h-full object-cover rounded-full" />
+                            <img
+                              src={croppedImage}
+                              alt="Profile"
+                              className="w-full h-full object-cover rounded-full"
+                            />
                           ) : (
                             formData.name.charAt(0).toUpperCase()
                           )}
                         </div>
                         <div className="id-details w-full">
-                          <p className="id-name text-lg font-bold m-[0_0_4px_0] text-white tracking-wide">{formData.name}</p>
-                          <p className="id-number font-mono text-xs text-[#a0aec0] bg-black/45 p-[3px_10px] rounded-[20px] m-[0_0_16px_0] inline-block tracking-wider border border-white/5">{memberId}</p>
+                          <p className="id-name text-lg font-bold m-[0_0_4px_0] text-white tracking-wide">
+                            {formData.name}
+                          </p>
+                          <p className="id-number font-mono text-xs text-[#a0aec0] bg-black/45 p-[3px_10px] rounded-[20px] m-[0_0_16px_0] inline-block tracking-wider border border-white/5">
+                            {memberId}
+                          </p>
                           <div className="id-info-grid grid grid-cols-[auto_1fr] gap-[6px_12px] text-left w-full text-xs font-mono">
-                            <span className="id-label text-[#a0aec0] font-semibold">{labelDept}</span>
-                            <span className="text-white/80">{formData.department}</span>
-                            <span className="id-label text-[#a0aec0] font-semibold">{labelBatch}</span>
-                            <span className="text-white/80">{formData.batch}</span>
+                            <span className="id-label text-[#a0aec0] font-semibold">
+                              {labelDept}
+                            </span>
+                            <span className="text-white/80">
+                              {formData.department}
+                            </span>
+                            <span className="id-label text-[#a0aec0] font-semibold">
+                              {labelBatch}
+                            </span>
+                            <span className="text-white/80">
+                              {formData.batch}
+                            </span>
                           </div>
                         </div>
                       </div>
                       <div className="id-card-footer p-3.5 bg-black/40 text-center text-[10px] text-[#718096] border-t border-white/5 font-mono">
-                        <p className="m-0 uppercase tracking-wider">{cardFooterText}</p>
+                        <p className="m-0 uppercase tracking-wider">
+                          {cardFooterText}
+                        </p>
                       </div>
                     </div>
                   </m.div>
 
-                  <button onClick={downloadIdCard} className="p-3.5 rounded-[50px] bg-gradient-to-r from-accent-primary/80 to-accent-secondary/80 text-white font-bold text-xs tracking-[2px] cursor-pointer transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_8px_20px_rgba(0,240,255,0.25)] max-w-[220px] w-full pointer-events-auto">
+                  <button
+                    onClick={downloadIdCard}
+                    className="p-3.5 rounded-[50px] bg-gradient-to-r from-accent-primary/80 to-accent-secondary/80 text-white font-bold text-xs tracking-[2px] cursor-pointer transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_8px_20px_rgba(0,240,255,0.25)] max-w-[220px] w-full pointer-events-auto"
+                  >
                     <m.span className="inline-flex items-center gap-2">
-                      <Download size={16} />{downloadBtnText}
+                      <Download size={16} />
+                      {downloadBtnText}
                     </m.span>
                   </button>
                 </div>

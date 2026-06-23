@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { Wrench, CheckCircle, Terminal, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Wrench,
+  CheckCircle,
+  Terminal,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import supabase from "../pages/api/supabase";
 import { playClick, playHover, playSuccess } from "../utils/audio";
 
 const portalTitle = " CAMPUS MAINTENANCE TERMINAL";
-const portalDesc = "Report campus electrical issues directly to EMRC technicians.";
+const portalDesc =
+  "Report campus electrical issues directly to EMRC technicians.";
 const successTitle = "TRANSMISSION SUCCESSFUL";
-const successDesc = "Directive logged. Dispatching technicians to localized coordinates.";
+const successDesc =
+  "Directive logged. Dispatching technicians to localized coordinates.";
 const submitBtnText = "EXECUTE DIRECTIVE";
 const placeholderName = "OPERATOR_NAME / DESIGNATION";
 const placeholderDept = "DEPARTMENT_ID";
@@ -26,7 +34,9 @@ const MaintenancePortal = () => {
   const [terminalLog, setTerminalLog] = useState([]);
 
   const addToLog = (msg) => {
-    setTerminalLog((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`].slice(-4));
+    setTerminalLog((prev) =>
+      [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`].slice(-4),
+    );
   };
 
   const handleInputChange = (field, value) => {
@@ -93,8 +103,14 @@ const MaintenancePortal = () => {
       {/* Accompanied telemetry contextual copy */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mb-6">
         <div className="md:col-span-8 font-mono text-xs text-text-secondary leading-relaxed uppercase tracking-[1px]">
-          <p className="mb-2">Campus maintenance dispatch order form. Registered requests are verified, prioritized by electrical fault hazards, and routed directly to active technical response squads.</p>
-          <p className="text-accent-primary/80">Open a maintenance dispatch ticket to file a new repair directive.</p>
+          <p className="mb-2">
+            Campus maintenance dispatch order form. Registered requests are
+            verified, prioritized by electrical fault hazards, and routed
+            directly to active technical response squads.
+          </p>
+          <p className="text-accent-primary/80">
+            Open a maintenance dispatch ticket to file a new repair directive.
+          </p>
         </div>
         <div className="md:col-span-4 flex justify-center">
           {!submitted && (
@@ -104,9 +120,13 @@ const MaintenancePortal = () => {
               className="flex items-center gap-2 px-5 py-3 rounded-full bg-accent-primary/10 border border-accent-primary/30 text-accent-primary font-bold font-mono text-[11px] tracking-[2px] transition-all duration-300 hover:bg-accent-primary/20 hover:border-accent-primary/60 select-none pointer-events-auto"
             >
               {isExpanded ? (
-                <>COLLAPSE DISPATCH <ChevronUp className="w-3.5 h-3.5" /></>
+                <>
+                  COLLAPSE DISPATCH <ChevronUp className="w-3.5 h-3.5" />
+                </>
               ) : (
-                <>INITIALIZE DISPATCH <ChevronDown className="w-3.5 h-3.5" /></>
+                <>
+                  INITIALIZE DISPATCH <ChevronDown className="w-3.5 h-3.5" />
+                </>
               )}
             </button>
           )}
@@ -129,29 +149,43 @@ const MaintenancePortal = () => {
                   initial={{ scale: 0.95, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                 >
-                  <CheckCircle size={40} className="mx-auto text-accent-primary mb-4 animate-bounce" />
-                  <h3 className="font-mono tracking-[3px] text-accent-primary font-bold text-lg">{successTitle}</h3>
-                  <p className="mt-2 text-xs font-mono text-text-secondary uppercase">{successDesc}</p>
-                  
+                  <CheckCircle
+                    size={40}
+                    className="mx-auto text-accent-primary mb-4 animate-bounce"
+                  />
+                  <h3 className="font-mono tracking-[3px] text-accent-primary font-bold text-lg">
+                    {successTitle}
+                  </h3>
+                  <p className="mt-2 text-xs font-mono text-text-secondary uppercase">
+                    {successDesc}
+                  </p>
+
                   <div className="mt-6 p-4 rounded bg-black/90 border border-white/5 text-left font-mono text-[10px] text-emerald-400/90 leading-relaxed shadow-inner">
                     <div className="flex items-center gap-1.5 border-b border-white/5 pb-2 mb-2 text-white/40">
                       <Terminal className="w-3.5 h-3.5" />
                       <span>TERMINAL STATUS READOUT</span>
                     </div>
                     {terminalLog.map((log, i) => (
-                      <div key={i} className="animate-pulse">{log}</div>
+                      <div key={i} className="animate-pulse">
+                        {log}
+                      </div>
                     ))}
                   </div>
                 </m.div>
               ) : (
-                <form onSubmit={handleSubmit} className="custom-form max-w-[560px] mx-auto flex flex-col gap-4 font-mono text-sm pointer-events-auto">
+                <form
+                  onSubmit={handleSubmit}
+                  className="custom-form max-w-[560px] mx-auto flex flex-col gap-4 font-mono text-sm pointer-events-auto"
+                >
                   <div className="form-group w-full">
                     <input
                       type="text"
                       placeholder={placeholderName}
                       required
                       value={formData.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("name", e.target.value)
+                      }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
                     />
@@ -162,7 +196,9 @@ const MaintenancePortal = () => {
                       placeholder={placeholderDept}
                       required
                       value={formData.department}
-                      onChange={(e) => handleInputChange("department", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("department", e.target.value)
+                      }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
                     />
@@ -173,7 +209,9 @@ const MaintenancePortal = () => {
                       placeholder={placeholderLoc}
                       required
                       value={formData.location}
-                      onChange={(e) => handleInputChange("location", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("location", e.target.value)
+                      }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
                     />
@@ -184,7 +222,9 @@ const MaintenancePortal = () => {
                       rows="3"
                       required
                       value={formData.issue}
-                      onChange={(e) => handleInputChange("issue", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("issue", e.target.value)
+                      }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
                     ></textarea>

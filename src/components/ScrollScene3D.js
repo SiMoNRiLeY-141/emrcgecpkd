@@ -19,7 +19,8 @@ const ScrollScene3D = () => {
     // 1. WebGL Availability Check
     try {
       const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      const gl =
+        canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
       if (!gl) {
         setHasWebGL(false);
         return;
@@ -31,13 +32,14 @@ const ScrollScene3D = () => {
 
     // Dynamic GSAP and ScrollTrigger import to avoid SSR issues
     let gsap, ScrollTrigger;
-    
+
     const initThreeAndGSAP = async () => {
       try {
         const gsapModule = await import("gsap");
         const scrollTriggerModule = await import("gsap/ScrollTrigger");
         gsap = gsapModule.default || gsapModule;
-        ScrollTrigger = scrollTriggerModule.ScrollTrigger || scrollTriggerModule.default;
+        ScrollTrigger =
+          scrollTriggerModule.ScrollTrigger || scrollTriggerModule.default;
         gsap.registerPlugin(ScrollTrigger);
       } catch (err) {
         console.error("GSAP loading error", err);
@@ -51,7 +53,7 @@ const ScrollScene3D = () => {
       const width = container.clientWidth;
       const height = container.clientHeight;
       const scene = new THREE.Scene();
-      
+
       // Black slate background with slight blue fog for depth
       scene.background = new THREE.Color(0x060913);
       scene.fog = new THREE.FogExp2(0x060913, 0.015);
@@ -59,8 +61,11 @@ const ScrollScene3D = () => {
       const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
       camera.position.set(0, 0, 15);
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-      
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: false,
+      });
+
       // Performance Budget Capping
       const isMobile = window.innerWidth < 768;
       const pixelRatio = Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2);
@@ -105,12 +110,15 @@ const ScrollScene3D = () => {
         positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
         positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
         positions[i * 3 + 2] = r * Math.cos(phi);
-        
+
         randomSpeeds[i] = 0.1 + Math.random() * 0.9;
       }
 
-      particleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-      
+      particleGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(positions, 3),
+      );
+
       // Simple particle shader or point material
       const particleMaterial = new THREE.PointsMaterial({
         color: 0x00f0ff,
@@ -121,7 +129,10 @@ const ScrollScene3D = () => {
         depthWrite: false,
       });
 
-      const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+      const particleSystem = new THREE.Points(
+        particleGeometry,
+        particleMaterial,
+      );
       scene.add(particleSystem);
 
       // --- Group B: Hero/Landing Central Reactor Core ---
@@ -139,19 +150,27 @@ const ScrollScene3D = () => {
         metalness: 0.8,
         wireframe: true,
         transparent: true,
-        opacity: 0.95
+        opacity: 0.95,
       });
       const coreMesh = new THREE.Mesh(coreGeo, coreMat);
       reactorGroup.add(coreMesh);
 
       // Outer mechanical rings
       const ringGeo1 = new THREE.TorusGeometry(2.4, 0.06, 8, 48);
-      const ringMat1 = new THREE.MeshStandardMaterial({ color: 0x7000ff, roughness: 0.2, metalness: 0.9 });
+      const ringMat1 = new THREE.MeshStandardMaterial({
+        color: 0x7000ff,
+        roughness: 0.2,
+        metalness: 0.9,
+      });
       const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
       reactorGroup.add(ring1);
 
       const ringGeo2 = new THREE.TorusGeometry(2.8, 0.04, 8, 48);
-      const ringMat2 = new THREE.MeshStandardMaterial({ color: 0x00f0ff, roughness: 0.2, metalness: 0.9 });
+      const ringMat2 = new THREE.MeshStandardMaterial({
+        color: 0x00f0ff,
+        roughness: 0.2,
+        metalness: 0.9,
+      });
       const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
       ring2.rotation.x = Math.PI / 2;
       reactorGroup.add(ring2);
@@ -200,12 +219,19 @@ const ScrollScene3D = () => {
 
       // Individual transistors and details
       const detailGeo = new THREE.BoxGeometry(0.3, 0.4, 0.3);
-      const detailMat = new THREE.MeshStandardMaterial({ color: 0x7000ff, metalness: 0.8 });
+      const detailMat = new THREE.MeshStandardMaterial({
+        color: 0x7000ff,
+        metalness: 0.8,
+      });
       for (let x = -2.5; x <= 2.5; x += 1.2) {
         for (let z = -2.5; z <= 2.5; z += 1.2) {
           if (Math.abs(x) < 1 && Math.abs(z) < 1) continue; // Skip CPU center
           const detail = new THREE.Mesh(detailGeo, detailMat);
-          detail.position.set(x + (Math.random() - 0.5) * 0.2, 0.2, z + (Math.random() - 0.5) * 0.2);
+          detail.position.set(
+            x + (Math.random() - 0.5) * 0.2,
+            0.2,
+            z + (Math.random() - 0.5) * 0.2,
+          );
           circuitGroup.add(detail);
         }
       }
@@ -216,7 +242,7 @@ const ScrollScene3D = () => {
         new THREE.Vector3(3, 0.15, -3),
         new THREE.Vector3(3, 0.15, 3),
         new THREE.Vector3(-3, 0.15, 3),
-        new THREE.Vector3(-3, 0.15, -3)
+        new THREE.Vector3(-3, 0.15, -3),
       ];
       const lineGeo = new THREE.BufferGeometry().setFromPoints(linePoints);
       const lineMat = new THREE.LineBasicMaterial({ color: 0x00f0ff });
@@ -235,14 +261,14 @@ const ScrollScene3D = () => {
       for (let i = 0; i < 3; i++) {
         const itemGroup = new THREE.Group();
         itemGroup.position.set((i - 1) * 3.8, 0, 0);
-        
+
         // Dynamic floating offset
         itemGroup.userData = {
           title: moduleTitles[i],
           originalY: 0,
           hoverProgress: 0,
           floatOffset: Math.random() * Math.PI,
-          index: i
+          index: i,
         };
 
         // Outer glass enclosure
@@ -255,7 +281,7 @@ const ScrollScene3D = () => {
           thickness: 0.5,
           transparent: true,
           opacity: 0.45,
-          side: THREE.DoubleSide
+          side: THREE.DoubleSide,
         });
         const box = new THREE.Mesh(boxGeo, boxMat);
         itemGroup.add(box);
@@ -266,7 +292,7 @@ const ScrollScene3D = () => {
           color: colors[i],
           emissive: colors[i],
           emissiveIntensity: 0.8,
-          wireframe: true
+          wireframe: true,
         });
         const inner = new THREE.Mesh(innerGeo, innerMat);
         inner.position.set(0, 0, 0);
@@ -288,7 +314,7 @@ const ScrollScene3D = () => {
         wireframe: true,
         transparent: true,
         opacity: 0.25,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
       });
       const grid = new THREE.Mesh(gridGeo, gridMat);
       grid.rotation.x = Math.PI / 2;
@@ -305,7 +331,7 @@ const ScrollScene3D = () => {
           emissive: 0x00f0ff,
           emissiveIntensity: 1.0,
           transparent: true,
-          opacity: 0.4
+          opacity: 0.4,
         });
         const tube = new THREE.Mesh(tubeGeo, tubeMat);
         tube.rotation.x = Math.PI / 2;
@@ -336,7 +362,7 @@ const ScrollScene3D = () => {
             duration: 0.15,
             yoyo: true,
             repeat: 1,
-            ease: "power2.out"
+            ease: "power2.out",
           });
         }
       };
@@ -358,7 +384,7 @@ const ScrollScene3D = () => {
         p2_look: { x: -10, y: -12, z: -3 },
         // Scroll 75-100% (Maintenance Portal)
         p3_pos: { x: 0, y: -19, z: 6.5 },
-        p3_look: { x: 0, y: -22, z: 0 }
+        p3_look: { x: 0, y: -22, z: 0 },
       };
 
       // Current animated properties
@@ -368,7 +394,7 @@ const ScrollScene3D = () => {
         camZ: cameraTargets.p0_pos.z,
         lookX: cameraTargets.p0_look.x,
         lookY: cameraTargets.p0_look.y,
-        lookZ: cameraTargets.p0_look.z
+        lookZ: cameraTargets.p0_look.z,
       };
 
       const scrollTimeline = gsap.timeline({
@@ -377,42 +403,54 @@ const ScrollScene3D = () => {
           start: "top top",
           end: "bottom bottom",
           scrub: 1.2, // Smooth interpolation
-          invalidateOnRefresh: true
-        }
+          invalidateOnRefresh: true,
+        },
       });
 
       // Frame 1: Scroll to About/Metrics
-      scrollTimeline.to(animState, {
-        camX: cameraTargets.p1_pos.x,
-        camY: cameraTargets.p1_pos.y,
-        camZ: cameraTargets.p1_pos.z,
-        lookX: cameraTargets.p1_look.x,
-        lookY: cameraTargets.p1_look.y,
-        lookZ: cameraTargets.p1_look.z,
-        ease: "power1.inOut"
-      }, 0);
+      scrollTimeline.to(
+        animState,
+        {
+          camX: cameraTargets.p1_pos.x,
+          camY: cameraTargets.p1_pos.y,
+          camZ: cameraTargets.p1_pos.z,
+          lookX: cameraTargets.p1_look.x,
+          lookY: cameraTargets.p1_look.y,
+          lookZ: cameraTargets.p1_look.z,
+          ease: "power1.inOut",
+        },
+        0,
+      );
 
       // Frame 2: Scroll to Workshops
-      scrollTimeline.to(animState, {
-        camX: cameraTargets.p2_pos.x,
-        camY: cameraTargets.p2_pos.y,
-        camZ: cameraTargets.p2_pos.z,
-        lookX: cameraTargets.p2_look.x,
-        lookY: cameraTargets.p2_look.y,
-        lookZ: cameraTargets.p2_look.z,
-        ease: "power1.inOut"
-      }, 1);
+      scrollTimeline.to(
+        animState,
+        {
+          camX: cameraTargets.p2_pos.x,
+          camY: cameraTargets.p2_pos.y,
+          camZ: cameraTargets.p2_pos.z,
+          lookX: cameraTargets.p2_look.x,
+          lookY: cameraTargets.p2_look.y,
+          lookZ: cameraTargets.p2_look.z,
+          ease: "power1.inOut",
+        },
+        1,
+      );
 
       // Frame 3: Scroll to Maintenance Portal
-      scrollTimeline.to(animState, {
-        camX: cameraTargets.p3_pos.x,
-        camY: cameraTargets.p3_pos.y,
-        camZ: cameraTargets.p3_pos.z,
-        lookX: cameraTargets.p3_look.x,
-        lookY: cameraTargets.p3_look.y,
-        lookZ: cameraTargets.p3_look.z,
-        ease: "power1.inOut"
-      }, 2);
+      scrollTimeline.to(
+        animState,
+        {
+          camX: cameraTargets.p3_pos.x,
+          camY: cameraTargets.p3_pos.y,
+          camZ: cameraTargets.p3_pos.z,
+          lookX: cameraTargets.p3_look.x,
+          lookY: cameraTargets.p3_look.y,
+          lookZ: cameraTargets.p3_look.z,
+          ease: "power1.inOut",
+        },
+        2,
+      );
 
       // 7. Render Loop
       const clock = new THREE.Clock();
@@ -439,7 +477,8 @@ const ScrollScene3D = () => {
         workshopMeshes.forEach((mesh) => {
           const ud = mesh.userData;
           // Float height movement
-          mesh.position.y = ud.originalY + Math.sin(elapsedTime * 1.5 + ud.floatOffset) * 0.15;
+          mesh.position.y =
+            ud.originalY + Math.sin(elapsedTime * 1.5 + ud.floatOffset) * 0.15;
           // Soft rotational wobble
           mesh.rotation.y = Math.sin(elapsedTime * 0.8 + ud.floatOffset) * 0.08;
           mesh.rotation.x = Math.cos(elapsedTime * 0.8 + ud.floatOffset) * 0.05;
@@ -453,7 +492,8 @@ const ScrollScene3D = () => {
 
         // Maintenance Portal Tubes pulsating glow
         tubes.forEach((tube, idx) => {
-          tube.material.emissiveIntensity = 0.5 + Math.sin(elapsedTime * 3 - idx * 0.8) * 0.4;
+          tube.material.emissiveIntensity =
+            0.5 + Math.sin(elapsedTime * 3 - idx * 0.8) * 0.4;
           tube.rotation.z = elapsedTime * 0.08 * (idx % 2 === 0 ? 1 : -1);
         });
 
@@ -463,25 +503,25 @@ const ScrollScene3D = () => {
 
         // Set camera position interpolated by scroll-linked GSAP timeline
         const parallaxOffsetLimit = isMobile ? 0.3 : 1.2;
-        camera.position.x = animState.camX + (mouse.x * parallaxOffsetLimit);
-        camera.position.y = animState.camY + (mouse.y * parallaxOffsetLimit);
+        camera.position.x = animState.camX + mouse.x * parallaxOffsetLimit;
+        camera.position.y = animState.camY + mouse.y * parallaxOffsetLimit;
         camera.position.z = animState.camZ;
 
         // Render camera looking at dynamic targets
         const targetLook = new THREE.Vector3(
-          animState.lookX + (mouse.x * parallaxOffsetLimit * 0.4),
-          animState.lookY + (mouse.y * parallaxOffsetLimit * 0.4),
-          animState.lookZ
+          animState.lookX + mouse.x * parallaxOffsetLimit * 0.4,
+          animState.lookY + mouse.y * parallaxOffsetLimit * 0.4,
+          animState.lookZ,
         );
         camera.lookAt(targetLook);
 
         // Raycasting for interactive Workshop cards
         if (!isMobile) {
           raycaster.setFromCamera(mouse, camera);
-          
+
           // Flatten workshop mesh hierarchy for intersection
           const interactiveObjects = [];
-          workshopMeshes.forEach(group => {
+          workshopMeshes.forEach((group) => {
             // Include main box mesh
             interactiveObjects.push(group.children[0]);
           });
@@ -495,19 +535,35 @@ const ScrollScene3D = () => {
             if (hoveredModule !== parentGroup) {
               if (hoveredModule) {
                 // Return previous to default scale & emission
-                gsap.to(hoveredModule.scale, { x: 1, y: 1, z: 1, duration: 0.3 });
-                gsap.to(hoveredModule.children[0].material, { opacity: 0.45, duration: 0.3 });
+                gsap.to(hoveredModule.scale, {
+                  x: 1,
+                  y: 1,
+                  z: 1,
+                  duration: 0.3,
+                });
+                gsap.to(hoveredModule.children[0].material, {
+                  opacity: 0.45,
+                  duration: 0.3,
+                });
               }
               hoveredModule = parentGroup;
               playHover();
               // Animate hover: scale up and increase opacity/neon glow
-              gsap.to(parentGroup.scale, { x: 1.15, y: 1.15, z: 1.15, duration: 0.3 });
+              gsap.to(parentGroup.scale, {
+                x: 1.15,
+                y: 1.15,
+                z: 1.15,
+                duration: 0.3,
+              });
               gsap.to(intersectedBox.material, { opacity: 0.8, duration: 0.3 });
             }
           } else {
             if (hoveredModule) {
               gsap.to(hoveredModule.scale, { x: 1, y: 1, z: 1, duration: 0.3 });
-              gsap.to(hoveredModule.children[0].material, { opacity: 0.45, duration: 0.3 });
+              gsap.to(hoveredModule.children[0].material, {
+                opacity: 0.45,
+                duration: 0.3,
+              });
               hoveredModule = null;
             }
           }
@@ -523,7 +579,7 @@ const ScrollScene3D = () => {
       const handleResize = () => {
         const w = container.clientWidth;
         const h = container.clientHeight;
-        
+
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
 
@@ -541,14 +597,14 @@ const ScrollScene3D = () => {
           container.removeChild(renderer.domElement);
           renderer.dispose();
         }
-        ScrollTrigger.getAll().forEach(t => t.kill());
+        ScrollTrigger.getAll().forEach((t) => t.kill());
       };
     };
 
     let cleanupPromise = initThreeAndGSAP();
 
     return () => {
-      cleanupPromise.then(cleanup => cleanup && cleanup());
+      cleanupPromise.then((cleanup) => cleanup && cleanup());
     };
   }, []);
 

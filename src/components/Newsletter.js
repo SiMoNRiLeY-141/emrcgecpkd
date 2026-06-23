@@ -78,7 +78,10 @@ const Newsletter = () => {
 
       <div className="hud-line mb-8" />
 
-      <form onSubmit={handleSubmit} className="newsletter-form flex flex-col md:flex-row gap-4 max-w-[560px] mx-auto relative pointer-events-auto font-mono text-xs">
+      <form
+        onSubmit={handleSubmit}
+        className="newsletter-form flex flex-col md:flex-row gap-4 max-w-[560px] mx-auto relative pointer-events-auto font-mono text-xs"
+      >
         <input
           type="email"
           placeholder={placeholderText}

@@ -193,11 +193,17 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
       <button
         onClick={handleAudioToggle}
         className={`fixed top-6 right-6 z-[99] p-3 rounded-full border border-accent-primary/20 bg-[#080d1a]/90 backdrop-blur-md text-accent-primary transition-all duration-500 shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:border-accent-primary/50 pointer-events-auto cursor-pointer ${
-          scrolled ? "opacity-0 pointer-events-none scale-90" : "opacity-100 pointer-events-auto scale-100"
+          scrolled
+            ? "opacity-0 pointer-events-none scale-90"
+            : "opacity-100 pointer-events-auto scale-100"
         }`}
         title={muted ? "Unmute UI Haptics" : "Mute UI Haptics"}
       >
-        {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 animate-pulse" />}
+        {muted ? (
+          <VolumeX className="w-4 h-4" />
+        ) : (
+          <Volume2 className="w-4 h-4 animate-pulse" />
+        )}
       </button>
 
       <main className="relative z-10 mx-auto max-w-[1100px] p-5 pb-20 md:pb-[80px]">
@@ -207,7 +213,7 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
           </ScrollSection>
         ))}
       </main>
-      
+
       <SocialMediaOverlay />
     </div>
   );

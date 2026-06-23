@@ -51,20 +51,12 @@ const ScrollSection = ({ children, depth = 0, className = "" }) => {
   const opacity = useTransform(
     smoothProgress,
     [0, 0.25, 0.75, 1],
-    [0, 1, 1, 0]
-  );
-  
-  const scale = useTransform(
-    smoothProgress,
-    [0, 0.5, 1],
-    [0.78, 1, 0.82]
+    [0, 1, 1, 0],
   );
 
-  const rotateX = useTransform(
-    smoothProgress,
-    [0, 0.5, 1],
-    [22, 0, -22]
-  );
+  const scale = useTransform(smoothProgress, [0, 0.5, 1], [0.78, 1, 0.82]);
+
+  const rotateX = useTransform(smoothProgress, [0, 0.5, 1], [22, 0, -22]);
 
   return (
     <m.section
@@ -80,9 +72,7 @@ const ScrollSection = ({ children, depth = 0, className = "" }) => {
             }
       }
     >
-      <div className="w-full pointer-events-auto">
-        {children}
-      </div>
+      <div className="w-full pointer-events-auto">{children}</div>
     </m.section>
   );
 };
