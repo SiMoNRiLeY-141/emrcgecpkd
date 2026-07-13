@@ -2,6 +2,59 @@ import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { playHover, playClick } from "../utils/audio";
 
+// Pre-allocated scratch vectors for lightning math (saves garbage collection churn)
+const _dir = new THREE.Vector3();
+const _tempUp = new THREE.Vector3();
+const _right = new THREE.Vector3();
+const _up = new THREE.Vector3();
+const _pt = new THREE.Vector3();
+
+// Fractal lightning path generator that writes coordinates directly into a pre-allocated Float32Array (ZERO allocations)
+const fillLightningArray = (array, start, end, segments = 8, jitter = 0.1) => {
+  _dir.subVectors(end, start);
+  const len = _dir.length();
+
+  // Start point
+  array[0] = start.x;
+  array[1] = start.y;
+  array[2] = start.z;
+
+  const innerEnd = segments - 2;
+  for (let i = 1; i <= innerEnd; i++) {
+    const t = i / (segments - 1);
+    _pt.lerpVectors(start, end, t);
+
+    // Get vectors perpendicular to line path for jitter offset
+    if (Math.abs(_dir.y) < 0.9) {
+      _tempUp.set(0, 1, 0);
+    } else {
+      _tempUp.set(1, 0, 0);
+    }
+    _right.crossVectors(_dir, _tempUp).normalize();
+    _up.crossVectors(_right, _dir).normalize();
+
+    // Chaotic displacement
+    const dispX = (Math.random() - 0.5) * jitter * len;
+    const dispY = (Math.random() - 0.5) * jitter * len;
+    const dispZ = (Math.random() - 0.5) * jitter * len;
+
+    _pt.addScaledVector(_right, dispX);
+    _pt.addScaledVector(_up, dispY);
+    _pt.z += dispZ;
+
+    const idx = i * 3;
+    array[idx] = _pt.x;
+    array[idx + 1] = _pt.y;
+    array[idx + 2] = _pt.z;
+  }
+
+  // End point
+  const lastIdx = (segments - 1) * 3;
+  array[lastIdx] = end.x;
+  array[lastIdx + 1] = end.y;
+  array[lastIdx + 2] = end.z;
+};
+
 // Fallback component in case WebGL is not supported
 const WebGLFallback = () => (
   <div className="fixed inset-0 z-0 bg-slate-950 flex items-center justify-center pointer-events-none opacity-40">
@@ -58,6 +111,7 @@ const ScrollScene3D = () => {
           ? document.documentElement.getAttribute("data-theme") || "dark"
           : "dark";
       const isLightInitial = initialTheme === "light";
+      let isLightTheme = isLightInitial;
       const initialBg = isLightInitial ? 0xf4f7fa : 0x060913;
 
       scene.background = new THREE.Color(initialBg);
@@ -72,7 +126,7 @@ const ScrollScene3D = () => {
       });
 
       const isMobile = window.innerWidth < 768;
-      const pixelRatio = Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2);
+      const pixelRatio = Math.min(window.devicePixelRatio, isMobile ? 1.2 : 1.5);
       renderer.setPixelRatio(pixelRatio);
       renderer.setSize(width, height);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -150,26 +204,58 @@ const ScrollScene3D = () => {
       );
       scene.add(particleSystem);
 
-      // --- Group B: Hero/Landing Central Reactor Core ---
+      // --- Group B: Hero/Landing Tesla Coil & Plasma Arcs ---
       const reactorGroup = new THREE.Group();
       reactorGroup.position.set(0, 0, 0);
       mainGroup.add(reactorGroup);
 
-      const coreGeo = new THREE.IcosahedronGeometry(1.6, 2);
-      const coreMat = new THREE.MeshPhysicalMaterial({
+      // Tesla Coil base windings
+      const coilBaseGeo = new THREE.CylinderGeometry(0.5, 0.5, 1.8, 16);
+      const coilBaseMat = new THREE.MeshStandardMaterial({
+        color: 0x8b4513, // copper/brown core
+        roughness: 0.4,
+        metalness: 0.8,
+      });
+      const coilBase = new THREE.Mesh(coilBaseGeo, coilBaseMat);
+      coilBase.position.y = -0.5;
+      reactorGroup.add(coilBase);
+
+      // Helical wire windings around Tesla coil base
+      const helixPointsBase = [];
+      const coilTurns = 12;
+      const coilRadius = 0.58;
+      const coilLength = 1.6;
+      for (let w = 0; w <= 150; w++) {
+        const t = w / 150;
+        const angle = t * coilTurns * Math.PI * 2;
+        helixPointsBase.push(
+          new THREE.Vector3(
+            Math.cos(angle) * coilRadius,
+            (t - 0.5) * coilLength - 0.5,
+            Math.sin(angle) * coilRadius
+          )
+        );
+      }
+      const baseCoilGeo = new THREE.BufferGeometry().setFromPoints(helixPointsBase);
+      const baseCoilMat = new THREE.LineBasicMaterial({ color: 0xffa500 }); // copper Orange
+      const baseCoilLine = new THREE.Line(baseCoilGeo, baseCoilMat);
+      reactorGroup.add(baseCoilLine);
+
+      // Top capacitor sphere of the Tesla coil
+      const coreGeo = new THREE.SphereGeometry(0.7, 32, 32);
+      const coreMat = new THREE.MeshStandardMaterial({
         color: initAccPrimary,
         emissive: isLightInitial ? 0x000000 : 0x00a0cc,
-        emissiveIntensity: isLightInitial ? 0.0 : 1.2,
+        emissiveIntensity: isLightInitial ? 0.0 : 1.5,
         roughness: 0.1,
-        metalness: 0.8,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.95,
+        metalness: 0.9,
       });
       const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+      coreMesh.position.y = 0.6;
       reactorGroup.add(coreMesh);
 
-      const ringGeo1 = new THREE.TorusGeometry(2.4, 0.06, 8, 48);
+      // Surrounding plasma rings
+      const ringGeo1 = new THREE.TorusGeometry(2.4, 0.04, 8, 48);
       const ringMat1 = new THREE.MeshStandardMaterial({
         color: initAccSecondary,
         roughness: 0.2,
@@ -178,7 +264,7 @@ const ScrollScene3D = () => {
       const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
       reactorGroup.add(ring1);
 
-      const ringGeo2 = new THREE.TorusGeometry(2.8, 0.04, 8, 48);
+      const ringGeo2 = new THREE.TorusGeometry(2.8, 0.03, 8, 48);
       const ringMat2 = new THREE.MeshStandardMaterial({
         color: initAccPrimary,
         roughness: 0.2,
@@ -188,10 +274,36 @@ const ScrollScene3D = () => {
       ring2.rotation.x = Math.PI / 2;
       reactorGroup.add(ring2);
 
-      const ringGeo3 = new THREE.TorusGeometry(3.2, 0.03, 6, 32);
+      const ringGeo3 = new THREE.TorusGeometry(3.2, 0.02, 6, 32);
       const ring3 = new THREE.Mesh(ringGeo3, ringMat1);
       ring3.rotation.y = Math.PI / 4;
       reactorGroup.add(ring3);
+
+      // Lightning discharge lines (pre-allocated Float32Array positions to prevent GC allocations)
+      const lightningSegments = 8;
+      const lightningArrays = [];
+      const lightningGeos = [];
+      const lightningLines = [];
+      const lightningCount = 3;
+      for (let i = 0; i < lightningCount; i++) {
+        const lightningGeo = new THREE.BufferGeometry();
+        const lightningArray = new Float32Array(lightningSegments * 3);
+        const positionAttr = new THREE.BufferAttribute(lightningArray, 3);
+        positionAttr.setUsage(THREE.DynamicDrawUsage);
+        lightningGeo.setAttribute("position", positionAttr);
+
+        const lightningMat = new THREE.LineBasicMaterial({
+          color: initAccPrimary,
+          transparent: true,
+          opacity: 0.9,
+          blending: THREE.AdditiveBlending,
+        });
+        const line = new THREE.Line(lightningGeo, lightningMat);
+        reactorGroup.add(line);
+        lightningArrays.push(lightningArray);
+        lightningGeos.push(lightningGeo);
+        lightningLines.push(line);
+      }
 
       // --- Group C: Club Metrics Futuristic Circuit Board ---
       const circuitGroup = new THREE.Group();
@@ -218,7 +330,7 @@ const ScrollScene3D = () => {
       circuitGroup.add(cpu);
 
       const chipCoreGeo = new THREE.BoxGeometry(1.4, 0.42, 1.4);
-      const chipCoreMat = new THREE.MeshPhysicalMaterial({
+      const chipCoreMat = new THREE.MeshStandardMaterial({
         color: initAccPrimary,
         emissive: isLightInitial ? 0x000000 : initAccPrimary,
         emissiveIntensity: isLightInitial ? 0.0 : 2.0,
@@ -257,7 +369,41 @@ const ScrollScene3D = () => {
       const boardLine = new THREE.Line(lineGeo, lineMat);
       circuitGroup.add(boardLine);
 
-      // --- Group D: Workshops & Services Floating Interactive Cards ---
+      // Current surges flowing along the circuit board path
+      const surgeCount = 3;
+      const surges = [];
+      const surgeGeo = new THREE.SphereGeometry(0.12, 8, 8);
+      const surgeMat = new THREE.MeshBasicMaterial({
+        color: initAccPrimary,
+        transparent: true,
+        opacity: 0.9,
+      });
+      for (let i = 0; i < surgeCount; i++) {
+        const surge = new THREE.Mesh(surgeGeo, surgeMat);
+        circuitGroup.add(surge);
+        surges.push({
+          mesh: surge,
+          offset: i / surgeCount,
+        });
+      }
+
+      // Helper function to interpolate position along circuit board trace (writes in-place to avoid allocations)
+      const getCircuitPathPos = (progress, targetVec) => {
+        const t = progress % 1.0;
+        const totalLen = 24.0;
+        const dist = t * totalLen;
+        if (dist < 6.0) {
+          targetVec.set(-3.0 + dist, 0.15, -3.0);
+        } else if (dist < 12.0) {
+          targetVec.set(3.0, 0.15, -3.0 + (dist - 6.0));
+        } else if (dist < 18.0) {
+          targetVec.set(3.0 - (dist - 12.0), 0.15, 3.0);
+        } else {
+          targetVec.set(-3.0, 0.15, 3.0 - (dist - 18.0));
+        }
+      };
+
+      // --- Group D: Workshops & Services Electromagnetic Inductors ---
       const workshopsGroup = new THREE.Group();
       workshopsGroup.position.set(-10, -12, -3);
       mainGroup.add(workshopsGroup);
@@ -281,36 +427,75 @@ const ScrollScene3D = () => {
 
         const activeColor = isLightInitial ? colorsLight[i] : colorsDark[i];
 
-        const boxGeo = new THREE.BoxGeometry(2.4, 3.4, 0.6);
-        const boxMat = new THREE.MeshPhysicalMaterial({
-          color: activeColor,
-          roughness: 0.1,
-          metalness: 0.1,
-          transmission: 0.85,
-          thickness: 0.5,
+        // Core cylinder (inductor ferrite core)
+        const boxGeo = new THREE.CylinderGeometry(0.8, 0.8, 3.2, 16);
+        const boxMat = new THREE.MeshStandardMaterial({
+          color: isLightInitial ? 0x708090 : 0x1f2937, // dark ferrite core
+          roughness: 0.5,
+          metalness: 0.8,
           transparent: true,
-          opacity: 0.45,
-          side: THREE.DoubleSide,
+          opacity: 0.85,
         });
         const box = new THREE.Mesh(boxGeo, boxMat);
         itemGroup.add(box);
 
-        const innerGeo = new THREE.CylinderGeometry(0.5, 0.5, 2.0, 16);
-        const innerMat = new THREE.MeshPhysicalMaterial({
+        // Helical copper wire wrapping
+        const helixPoints = [];
+        const windingsCount = 12;
+        const windingRadius = 0.95;
+        const windingLength = 2.8;
+        for (let w = 0; w <= 150; w++) {
+          const t = w / 150;
+          const angle = t * windingsCount * Math.PI * 2;
+          helixPoints.push(
+            new THREE.Vector3(
+              Math.cos(angle) * windingRadius,
+              (t - 0.5) * windingLength,
+              Math.sin(angle) * windingRadius
+            )
+          );
+        }
+        const coilGeo = new THREE.BufferGeometry().setFromPoints(helixPoints);
+        const coilMat = new THREE.LineBasicMaterial({
+          color: 0xff8c00, // Copper dark orange
+          linewidth: 2.0,
+        });
+        const coilLine = new THREE.Line(coilGeo, coilMat);
+        itemGroup.add(coilLine);
+        itemGroup.userData.coil = coilLine;
+
+        // Concentric electromagnetic flux rings (concentric lines)
+        const magRings = [];
+        const magRingGeo = new THREE.TorusGeometry(1.2, 0.02, 6, 24);
+        const magRingMat = new THREE.MeshBasicMaterial({
+          color: activeColor,
+          transparent: true,
+          opacity: 0.35,
+        });
+        for (let k = 0; k < 2; k++) {
+          const magRing = new THREE.Mesh(magRingGeo, magRingMat);
+          magRing.rotation.x = Math.PI / 2; // Flat field
+          itemGroup.add(magRing);
+          magRings.push(magRing);
+        }
+        itemGroup.userData.magRings = magRings;
+
+        // Inner glowing core
+        const innerGeo = new THREE.CylinderGeometry(0.3, 0.3, 2.0, 16);
+        const innerMat = new THREE.MeshStandardMaterial({
           color: activeColor,
           emissive: isLightInitial ? 0x000000 : activeColor,
-          emissiveIntensity: isLightInitial ? 0.0 : 0.8,
+          emissiveIntensity: isLightInitial ? 0.0 : 1.2,
           wireframe: true,
         });
         const inner = new THREE.Mesh(innerGeo, innerMat);
-        inner.position.set(0, 0, 0);
         itemGroup.add(inner);
 
         workshopsGroup.add(itemGroup);
         workshopMeshes.push(itemGroup);
       }
 
-      // --- Group E: Maintenance Portal Terminals & Power Lines ---
+      // --- Group E: Maintenance Portal Substation Towers ---
       const terminalGroup = new THREE.Group();
       terminalGroup.position.set(0, -22, 0);
       mainGroup.add(terminalGroup);
@@ -344,6 +529,199 @@ const ScrollScene3D = () => {
         terminalGroup.add(tube);
         tubes.push(tube);
       }
+
+      // High voltage insulator stack towers
+      const tower1 = new THREE.Group();
+      tower1.position.set(-3.5, 0, 0);
+      terminalGroup.add(tower1);
+      
+      const tower2 = new THREE.Group();
+      tower2.position.set(3.5, 0, 0);
+      terminalGroup.add(tower2);
+      
+      const discGeo = new THREE.CylinderGeometry(0.6, 0.8, 0.15, 8);
+      const discMat = new THREE.MeshStandardMaterial({
+        color: isLightInitial ? 0x90a0b0 : 0x1a2b4c,
+        roughness: 0.3,
+        metalness: 0.8,
+      });
+      for (let k = 0; k < 6; k++) {
+        const d1 = new THREE.Mesh(discGeo, discMat);
+        d1.position.y = k * 0.3;
+        tower1.add(d1);
+        
+        const d2 = new THREE.Mesh(discGeo, discMat);
+        d2.position.y = k * 0.3;
+        tower2.add(d2);
+      }
+
+      // Electric busbar line connecting tower tops (pre-allocated Float32Array positions to prevent GC allocations)
+      const busbarSegments = 10;
+      const busbarArray = new Float32Array(busbarSegments * 3);
+      const busbarGeo = new THREE.BufferGeometry();
+      const busbarPosAttr = new THREE.BufferAttribute(busbarArray, 3);
+      busbarPosAttr.setUsage(THREE.DynamicDrawUsage);
+      busbarGeo.setAttribute("position", busbarPosAttr);
+
+      const busbarMat = new THREE.LineBasicMaterial({
+        color: initAccPrimary,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+      });
+      const busbarLine = new THREE.Line(busbarGeo, busbarMat);
+      terminalGroup.add(busbarLine);
+
+      // --- Group F: Committee Analog Oscilloscope ---
+      const committeeGroup = new THREE.Group();
+      committeeGroup.position.set(10, -32, -6);
+      mainGroup.add(committeeGroup);
+
+      // CRT Display Housing Box
+      const scopeHousingGeo = new THREE.BoxGeometry(4.4, 3.4, 0.8);
+      const scopeHousingMat = new THREE.MeshStandardMaterial({
+        color: isLightInitial ? 0xd0d0d8 : 0x181a20,
+        roughness: 0.5,
+        metalness: 0.7,
+      });
+      const scopeHousing = new THREE.Mesh(scopeHousingGeo, scopeHousingMat);
+      committeeGroup.add(scopeHousing);
+
+      // Screen glass
+      const scopeScreenGeo = new THREE.BoxGeometry(4.0, 3.0, 0.82);
+      const scopeScreenMat = new THREE.MeshStandardMaterial({
+        color: 0x051d10, // dark phosphor tint
+        roughness: 0.1,
+        metalness: 0.1,
+        transparent: true,
+        opacity: 0.8,
+      });
+      const scopeScreen = new THREE.Mesh(scopeScreenGeo, scopeScreenMat);
+      committeeGroup.add(scopeScreen);
+
+      // Oscilloscope screen grid pattern
+      const scopeGridGeo = new THREE.PlaneGeometry(3.6, 2.6);
+      const scopeGridMat = new THREE.MeshBasicMaterial({
+        color: 0x005522, // dim green grid lines
+        wireframe: true,
+        transparent: true,
+        opacity: 0.45,
+      });
+      const scopeGrid = new THREE.Mesh(scopeGridGeo, scopeGridMat);
+      scopeGrid.position.z = 0.42;
+      committeeGroup.add(scopeGrid);
+
+      // Waveform line on the screen
+      const wavePointsCount = 80;
+      const waveGeo = new THREE.BufferGeometry();
+      const wavePos = new Float32Array(wavePointsCount * 3);
+      waveGeo.setAttribute("position", new THREE.BufferAttribute(wavePos, 3));
+      const waveMat = new THREE.LineBasicMaterial({
+        color: 0x00ff88, // Phosphor bright green
+        transparent: true,
+        opacity: 0.95,
+        blending: THREE.AdditiveBlending,
+      });
+      const oscilloscopeLine = new THREE.Line(waveGeo, waveMat);
+      oscilloscopeLine.position.z = 0.43;
+      committeeGroup.add(oscilloscopeLine);
+
+      // --- Group G: Newsletter Transmitter Antenna ---
+      const newsletterGroup = new THREE.Group();
+      newsletterGroup.position.set(-12, -42, -4);
+      mainGroup.add(newsletterGroup);
+
+      // Vertical antenna pole
+      const antennaPoleGeo = new THREE.CylinderGeometry(0.12, 0.22, 3.8, 16);
+      const antennaPoleMat = new THREE.MeshStandardMaterial({
+        color: isLightInitial ? 0x708090 : 0x2d3748,
+        roughness: 0.4,
+        metalness: 0.8,
+      });
+      const antennaPole = new THREE.Mesh(antennaPoleGeo, antennaPoleMat);
+      newsletterGroup.add(antennaPole);
+
+      // Top dome/sphere representing the active dome
+      const transmitterGeo = new THREE.SphereGeometry(0.6, 16, 16);
+      const transmitterMat = new THREE.MeshStandardMaterial({
+        color: initAccPrimary,
+        roughness: 0.3,
+        metalness: 0.8,
+      });
+      const transmitter = new THREE.Mesh(transmitterGeo, transmitterMat);
+      transmitter.position.y = 1.9;
+      newsletterGroup.add(transmitter);
+
+      const waveCount = 3;
+      const waveRings = [];
+      for (let i = 0; i < waveCount; i++) {
+        const ringGeo = new THREE.RingGeometry(1.0, 1.05, 32);
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: initAccSecondary,
+          transparent: true,
+          opacity: 0.5,
+          side: THREE.DoubleSide,
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.position.y = 1.9; // Radiate from the top dome
+        ring.rotation.x = Math.PI / 2;
+        newsletterGroup.add(ring);
+        waveRings.push({
+          mesh: ring,
+          speed: 0.8 + i * 0.2,
+          delay: i * 0.5,
+        });
+      }
+
+      // --- Group H: Contact Transmission Grid Globe ---
+      const contactGroup = new THREE.Group();
+      contactGroup.position.set(0, -52, 0);
+      mainGroup.add(contactGroup);
+
+      // Rotating transmission wireframe globe
+      const globeGeo = new THREE.SphereGeometry(3.5, 18, 18);
+      const globeMat = new THREE.MeshStandardMaterial({
+        color: initAccPrimary,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.25,
+      });
+      const globe = new THREE.Mesh(globeGeo, globeMat);
+      contactGroup.add(globe);
+
+      const globeInnerGeo = new THREE.IcosahedronGeometry(2.2, 1);
+      const globeInnerMat = new THREE.MeshStandardMaterial({
+        color: initAccSecondary,
+        roughness: 0.2,
+        metalness: 0.8,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.4,
+      });
+      const globeInner = new THREE.Mesh(globeInnerGeo, globeInnerMat);
+      contactGroup.add(globeInner);
+
+      const nodeCount = 12;
+      const globeNodes = [];
+      const nodeGeo = new THREE.SphereGeometry(0.12, 8, 8);
+      const nodeMat = new THREE.MeshBasicMaterial({
+        color: initAccPrimary,
+      });
+      for (let i = 0; i < nodeCount; i++) {
+        const node = new THREE.Mesh(nodeGeo, nodeMat);
+        const u = Math.random();
+        const v = Math.random();
+        const theta = u * 2.0 * Math.PI;
+        const phi = Math.acos(2.0 * v - 1.0);
+        node.position.set(
+          3.5 * Math.sin(phi) * Math.cos(theta),
+          3.5 * Math.sin(phi) * Math.sin(theta),
+          3.5 * Math.cos(phi)
+        );
+        contactGroup.add(node);
+        globeNodes.push(node);
+      }
+
 
       // --- Dynamic Theme Swapping Logic ---
       const updateThemeColors = (themeName) => {
@@ -515,17 +893,77 @@ const ScrollScene3D = () => {
           });
           tube.material.emissiveIntensity = isLight ? 0.0 : 1.0;
         });
+
+        // Transition Group F (Committee hologram)
+        gsap.to(hologramCoreMat.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+        gsap.to(hologramCoreMat.emissive, {
+          r: isLight ? 0 : ((accPrimary >> 16) & 255) / 255,
+          g: isLight ? 0 : ((accPrimary >> 8) & 255) / 255,
+          b: isLight ? 0 : (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+        hologramCoreMat.emissiveIntensity = isLight ? 0.0 : 1.2;
+
+        gsap.to(satMat.color, {
+          r: ((accSecondary >> 16) & 255) / 255,
+          g: ((accSecondary >> 8) & 255) / 255,
+          b: (accSecondary & 255) / 255,
+          duration: 0.8,
+        });
+
+        // Transition Group G (Newsletter transmitter and waves)
+        gsap.to(transmitterMat.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+        waveRings.forEach((wave) => {
+          gsap.to(wave.mesh.material.color, {
+            r: ((accSecondary >> 16) & 255) / 255,
+            g: ((accSecondary >> 8) & 255) / 255,
+            b: (accSecondary & 255) / 255,
+            duration: 0.8,
+          });
+        });
+
+        // Transition Group H (Contact globe)
+        gsap.to(globeMat.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
+        gsap.to(globeInnerMat.color, {
+          r: ((accSecondary >> 16) & 255) / 255,
+          g: ((accSecondary >> 8) & 255) / 255,
+          b: (accSecondary & 255) / 255,
+          duration: 0.8,
+        });
+        gsap.to(nodeMat.color, {
+          r: ((accPrimary >> 16) & 255) / 255,
+          g: ((accPrimary >> 8) & 255) / 255,
+          b: (accPrimary & 255) / 255,
+          duration: 0.8,
+        });
       };
 
       // Set up theme MutationObserver
       const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
+        for (let i = 0; i < mutations.length; i++) {
+          const mutation = mutations[i];
           if (mutation.attributeName === "data-theme") {
             const currentTheme =
               document.documentElement.getAttribute("data-theme") || "dark";
+            isLightTheme = currentTheme === "light";
             updateThemeColors(currentTheme);
           }
-        });
+        }
       });
       observer.observe(document.documentElement, { attributes: true });
 
@@ -568,6 +1006,12 @@ const ScrollScene3D = () => {
         p2_look: { x: -10, y: -12, z: -3 },
         p3_pos: { x: 0, y: -19, z: 6.5 },
         p3_look: { x: 0, y: -22, z: 0 },
+        p4_pos: { x: 8, y: -29, z: -1 },
+        p4_look: { x: 10, y: -32, z: -6 },
+        p5_pos: { x: -10, y: -39, z: 4 },
+        p5_look: { x: -12, y: -42, z: -4 },
+        p6_pos: { x: 0, y: -48, z: 8 },
+        p6_look: { x: 0, y: -52, z: 0 },
       };
 
       const animState = {
@@ -631,47 +1075,223 @@ const ScrollScene3D = () => {
         2,
       );
 
+      scrollTimeline.to(
+        animState,
+        {
+          camX: cameraTargets.p4_pos.x,
+          camY: cameraTargets.p4_pos.y,
+          camZ: cameraTargets.p4_pos.z,
+          lookX: cameraTargets.p4_look.x,
+          lookY: cameraTargets.p4_look.y,
+          lookZ: cameraTargets.p4_look.z,
+          ease: "power1.inOut",
+        },
+        3,
+      );
+
+      scrollTimeline.to(
+        animState,
+        {
+          camX: cameraTargets.p5_pos.x,
+          camY: cameraTargets.p5_pos.y,
+          camZ: cameraTargets.p5_pos.z,
+          lookX: cameraTargets.p5_look.x,
+          lookY: cameraTargets.p5_look.y,
+          lookZ: cameraTargets.p5_look.z,
+          ease: "power1.inOut",
+        },
+        4,
+      );
+
+      scrollTimeline.to(
+        animState,
+        {
+          camX: cameraTargets.p6_pos.x,
+          camY: cameraTargets.p6_pos.y,
+          camZ: cameraTargets.p6_pos.z,
+          lookX: cameraTargets.p6_look.x,
+          lookY: cameraTargets.p6_look.y,
+          lookZ: cameraTargets.p6_look.z,
+          ease: "power1.inOut",
+        },
+        5,
+      );
+
+
       // 7. Render Loop
-      const clock = new THREE.Clock();
+      const startTime = performance.now();
+      let lastFrameCount = -1;
+      let lastSubFrameCount = -1;
+
+      // Pre-allocated math structures for rendering to avoid runtime memory allocations
+      const startPt = new THREE.Vector3(0, 0.6, 0);
+      const endPts = [
+        new THREE.Vector3(),
+        new THREE.Vector3(),
+        new THREE.Vector3()
+      ];
+      const t1Top = new THREE.Vector3(-3.5, 1.8, 0);
+      const t2Top = new THREE.Vector3(3.5, 1.8, 0);
+      const surgeVec = new THREE.Vector3();
 
       const animate = () => {
-        const elapsedTime = clock.getElapsedTime();
+        const elapsedTime = (performance.now() - startTime) * 0.001;
 
         particleSystem.rotation.y = elapsedTime * 0.02;
         particleSystem.rotation.x = elapsedTime * 0.008;
 
-        coreMesh.rotation.y = elapsedTime * 0.4;
-        coreMesh.rotation.x = elapsedTime * 0.25;
-        ring1.rotation.y = elapsedTime * 0.6;
-        ring2.rotation.x = elapsedTime * 0.5;
-        ring3.rotation.z = -elapsedTime * 0.3;
+        // Animate Group B (Tesla Coil) - active when near top
+        if (animState.camY > -6.0) {
+          coreMesh.rotation.y = elapsedTime * 0.2;
+          ring1.rotation.y = elapsedTime * 0.6;
+          ring2.rotation.x = elapsedTime * 0.5;
+          ring3.rotation.z = -elapsedTime * 0.3;
 
-        const currentTheme =
-          document.documentElement.getAttribute("data-theme") || "dark";
-        const isL = currentTheme === "light";
-        chipCoreMat.emissiveIntensity =
-          (isL ? 0.0 : 1.5) + Math.sin(elapsedTime * 4) * 0.5;
-        circuitGroup.rotation.y = Math.sin(elapsedTime * 0.2) * 0.3;
+          // Generate Tesla coil lightning discharges connecting to the rings (ZERO allocations)
+          endPts[0].set(Math.cos(elapsedTime * 0.6) * 2.4, 0, Math.sin(elapsedTime * 0.6) * 2.4);
+          endPts[1].set(0, Math.cos(elapsedTime * 0.5) * 2.8, Math.sin(elapsedTime * 0.5) * 2.8);
+          endPts[2].set(Math.cos(-elapsedTime * 0.3) * 3.2, Math.sin(-elapsedTime * 0.3) * 3.2, 0);
 
-        workshopMeshes.forEach((mesh) => {
-          const ud = mesh.userData;
-          mesh.position.y =
-            ud.originalY + Math.sin(elapsedTime * 1.5 + ud.floatOffset) * 0.15;
-          mesh.rotation.y = Math.sin(elapsedTime * 0.8 + ud.floatOffset) * 0.08;
-          mesh.rotation.x = Math.cos(elapsedTime * 0.8 + ud.floatOffset) * 0.05;
-
-          const innerCore = mesh.children[1];
-          if (innerCore) {
-            innerCore.rotation.y = elapsedTime * 1.2;
+          const currentFrame = Math.floor(elapsedTime * 18); // ~18fps flicker
+          if (currentFrame !== lastFrameCount) {
+            for (let i = 0; i < lightningCount; i++) {
+              // 20% chance of no discharge for realistic crackling gap
+              if (Math.random() > 0.2) {
+                lightningLines[i].visible = true;
+                fillLightningArray(lightningArrays[i], startPt, endPts[i], lightningSegments, 0.08);
+                lightningGeos[i].attributes.position.needsUpdate = true;
+              } else {
+                lightningLines[i].visible = false;
+              }
+            }
+            lastFrameCount = currentFrame;
           }
-        });
+        } else {
+          for (let i = 0; i < lightningCount; i++) {
+            lightningLines[i].visible = false;
+          }
+        }
 
-        tubes.forEach((tube, idx) => {
-          tube.material.emissiveIntensity = isL
-            ? 0.0
-            : 0.5 + Math.sin(elapsedTime * 3 - idx * 0.8) * 0.4;
-          tube.rotation.z = elapsedTime * 0.08 * (idx % 2 === 0 ? 1 : -1);
-        });
+        chipCoreMat.emissiveIntensity =
+          (isLightTheme ? 0.0 : 1.5) + Math.sin(elapsedTime * 4) * 0.5;
+
+        // Animate Group C (Motherboard traces & surges - active when nearby)
+        circuitGroup.rotation.y = Math.sin(elapsedTime * 0.2) * 0.3;
+        if (animState.camY < -1.0 && animState.camY > -9.0) {
+          for (let i = 0; i < surges.length; i++) {
+            const s = surges[i];
+            const t = (elapsedTime * 0.08 + s.offset) % 1.0;
+            getCircuitPathPos(t, surgeVec);
+            s.mesh.position.copy(surgeVec);
+          }
+        }
+
+        // Animate Group D (Electromagnetic Inductors - active when nearby)
+        if (animState.camY < -7.0 && animState.camY > -24.0) {
+          for (let i = 0; i < workshopMeshes.length; i++) {
+            const mesh = workshopMeshes[i];
+            const ud = mesh.userData;
+            mesh.position.y =
+              ud.originalY + Math.sin(elapsedTime * 1.5 + ud.floatOffset) * 0.15;
+            mesh.rotation.y = Math.sin(elapsedTime * 0.8 + ud.floatOffset) * 0.08;
+            mesh.rotation.x = Math.cos(elapsedTime * 0.8 + ud.floatOffset) * 0.05;
+
+            // Rotate coil wrapping
+            if (ud.coil) {
+              ud.coil.rotation.y = elapsedTime * 1.4;
+            }
+
+            // Expand electromagnetic flux field rings
+            const magRings = ud.magRings;
+            if (magRings) {
+              for (let k = 0; k < magRings.length; k++) {
+                const ring = magRings[k];
+                const p = ((elapsedTime * 0.6 + k * 0.5) % 1.0);
+                const scaleVal = 1.0 + p * 1.6;
+                ring.scale.set(scaleVal, 1.0, scaleVal);
+                ring.material.opacity = (1.0 - p) * 0.4;
+              }
+            }
+
+            // Inner core wireframe spin
+            const innerCore = mesh.children[mesh.children.length - 1];
+            if (innerCore) {
+              innerCore.rotation.y = -elapsedTime * 0.8;
+            }
+          }
+        }
+
+        // Animate Group E (Substation Insulators & Busbar - active when nearby)
+        if (animState.camY < -23.0 && animState.camY > -35.0) {
+          for (let i = 0; i < tubes.length; i++) {
+            const tube = tubes[i];
+            tube.material.emissiveIntensity = isLightTheme
+              ? 0.0
+              : 0.5 + Math.sin(elapsedTime * 3 - i * 0.8) * 0.4;
+            tube.rotation.z = elapsedTime * 0.08 * (i % 2 === 0 ? 1 : -1);
+          }
+
+          const currentFrame = Math.floor(elapsedTime * 18);
+          if (currentFrame !== lastSubFrameCount) {
+            // Spark jitter probability
+            if (Math.random() > 0.3) {
+              busbarLine.visible = true;
+              fillLightningArray(busbarArray, t1Top, t2Top, busbarSegments, 0.02);
+              busbarGeo.attributes.position.needsUpdate = true;
+            } else {
+              busbarLine.visible = false;
+            }
+            lastSubFrameCount = currentFrame;
+          }
+        } else {
+          busbarLine.visible = false;
+        }
+
+        // Animate Group F (Analog Oscilloscope wave - active when nearby)
+        if (oscilloscopeLine && animState.camY < -33.0 && animState.camY > -44.0) {
+          const positions = waveGeo.attributes.position.array;
+          const width = 3.6;
+          for (let i = 0; i < wavePointsCount; i++) {
+            const t = i / (wavePointsCount - 1);
+            const x = (t - 0.5) * width;
+            
+            // Amplitude modulation & frequency oscillation
+            const phase = elapsedTime * 5.0;
+            const amp = Math.sin(elapsedTime * 1.1) * 0.5 + 0.65;
+            const freq = 11.0 + Math.cos(elapsedTime * 1.8) * 3.5;
+            const y = Math.sin(x * freq + phase) * 0.7 * amp;
+            
+            positions[i * 3] = x;
+            positions[i * 3 + 1] = y;
+            positions[i * 3 + 2] = 0.05;
+          }
+          waveGeo.attributes.position.needsUpdate = true;
+        }
+
+        // Animate Group G (Antenna signal waves - active when nearby)
+        if (animState.camY < -33.0 && animState.camY > -54.0) {
+          for (let i = 0; i < waveRings.length; i++) {
+            const wave = waveRings[i];
+            const progress = ((elapsedTime + wave.delay) % 2) / 2;
+            const currentScale = 1.0 + progress * 5.0;
+            wave.mesh.scale.set(currentScale, currentScale, currentScale);
+            wave.mesh.material.opacity = isLightTheme ? (1 - progress) * 0.35 : (1 - progress) * 0.6;
+          }
+          transmitter.rotation.y = elapsedTime * 0.5;
+        }
+
+        // Animate Group H (Contact Globe - active when near bottom)
+        if (animState.camY < -42.0) {
+          contactGroup.rotation.y = elapsedTime * 0.15;
+          contactGroup.rotation.x = elapsedTime * 0.08;
+          globeInner.rotation.y = -elapsedTime * 0.3;
+          for (let i = 0; i < globeNodes.length; i++) {
+            const node = globeNodes[i];
+            const scale = 1 + Math.sin(elapsedTime * 4 + i) * 0.3;
+            node.scale.set(scale, scale, scale);
+          }
+        }
+
 
         mouse.x += (targetMouse.x - mouse.x) * 0.06;
         mouse.y += (targetMouse.y - mouse.y) * 0.06;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { m } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { playHover, playClick } from "../utils/audio";
 
 const NO_NEWS_TEXT = "NO_DIAGNOSTICS_AVAILABLE";
 const LATEST_NEWS_TEXT = " LATEST_NEWS_STREAM";
@@ -40,7 +42,19 @@ const News = ({ initialNews = [] }) => {
     }, 7000);
 
     return () => clearInterval(interval);
-  }, [news.length]);
+  }, [news.length, currentIndex]);
+
+  const handlePrev = (e) => {
+    e.preventDefault();
+    playClick();
+    setCurrentIndex((prev) => (prev === 0 ? news.length - 1 : prev - 1));
+  };
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    playClick();
+    setCurrentIndex((prev) => (prev === news.length - 1 ? 0 : prev + 1));
+  };
 
   if (news.length === 0) {
     return (
@@ -88,7 +102,7 @@ const News = ({ initialNews = [] }) => {
                 scale: isActive ? 1 : 1.04,
               }}
               transition={{ duration: 0.8, ease: "easeInOut" }}
-              className={`news-item absolute top-0 left-0 w-full h-full flex flex-col ${isActive ? "active" : ""}`}
+              className={`news-item absolute top-0 left-0 w-full h-full flex flex-col z-10 ${isActive ? "active" : ""}`}
               style={{
                 pointerEvents: isActive ? "auto" : "none",
               }}
@@ -123,6 +137,46 @@ const News = ({ initialNews = [] }) => {
             </m.div>
           );
         })}
+
+        {/* Cybernetic Navigation Chevrons */}
+        <button
+          onClick={handlePrev}
+          onMouseEnter={playHover}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-md border border-accent-primary/20 bg-[#080d1a]/85 text-accent-primary opacity-65 hover:opacity-100 hover:border-accent-primary/75 hover:scale-105 transition-all duration-300 shadow-[0_0_10px_rgba(0,240,255,0.15)] hover:shadow-[0_0_15px_rgba(0,240,255,0.35)] pointer-events-auto cursor-pointer focus:outline-none"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+
+        <button
+          onClick={handleNext}
+          onMouseEnter={playHover}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-md border border-accent-primary/20 bg-[#080d1a]/85 text-accent-primary opacity-65 hover:opacity-100 hover:border-accent-primary/75 hover:scale-105 transition-all duration-300 shadow-[0_0_10px_rgba(0,240,255,0.15)] hover:shadow-[0_0_15px_rgba(0,240,255,0.35)] pointer-events-auto cursor-pointer focus:outline-none"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+
+        {/* Cybernetic Navigation Indicators */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+          {news.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={(e) => {
+                e.preventDefault();
+                playClick();
+                setCurrentIndex(idx);
+              }}
+              onMouseEnter={playHover}
+              className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer pointer-events-auto focus:outline-none ${
+                idx === currentIndex
+                  ? "bg-accent-primary w-5 shadow-[0_0_8px_var(--accent-primary)]"
+                  : "bg-white/30 hover:bg-white/60"
+              }`}
+              aria-label={`Go to news item ${idx + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </m.div>
   );

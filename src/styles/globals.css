@@ -131,8 +131,8 @@
   /* Premium Glassmorphic Hud Panels */
   .hud-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
     box-shadow:
       0 8px 32px 0 rgba(0, 0, 0, 0.15),
@@ -214,3 +214,17 @@
     scroll-behavior: auto;
   }
 }
+
+@media (pointer: fine) {
+  body, 
+  a, 
+  button, 
+  input, 
+  select, 
+  textarea, 
+  [role="button"], 
+  .cursor-pointer {
+    cursor: none !important;
+  }
+}
+

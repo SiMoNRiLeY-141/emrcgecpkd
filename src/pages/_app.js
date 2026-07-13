@@ -1,6 +1,12 @@
 import "@/styles/globals.css";
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, m, LazyMotion, domAnimation } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const CustomCursor = dynamic(() => import("../components/CustomCursor"), {
+  ssr: false,
+});
+
 
 const loadingText = "INITIALIZING";
 
@@ -52,7 +58,9 @@ export default function App({ Component, pageProps }) {
         )}
       </AnimatePresence>
 
+      <CustomCursor />
       {React.createElement(Component, pageProps)}
+
     </LazyMotion>
   );
 }

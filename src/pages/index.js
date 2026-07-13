@@ -39,6 +39,9 @@ const ScrollSection = dynamic(() => import("../components/ScrollSection"), {
 const StatsMonitor = dynamic(() => import("../components/StatsMonitor"), {
   ssr: false,
 });
+const SmoothScroll = dynamic(() => import("../components/SmoothScroll"), {
+  ssr: false,
+});
 
 const siteUrl = "https://emrcgecpkd.vercel.app";
 const titleText = "Electrical Maintenance and Research Club, GEC Palakkad";
@@ -206,13 +209,15 @@ const HomePage = ({ initialNews = [], initialCommittee = [] }) => {
         )}
       </button>
 
-      <main className="relative z-10 mx-auto max-w-[1100px] p-5 pb-20 md:pb-[80px]">
-        {sections.map((section, index) => (
-          <ScrollSection key={section.key} depth={index}>
-            {section.component}
-          </ScrollSection>
-        ))}
-      </main>
+      <SmoothScroll>
+        <main className="relative z-10 mx-auto max-w-[1100px] p-5 pb-20 md:pb-[80px]">
+          {sections.map((section, index) => (
+            <ScrollSection key={section.key} depth={index}>
+              {section.component}
+            </ScrollSection>
+          ))}
+        </main>
+      </SmoothScroll>
 
       <SocialMediaOverlay />
     </div>

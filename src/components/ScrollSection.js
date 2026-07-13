@@ -1,47 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import {
   m,
-  useMotionValue,
   useReducedMotion,
   useSpring,
   useTransform,
+  useScroll,
 } from "framer-motion";
-
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-const useElementProgress = (ref) => {
-  const progress = useMotionValue(0);
-
-  useEffect(() => {
-    const updateProgress = () => {
-      if (!ref.current) return;
-
-      const rect = ref.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight || 1;
-      const travelDistance = viewportHeight + rect.height;
-      const currentProgress = (viewportHeight - rect.top) / travelDistance;
-
-      progress.set(clamp(currentProgress, 0, 1));
-    };
-
-    updateProgress();
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress);
-
-    return () => {
-      window.removeEventListener("scroll", updateProgress);
-      window.removeEventListener("resize", updateProgress);
-    };
-  }, [progress, ref]);
-
-  return progress;
-};
 
 const ScrollSection = ({ children, depth = 0, className = "" }) => {
   const ref = useRef(null);
   const reduceMotion = useReducedMotion();
-  const sectionProgress = useElementProgress(ref);
-  const smoothProgress = useSpring(sectionProgress, {
+
+  // High-performance native scroll observer (eliminates layout-thrashing getBoundingClientRect scroll listeners)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 90,
     damping: 24,
     mass: 0.4,
@@ -72,7 +48,7 @@ const ScrollSection = ({ children, depth = 0, className = "" }) => {
             }
       }
     >
-      <div className="w-full pointer-events-auto">{children}</div>
+      <div className="w-full relative pointer-events-auto">{children}</div>
     </m.section>
   );
 };

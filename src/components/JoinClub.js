@@ -57,6 +57,11 @@ const JoinClub = () => {
   const [isEditingImg, setIsEditingImg] = useState(false);
   const [isExistingMember, setIsExistingMember] = useState(false);
 
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    playHover();
+  };
+
   const handleSaveImage = () => {
     if (editorRef.current) {
       const canvasScaled = editorRef.current.getImageScaledToCanvas();
@@ -230,7 +235,7 @@ const JoinClub = () => {
                       required
                       value={formData.email}
                       onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
+                        handleInputChange("email", e.target.value)
                       }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
@@ -241,7 +246,7 @@ const JoinClub = () => {
                       required
                       value={formData.department}
                       onChange={(e) =>
-                        setFormData({ ...formData, department: e.target.value })
+                        handleInputChange("department", e.target.value)
                       }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)]"
@@ -276,7 +281,7 @@ const JoinClub = () => {
                       required
                       value={formData.batch}
                       onChange={(e) =>
-                        setFormData({ ...formData, batch: e.target.value })
+                        handleInputChange("batch", e.target.value)
                       }
                       onFocus={playClick}
                       className="w-full p-3.5 rounded-xl border border-accent-primary/10 bg-black/40 text-text-primary text-xs tracking-wider transition-all duration-300 focus:outline-none focus:border-accent-primary/60 focus:bg-black/60 focus:shadow-[0_0_12px_rgba(0,240,255,0.15)] placeholder:text-text-secondary/30"
