@@ -74,12 +74,14 @@ const JoinClub = () => {
     e.preventDefault();
     playClick();
 
+    const normalizedEmail = formData.email.trim().toLowerCase();
+
     try {
       // 1. Check if user exists by email
       const { data: existingUser } = await supabase
         .from("members")
         .select("*")
-        .eq("email", formData.email)
+        .eq("email", normalizedEmail)
         .single();
 
       if (existingUser) {
@@ -106,7 +108,7 @@ const JoinClub = () => {
       const { error } = await supabase.from("members").insert([
         {
           name: formData.name,
-          email: formData.email,
+          email: normalizedEmail,
           department: formData.department,
           batch: formData.batch,
           member_id: newId,

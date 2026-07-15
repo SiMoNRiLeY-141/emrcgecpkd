@@ -4,8 +4,8 @@ import { m } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { playHover, playClick } from "../utils/audio";
 
-const NO_NEWS_TEXT = "NO_DIAGNOSTICS_AVAILABLE";
-const LATEST_NEWS_TEXT = " LATEST_NEWS_STREAM";
+const NO_NEWS_TEXT = "No news available.";
+const LATEST_NEWS_TEXT = "Latest News";
 
 const News = ({ initialNews = [] }) => {
   const [news, setNews] = useState(initialNews);
@@ -42,7 +42,7 @@ const News = ({ initialNews = [] }) => {
     }, 7000);
 
     return () => clearInterval(interval);
-  }, [news.length, currentIndex]);
+  }, [news.length]);
 
   const handlePrev = (e) => {
     e.preventDefault();
@@ -118,9 +118,9 @@ const News = ({ initialNews = [] }) => {
                   alt={item.title}
                   width={640}
                   height={360}
-                  priority
-                  loading="eager"
-                  fetchPriority="high"
+                  priority={isActive}
+                  loading={isActive ? "eager" : "lazy"}
+                  fetchPriority={isActive ? "high" : "low"}
                   quality={75}
                   sizes="(max-width: 768px) 100vw, 640px"
                   className="w-full h-full object-cover opacity-80 transition-opacity duration-500 hover:opacity-100"

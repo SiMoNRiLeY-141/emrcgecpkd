@@ -22,34 +22,34 @@ const SmoothScroll = ({ children }) => {
     lenisRef.current = lenis;
 
     // Connect to GSAP ScrollTrigger
-    Promise.all([
-      import("gsap"),
-      import("gsap/ScrollTrigger")
-    ]).then(([gsapModule, scrollTriggerModule]) => {
-      const gsap = gsapModule.default || gsapModule;
-      const ScrollTrigger = scrollTriggerModule.ScrollTrigger || scrollTriggerModule.default;
-      gsap.registerPlugin(ScrollTrigger);
+    Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(
+      ([gsapModule, scrollTriggerModule]) => {
+        const gsap = gsapModule.default || gsapModule;
+        const ScrollTrigger =
+          scrollTriggerModule.ScrollTrigger || scrollTriggerModule.default;
+        gsap.registerPlugin(ScrollTrigger);
 
-      lenis.on("scroll", () => {
-        ScrollTrigger.update();
-      });
-      
-      ScrollTrigger.scrollerProxy(document.body, {
-        scrollTop(value) {
-          return arguments.length
-            ? lenis.scrollTo(value, { immediate: true })
-            : lenis.scroll;
-        },
-        getBoundingClientRect() {
-          return {
-            top: 0,
-            left: 0,
-            width: window.innerWidth,
-            height: window.innerHeight,
-          };
-        },
-      });
-    });
+        lenis.on("scroll", () => {
+          ScrollTrigger.update();
+        });
+
+        ScrollTrigger.scrollerProxy(document.body, {
+          scrollTop(value) {
+            return arguments.length
+              ? lenis.scrollTo(value, { immediate: true })
+              : lenis.scroll;
+          },
+          getBoundingClientRect() {
+            return {
+              top: 0,
+              left: 0,
+              width: window.innerWidth,
+              height: window.innerHeight,
+            };
+          },
+        });
+      },
+    );
 
     // RequestAnimationFrame Loop
     let rafId;

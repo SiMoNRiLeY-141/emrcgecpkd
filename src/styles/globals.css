@@ -216,15 +216,14 @@
 }
 
 @media (pointer: fine) {
-  body, 
-  a, 
-  button, 
-  input, 
-  select, 
-  textarea, 
-  [role="button"], 
+  body,
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  [role="button"],
   .cursor-pointer {
     cursor: none !important;
   }
 }
-

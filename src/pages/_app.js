@@ -7,7 +7,6 @@ const CustomCursor = dynamic(() => import("../components/CustomCursor"), {
   ssr: false,
 });
 
-
 const loadingText = "INITIALIZING";
 
 if (
@@ -60,7 +59,6 @@ export default function App({ Component, pageProps }) {
 
       <CustomCursor />
       {React.createElement(Component, pageProps)}
-
     </LazyMotion>
   );
 }

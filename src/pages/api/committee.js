@@ -1,10 +1,11 @@
+import { COMMITTEE_SELECT } from "../../lib/supabaseContent";
 import supabase from "./supabase";
 
 export default async function handler(req, res) {
   try {
     const { data, error } = await supabase
       .from("committee")
-      .select("*")
+      .select(COMMITTEE_SELECT)
       .order("id", { ascending: true });
     if (error) {
       throw error;

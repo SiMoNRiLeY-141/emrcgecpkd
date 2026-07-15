@@ -126,7 +126,10 @@ const ScrollScene3D = () => {
       });
 
       const isMobile = window.innerWidth < 768;
-      const pixelRatio = Math.min(window.devicePixelRatio, isMobile ? 1.2 : 1.5);
+      const pixelRatio = Math.min(
+        window.devicePixelRatio,
+        isMobile ? 1.2 : 1.5,
+      );
       renderer.setPixelRatio(pixelRatio);
       renderer.setSize(width, height);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -232,11 +235,13 @@ const ScrollScene3D = () => {
           new THREE.Vector3(
             Math.cos(angle) * coilRadius,
             (t - 0.5) * coilLength - 0.5,
-            Math.sin(angle) * coilRadius
-          )
+            Math.sin(angle) * coilRadius,
+          ),
         );
       }
-      const baseCoilGeo = new THREE.BufferGeometry().setFromPoints(helixPointsBase);
+      const baseCoilGeo = new THREE.BufferGeometry().setFromPoints(
+        helixPointsBase,
+      );
       const baseCoilMat = new THREE.LineBasicMaterial({ color: 0xffa500 }); // copper Orange
       const baseCoilLine = new THREE.Line(baseCoilGeo, baseCoilMat);
       reactorGroup.add(baseCoilLine);
@@ -451,8 +456,8 @@ const ScrollScene3D = () => {
             new THREE.Vector3(
               Math.cos(angle) * windingRadius,
               (t - 0.5) * windingLength,
-              Math.sin(angle) * windingRadius
-            )
+              Math.sin(angle) * windingRadius,
+            ),
           );
         }
         const coilGeo = new THREE.BufferGeometry().setFromPoints(helixPoints);
@@ -534,11 +539,11 @@ const ScrollScene3D = () => {
       const tower1 = new THREE.Group();
       tower1.position.set(-3.5, 0, 0);
       terminalGroup.add(tower1);
-      
+
       const tower2 = new THREE.Group();
       tower2.position.set(3.5, 0, 0);
       terminalGroup.add(tower2);
-      
+
       const discGeo = new THREE.CylinderGeometry(0.6, 0.8, 0.15, 8);
       const discMat = new THREE.MeshStandardMaterial({
         color: isLightInitial ? 0x90a0b0 : 0x1a2b4c,
@@ -549,7 +554,7 @@ const ScrollScene3D = () => {
         const d1 = new THREE.Mesh(discGeo, discMat);
         d1.position.y = k * 0.3;
         tower1.add(d1);
-        
+
         const d2 = new THREE.Mesh(discGeo, discMat);
         d2.position.y = k * 0.3;
         tower2.add(d2);
@@ -716,12 +721,11 @@ const ScrollScene3D = () => {
         node.position.set(
           3.5 * Math.sin(phi) * Math.cos(theta),
           3.5 * Math.sin(phi) * Math.sin(theta),
-          3.5 * Math.cos(phi)
+          3.5 * Math.cos(phi),
         );
         contactGroup.add(node);
         globeNodes.push(node);
       }
-
 
       // --- Dynamic Theme Swapping Logic ---
       const updateThemeColors = (themeName) => {
@@ -1117,7 +1121,6 @@ const ScrollScene3D = () => {
         5,
       );
 
-
       // 7. Render Loop
       const startTime = performance.now();
       let lastFrameCount = -1;
@@ -1128,7 +1131,7 @@ const ScrollScene3D = () => {
       const endPts = [
         new THREE.Vector3(),
         new THREE.Vector3(),
-        new THREE.Vector3()
+        new THREE.Vector3(),
       ];
       const t1Top = new THREE.Vector3(-3.5, 1.8, 0);
       const t2Top = new THREE.Vector3(3.5, 1.8, 0);
@@ -1148,9 +1151,21 @@ const ScrollScene3D = () => {
           ring3.rotation.z = -elapsedTime * 0.3;
 
           // Generate Tesla coil lightning discharges connecting to the rings (ZERO allocations)
-          endPts[0].set(Math.cos(elapsedTime * 0.6) * 2.4, 0, Math.sin(elapsedTime * 0.6) * 2.4);
-          endPts[1].set(0, Math.cos(elapsedTime * 0.5) * 2.8, Math.sin(elapsedTime * 0.5) * 2.8);
-          endPts[2].set(Math.cos(-elapsedTime * 0.3) * 3.2, Math.sin(-elapsedTime * 0.3) * 3.2, 0);
+          endPts[0].set(
+            Math.cos(elapsedTime * 0.6) * 2.4,
+            0,
+            Math.sin(elapsedTime * 0.6) * 2.4,
+          );
+          endPts[1].set(
+            0,
+            Math.cos(elapsedTime * 0.5) * 2.8,
+            Math.sin(elapsedTime * 0.5) * 2.8,
+          );
+          endPts[2].set(
+            Math.cos(-elapsedTime * 0.3) * 3.2,
+            Math.sin(-elapsedTime * 0.3) * 3.2,
+            0,
+          );
 
           const currentFrame = Math.floor(elapsedTime * 18); // ~18fps flicker
           if (currentFrame !== lastFrameCount) {
@@ -1158,7 +1173,13 @@ const ScrollScene3D = () => {
               // 20% chance of no discharge for realistic crackling gap
               if (Math.random() > 0.2) {
                 lightningLines[i].visible = true;
-                fillLightningArray(lightningArrays[i], startPt, endPts[i], lightningSegments, 0.08);
+                fillLightningArray(
+                  lightningArrays[i],
+                  startPt,
+                  endPts[i],
+                  lightningSegments,
+                  0.08,
+                );
                 lightningGeos[i].attributes.position.needsUpdate = true;
               } else {
                 lightningLines[i].visible = false;
@@ -1192,9 +1213,12 @@ const ScrollScene3D = () => {
             const mesh = workshopMeshes[i];
             const ud = mesh.userData;
             mesh.position.y =
-              ud.originalY + Math.sin(elapsedTime * 1.5 + ud.floatOffset) * 0.15;
-            mesh.rotation.y = Math.sin(elapsedTime * 0.8 + ud.floatOffset) * 0.08;
-            mesh.rotation.x = Math.cos(elapsedTime * 0.8 + ud.floatOffset) * 0.05;
+              ud.originalY +
+              Math.sin(elapsedTime * 1.5 + ud.floatOffset) * 0.15;
+            mesh.rotation.y =
+              Math.sin(elapsedTime * 0.8 + ud.floatOffset) * 0.08;
+            mesh.rotation.x =
+              Math.cos(elapsedTime * 0.8 + ud.floatOffset) * 0.05;
 
             // Rotate coil wrapping
             if (ud.coil) {
@@ -1206,7 +1230,7 @@ const ScrollScene3D = () => {
             if (magRings) {
               for (let k = 0; k < magRings.length; k++) {
                 const ring = magRings[k];
-                const p = ((elapsedTime * 0.6 + k * 0.5) % 1.0);
+                const p = (elapsedTime * 0.6 + k * 0.5) % 1.0;
                 const scaleVal = 1.0 + p * 1.6;
                 ring.scale.set(scaleVal, 1.0, scaleVal);
                 ring.material.opacity = (1.0 - p) * 0.4;
@@ -1236,7 +1260,13 @@ const ScrollScene3D = () => {
             // Spark jitter probability
             if (Math.random() > 0.3) {
               busbarLine.visible = true;
-              fillLightningArray(busbarArray, t1Top, t2Top, busbarSegments, 0.02);
+              fillLightningArray(
+                busbarArray,
+                t1Top,
+                t2Top,
+                busbarSegments,
+                0.02,
+              );
               busbarGeo.attributes.position.needsUpdate = true;
             } else {
               busbarLine.visible = false;
@@ -1248,19 +1278,23 @@ const ScrollScene3D = () => {
         }
 
         // Animate Group F (Analog Oscilloscope wave - active when nearby)
-        if (oscilloscopeLine && animState.camY < -33.0 && animState.camY > -44.0) {
+        if (
+          oscilloscopeLine &&
+          animState.camY < -33.0 &&
+          animState.camY > -44.0
+        ) {
           const positions = waveGeo.attributes.position.array;
           const width = 3.6;
           for (let i = 0; i < wavePointsCount; i++) {
             const t = i / (wavePointsCount - 1);
             const x = (t - 0.5) * width;
-            
+
             // Amplitude modulation & frequency oscillation
             const phase = elapsedTime * 5.0;
             const amp = Math.sin(elapsedTime * 1.1) * 0.5 + 0.65;
             const freq = 11.0 + Math.cos(elapsedTime * 1.8) * 3.5;
             const y = Math.sin(x * freq + phase) * 0.7 * amp;
-            
+
             positions[i * 3] = x;
             positions[i * 3 + 1] = y;
             positions[i * 3 + 2] = 0.05;
@@ -1275,7 +1309,9 @@ const ScrollScene3D = () => {
             const progress = ((elapsedTime + wave.delay) % 2) / 2;
             const currentScale = 1.0 + progress * 5.0;
             wave.mesh.scale.set(currentScale, currentScale, currentScale);
-            wave.mesh.material.opacity = isLightTheme ? (1 - progress) * 0.35 : (1 - progress) * 0.6;
+            wave.mesh.material.opacity = isLightTheme
+              ? (1 - progress) * 0.35
+              : (1 - progress) * 0.6;
           }
           transmitter.rotation.y = elapsedTime * 0.5;
         }
@@ -1291,7 +1327,6 @@ const ScrollScene3D = () => {
             node.scale.set(scale, scale, scale);
           }
         }
-
 
         mouse.x += (targetMouse.x - mouse.x) * 0.06;
         mouse.y += (targetMouse.y - mouse.y) * 0.06;

@@ -1,9 +1,16 @@
 // src/pages/api/news.js
+import { NEWS_SELECT } from "../../lib/supabaseContent";
 import supabase from "./supabase";
 
 export default async function handler(req, res) {
   try {
-    const { data, error } = await supabase.from("news").select("*");
+    const newsQuery = supabase.from("news").select(NEWS_SELECT);
+    const orderedNewsQuery =
+      typeof newsQuery.order === "function"
+        ? newsQuery.order("created_at", { ascending: false })
+        : newsQuery;
+
+    const { data, error } = await orderedNewsQuery;
     if (error) {
       throw error;
     }

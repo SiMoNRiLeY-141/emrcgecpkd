@@ -3,7 +3,7 @@ import Image from "next/image";
 import { m } from "framer-motion";
 import { playHover, playClick } from "../utils/audio";
 
-const titleText = " EXECUTIVE_COMMITTEE_NODES";
+const titleText = "Executive Committee";
 const OPTIMIZED_COMMITTEE_PREFIX =
   "/storage/v1/object/public/images/committee/optimized/";
 

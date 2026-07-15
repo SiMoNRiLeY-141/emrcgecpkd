@@ -113,7 +113,9 @@ const CustomCursor = () => {
         animate={{
           width: isHovered ? 48 : 28,
           height: isHovered ? 48 : 28,
-          borderColor: isHovered ? "var(--accent-secondary)" : "var(--accent-primary)",
+          borderColor: isHovered
+            ? "var(--accent-secondary)"
+            : "var(--accent-primary)",
           boxShadow: isHovered
             ? "0 0 12px var(--accent-secondary)"
             : "0 0 6px var(--accent-primary)",
@@ -131,25 +133,33 @@ const CustomCursor = () => {
         <m.span
           className="absolute w-1.5 h-[1.5px] bg-accent-primary left-[-1.5px]"
           animate={{
-            backgroundColor: isHovered ? "var(--accent-secondary)" : "var(--accent-primary)",
+            backgroundColor: isHovered
+              ? "var(--accent-secondary)"
+              : "var(--accent-primary)",
           }}
         />
         <m.span
           className="absolute w-1.5 h-[1.5px] bg-accent-primary right-[-1.5px]"
           animate={{
-            backgroundColor: isHovered ? "var(--accent-secondary)" : "var(--accent-primary)",
+            backgroundColor: isHovered
+              ? "var(--accent-secondary)"
+              : "var(--accent-primary)",
           }}
         />
         <m.span
           className="absolute w-[1.5px] h-1.5 bg-accent-primary top-[-1.5px]"
           animate={{
-            backgroundColor: isHovered ? "var(--accent-secondary)" : "var(--accent-primary)",
+            backgroundColor: isHovered
+              ? "var(--accent-secondary)"
+              : "var(--accent-primary)",
           }}
         />
         <m.span
           className="absolute w-[1.5px] h-1.5 bg-accent-primary bottom-[-1.5px]"
           animate={{
-            backgroundColor: isHovered ? "var(--accent-secondary)" : "var(--accent-primary)",
+            backgroundColor: isHovered
+              ? "var(--accent-secondary)"
+              : "var(--accent-primary)",
           }}
         />
       </m.div>
@@ -165,7 +175,9 @@ const CustomCursor = () => {
         }}
         animate={{
           scale: isHovered ? 1.5 : 1,
-          backgroundColor: isHovered ? "var(--accent-secondary)" : "var(--accent-primary)",
+          backgroundColor: isHovered
+            ? "var(--accent-secondary)"
+            : "var(--accent-primary)",
           boxShadow: isHovered
             ? "0 0 8px var(--accent-secondary)"
             : "0 0 4px var(--accent-primary)",

@@ -3,7 +3,10 @@ import supabase from "./supabase";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    const { email } = req.body;
+    const email =
+      typeof req.body?.email === "string"
+        ? req.body.email.trim().toLowerCase()
+        : "";
 
     if (!email) {
       return res.status(400).json({ error: "Email address is required." });

@@ -3,6 +3,7 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import { Volume2, VolumeX } from "lucide-react";
 import { toggleMute, getMutedState, playClick } from "../utils/audio";
+import { fetchHomePageContent } from "../lib/supabaseContent";
 
 import Header from "../components/Header";
 import News from "../components/News";
@@ -228,26 +229,12 @@ export default HomePage;
 
 export async function getStaticProps() {
   try {
-    const { default: supabase } = await import("./api/supabase");
-    const [
-      { data: newsData, error: newsError },
-      { data: committeeData, error: committeeError },
-    ] = await Promise.all([
-      supabase.from("news").select("id, title, image_url, url"),
-      supabase
-        .from("committee")
-        .select("id, name, position, photo_url")
-        .order("id", { ascending: true }),
-    ]);
-
-    if (newsError || committeeError) {
-      throw new Error(newsError?.message || committeeError?.message);
-    }
+    const { initialNews, initialCommittee } = await fetchHomePageContent();
 
     return {
       props: {
-        initialNews: newsData || [],
-        initialCommittee: committeeData || [],
+        initialNews,
+        initialCommittee,
       },
       revalidate: 300,
     };

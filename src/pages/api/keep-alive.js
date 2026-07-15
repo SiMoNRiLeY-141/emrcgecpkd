@@ -8,7 +8,7 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
   try {
-    const { data, error } = await supabase.from("news").select("*").limit(1);
+    const { data, error } = await supabase.from("news").select("id").limit(1);
     if (error) throw error;
     res.status(200).json({ message: "Supabase pinged successfully", data });
   } catch (error) {
