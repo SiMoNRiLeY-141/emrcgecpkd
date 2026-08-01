@@ -72,7 +72,7 @@ describe("HomePage (pages/index.js)", () => {
     const titleEl = document.querySelector("title");
     expect(titleEl).not.toBeNull();
     expect(titleEl.textContent).toBe(
-      "Electrical Maintenance and Research Club, GEC Palakkad",
+      "Electrical Maintenance and Research Club, GEC Palakkad | EMRC GEC Palakkad",
     );
   });
 
@@ -107,8 +107,8 @@ describe("HomePage (pages/index.js)", () => {
 
     const schema = JSON.parse(script.textContent);
     expect(schema["@context"]).toBe("https://schema.org");
-    expect(schema["@type"]).toBe("CollegeOrUniversity");
-    expect(schema.name).toBe("EMRC GEC Palakkad");
+    expect(schema["@type"]).toBe("Organization");
+    expect(schema.name).toBe("Electrical Maintenance and Research Club (EMRC)");
     expect(schema.url).toBe("https://emrcgecpkd.vercel.app");
   });
 
@@ -131,7 +131,7 @@ describe("HomePage (pages/index.js)", () => {
     expect(bingbot.getAttribute("content")).toBe("index, follow");
   });
 
-  it("JSON-LD schema contains committee member info", async () => {
+  it("JSON-LD schema contains the club's social profiles", async () => {
     const { container } = render(<HomePage />);
     await act(async () => {});
 
@@ -140,15 +140,8 @@ describe("HomePage (pages/index.js)", () => {
     );
     const schema = JSON.parse(script.textContent);
 
-    const chairperson = schema.member.find((m) => m.jobTitle === "Chairperson");
-    expect(chairperson).toBeDefined();
-    expect(chairperson.name).toBe("Rithin");
-
-    const viceChair = schema.member.find(
-      (m) => m.jobTitle === "Vice Chairperson",
-    );
-    expect(viceChair).toBeDefined();
-    expect(viceChair.name).toBe("Yatheesh");
+    expect(schema.member).toBeUndefined();
+    expect(schema.sameAs).toContain("https://www.instagram.com/emrc_gec");
   });
 
   it("JSON-LD schema contains correct social media links", async () => {

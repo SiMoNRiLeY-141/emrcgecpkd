@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { m } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { playHover, playClick } from "../utils/audio";
@@ -107,12 +108,7 @@ const News = ({ initialNews = [] }) => {
                 pointerEvents: isActive ? "auto" : "none",
               }}
             >
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full h-full relative"
-              >
+              <Link href={`/news/${item.slug}`} className="block w-full h-full relative">
                 <Image
                   src={item.image_url}
                   alt={item.title}
@@ -133,7 +129,7 @@ const News = ({ initialNews = [] }) => {
                   </span>
                   {item.title}
                 </div>
-              </a>
+              </Link>
             </m.div>
           );
         })}

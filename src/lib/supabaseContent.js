@@ -1,6 +1,7 @@
 import supabase from "../pages/api/supabase";
 
-export const NEWS_SELECT = "id, title, image_url, url, created_at";
+export const NEWS_SELECT =
+  "id, title, image_url, url, external_url, slug, summary, body, published_at, created_at, updated_at";
 export const COMMITTEE_SELECT = "id, name, position, photo_url, created_at";
 
 function applyOrder(query, column, options) {
@@ -30,4 +31,27 @@ export async function fetchHomePageContent() {
     initialNews: newsResult.data || [],
     initialCommittee: committeeResult.data || [],
   };
+}
+
+export async function fetchPublishedActivities() {
+  const query = supabase
+    .from("news")
+    .select(NEWS_SELECT)
+    .not("published_at", "is", null);
+  const result = await applyOrder(query, "published_at", { ascending: false });
+
+  if (result.error) throw new Error(result.error.message);
+  return result.data || [];
+}
+
+export async function fetchActivityBySlug(slug) {
+  const { data, error } = await supabase
+    .from("news")
+    .select(NEWS_SELECT)
+    .eq("slug", slug)
+    .not("published_at", "is", null)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+  return data;
 }

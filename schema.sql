@@ -18,6 +18,12 @@ CREATE TABLE IF NOT EXISTS public.news (
   title text NOT NULL,
   image_url text NOT NULL,
   url text,
+  external_url text,
+  slug text NOT NULL UNIQUE,
+  summary text NOT NULL,
+  body text NOT NULL,
+  published_at timestamp with time zone,
+  updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -39,6 +45,24 @@ CREATE TABLE IF NOT EXISTS public.newsletter_subscribers (
 
 CREATE INDEX IF NOT EXISTS idx_news_created_at
   ON public.news (created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_news_published_at
+  ON public.news (published_at DESC) WHERE published_at IS NOT NULL;
+
+CREATE OR REPLACE FUNCTION public.set_news_updated_at()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.updated_at = timezone('utc'::text, now());
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS set_news_updated_at ON public.news;
+CREATE TRIGGER set_news_updated_at
+BEFORE UPDATE ON public.news
+FOR EACH ROW EXECUTE FUNCTION public.set_news_updated_at();
 
 CREATE INDEX IF NOT EXISTS idx_committee_created_at
   ON public.committee (created_at DESC);

@@ -37,12 +37,14 @@ describe("News component", () => {
         id: 1,
         title: "Workshop on Robotics",
         image_url: "https://example.com/img1.jpg",
+        slug: "workshop-on-robotics",
         url: "https://example.com/1",
       },
       {
         id: 2,
         title: "Annual Tech Fest",
         image_url: "https://example.com/img2.jpg",
+        slug: "annual-tech-fest",
         url: "https://example.com/2",
       },
     ];
@@ -65,6 +67,7 @@ describe("News component", () => {
         id: 1,
         title: "Test Event",
         image_url: "https://example.com/img.jpg",
+        slug: "test-event",
         url: "https://example.com/",
       },
     ];
@@ -86,6 +89,7 @@ describe("News component", () => {
         id: 1,
         title: "Robotics Event",
         image_url: "https://example.com/img1.jpg",
+        slug: "robotics-event",
         url: "https://example.com/1",
       },
     ];
@@ -121,12 +125,14 @@ describe("News component", () => {
         id: 1,
         title: "First Item",
         image_url: "https://example.com/img1.jpg",
+        slug: "first-item",
         url: "https://example.com/1",
       },
       {
         id: 2,
         title: "Second Item",
         image_url: "https://example.com/img2.jpg",
+        slug: "second-item",
         url: "https://example.com/2",
       },
     ];
@@ -164,12 +170,13 @@ describe("News component", () => {
     expect(screen.getByText("No news available.")).toBeInTheDocument();
   });
 
-  it("renders news item links with correct href, target, and rel attributes", async () => {
+  it("links each news item to its crawlable activity page", async () => {
     const mockNews = [
       {
         id: 1,
         title: "Workshop on Robotics",
         image_url: "https://example.com/img1.jpg",
+        slug: "workshop-on-robotics",
         url: "https://example.com/event/1",
       },
     ];
@@ -183,9 +190,7 @@ describe("News component", () => {
     });
 
     const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("href", "https://example.com/event/1");
-    expect(link).toHaveAttribute("target", "_blank");
-    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    expect(link).toHaveAttribute("href", "/news/workshop-on-robotics");
   });
 
   it("wraps around to the first item after the last item", async () => {
@@ -194,12 +199,14 @@ describe("News component", () => {
         id: 1,
         title: "First Item",
         image_url: "https://example.com/img1.jpg",
+        slug: "first-item",
         url: "https://example.com/1",
       },
       {
         id: 2,
         title: "Second Item",
         image_url: "https://example.com/img2.jpg",
+        slug: "second-item",
         url: "https://example.com/2",
       },
     ];
