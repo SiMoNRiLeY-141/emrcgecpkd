@@ -3,10 +3,7 @@ jest.mock("../../lib/supabaseContent", () => ({
   fetchActivityBySlug: jest.fn(),
 }));
 
-import {
-  getStaticPaths,
-  getStaticProps,
-} from "../../pages/news/[slug]";
+import { getStaticPaths, getStaticProps } from "../../pages/news/[slug]";
 import {
   fetchActivityBySlug,
   fetchPublishedActivities,

@@ -22,7 +22,10 @@ describe("App component (pages/_app.js)", () => {
 
   it("passes pageProps to the Component", async () => {
     const MockPage = ({ greeting }) => <h1>{greeting}</h1>;
-    await renderLoadedApp({ Component: MockPage, pageProps: { greeting: "Hello EMRC" } });
+    await renderLoadedApp({
+      Component: MockPage,
+      pageProps: { greeting: "Hello EMRC" },
+    });
     expect(
       screen.getByRole("heading", { name: "Hello EMRC" }),
     ).toBeInTheDocument();
@@ -34,7 +37,10 @@ describe("App component (pages/_app.js)", () => {
         {a}-{b}
       </span>
     );
-    await renderLoadedApp({ Component: MockPage, pageProps: { a: "foo", b: "bar" } });
+    await renderLoadedApp({
+      Component: MockPage,
+      pageProps: { a: "foo", b: "bar" },
+    });
     expect(screen.getByText("foo-bar")).toBeInTheDocument();
   });
 
@@ -42,7 +48,10 @@ describe("App component (pages/_app.js)", () => {
     const PageA = () => <div data-testid="page-a" />;
     const PageB = () => <div data-testid="page-b" />;
 
-    const { rerender } = await renderLoadedApp({ Component: PageA, pageProps: {} });
+    const { rerender } = await renderLoadedApp({
+      Component: PageA,
+      pageProps: {},
+    });
     expect(screen.getByTestId("page-a")).toBeInTheDocument();
     expect(screen.queryByTestId("page-b")).not.toBeInTheDocument();
 

@@ -14,7 +14,10 @@ export async function getServerSideProps({ res }) {
   }
 
   res.setHeader("Content-Type", "application/xml; charset=utf-8");
-  res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=300, stale-while-revalidate=86400",
+  );
   res.write(buildSitemap(activities));
   res.end();
   return { props: {} };

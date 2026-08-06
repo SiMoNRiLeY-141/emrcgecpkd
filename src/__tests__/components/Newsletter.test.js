@@ -17,7 +17,9 @@ describe("Newsletter component", () => {
   it("renders the subscription form with heading and input", () => {
     render(<Newsletter />);
     expect(screen.getByText("NEWS_LETTER_SUBSCRIPTION")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("ENTER_EMAIL_ID...")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("ENTER_EMAIL_ID..."),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /subscribe/i }),
     ).toBeInTheDocument();

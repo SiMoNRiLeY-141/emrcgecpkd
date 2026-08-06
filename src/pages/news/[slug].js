@@ -23,10 +23,17 @@ export default function ActivityPage({ activity }) {
 
   return (
     <>
-      <SeoHead metadata={metadata} schema={articleSchema(activity)} type="article" />
+      <SeoHead
+        metadata={metadata}
+        schema={articleSchema(activity)}
+        type="article"
+      />
       <main className="mx-auto min-h-screen max-w-3xl px-5 py-12 md:py-20">
         <article className="hud-panel overflow-hidden rounded-[24px] p-6 md:p-10">
-          <Link href="/" className="text-sm text-accent-primary hover:underline">
+          <Link
+            href="/"
+            className="text-sm text-accent-primary hover:underline"
+          >
             ← Back to EMRC home
           </Link>
           <p className="mt-8 font-mono text-xs uppercase tracking-wider text-accent-primary">
@@ -72,7 +79,9 @@ export async function getStaticPaths() {
   try {
     const activities = await fetchPublishedActivities();
     return {
-      paths: activities.map((activity) => ({ params: { slug: activity.slug } })),
+      paths: activities.map((activity) => ({
+        params: { slug: activity.slug },
+      })),
       fallback: "blocking",
     };
   } catch {

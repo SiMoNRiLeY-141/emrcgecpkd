@@ -9,7 +9,12 @@ export function absoluteUrl(path = "/") {
   return new URL(path, SITE_URL).toString();
 }
 
-export function pageMetadata({ title, description, path = "/", image = DEFAULT_IMAGE }) {
+export function pageMetadata({
+  title,
+  description,
+  path = "/",
+  image = DEFAULT_IMAGE,
+}) {
   const canonical = absoluteUrl(path);
   return {
     title: `${title} | ${SITE_NAME}`,
