@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 const API_KEY = "d6c7e9a21f2c436795027ef98a9b4ed9";
 const INDEXNOW_ENDPOINT = "https://api.indexnow.org/indexnow";
 const KEY_LOCATION =

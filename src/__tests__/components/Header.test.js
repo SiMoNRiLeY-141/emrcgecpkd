@@ -31,22 +31,22 @@ describe("Header component", () => {
 
   it("renders both logos with appropriate alt text", () => {
     render(<Header />);
-    const logo1 = screen.getByAltText("Logo 1");
-    const logo2 = screen.getByAltText("Logo 2");
+    const logo1 = screen.getByAltText("EMRC Logo");
+    const logo2 = screen.getByAltText("GEC Logo");
     expect(logo1).toBeInTheDocument();
     expect(logo2).toBeInTheDocument();
   });
 
   it("renders EMRC logo with the correct Supabase URL", () => {
     render(<Header />);
-    const logo1 = screen.getByAltText("Logo 1");
+    const logo1 = screen.getByAltText("EMRC Logo");
     expect(logo1.src).toContain("jfgkhseftiwquikjuhcv.supabase.co");
     expect(logo1.src).toContain("emrc.webp");
   });
 
   it("renders GEC logo with the correct Supabase URL", () => {
     render(<Header />);
-    const logo2 = screen.getByAltText("Logo 2");
+    const logo2 = screen.getByAltText("GEC Logo");
     expect(logo2.src).toContain("jfgkhseftiwquikjuhcv.supabase.co");
     expect(logo2.src).toContain("gec.webp");
   });

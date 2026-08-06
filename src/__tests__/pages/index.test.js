@@ -39,6 +39,41 @@ jest.mock("../../components/Newsletter", () => ({
   default: () => <div data-testid="newsletter" />,
 }));
 
+jest.mock("../../components/JoinClub", () => ({
+  __esModule: true,
+  default: () => <div data-testid="join-club" />,
+}));
+
+jest.mock("../../components/MaintenancePortal", () => ({
+  __esModule: true,
+  default: () => <div data-testid="maintenance-portal" />,
+}));
+
+jest.mock("../../components/ThemeToggle", () => ({
+  __esModule: true,
+  default: () => <div data-testid="theme-toggle" />,
+}));
+
+jest.mock("../../components/ScrollScene3D", () => ({
+  __esModule: true,
+  default: () => <div data-testid="scroll-scene" />,
+}));
+
+jest.mock("../../components/ScrollSection", () => ({
+  __esModule: true,
+  default: ({ children }) => <section>{children}</section>,
+}));
+
+jest.mock("../../components/StatsMonitor", () => ({
+  __esModule: true,
+  default: () => <div data-testid="stats-monitor" />,
+}));
+
+jest.mock("../../components/SmoothScroll", () => ({
+  __esModule: true,
+  default: ({ children }) => <>{children}</>,
+}));
+
 describe("HomePage (pages/index.js)", () => {
   it("renders the .App root container", async () => {
     const { container } = render(<HomePage />);

@@ -94,6 +94,7 @@ const News = ({ initialNews = [] }) => {
       <div className="news-slider flex overflow-hidden rounded-xl relative aspect-[4/3] md:aspect-[16/9] max-h-[460px] bg-black/60 shadow-[0_12px_36px_rgba(0,0,0,0.6)] border border-white/5 m-[0_auto]">
         {news.map((item, index) => {
           const isActive = index === currentIndex;
+          const destination = item.slug ? `/news/${item.slug}` : item.url;
           return (
             <m.div
               key={item.id}
@@ -108,7 +109,7 @@ const News = ({ initialNews = [] }) => {
                 pointerEvents: isActive ? "auto" : "none",
               }}
             >
-              <Link href={`/news/${item.slug}`} className="block w-full h-full relative">
+              <Link href={destination} className="block w-full h-full relative">
                 <Image
                   src={item.image_url}
                   alt={item.title}

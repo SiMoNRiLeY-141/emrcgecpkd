@@ -1,8 +1,6 @@
-// Mock node-fetch used by submit-url
-jest.mock("node-fetch", () => jest.fn());
-
 import handler from "../../pages/api/submit-url";
-import mockFetch from "node-fetch";
+
+const originalFetch = global.fetch;
 
 function createMockRes() {
   const res = {
@@ -29,8 +27,13 @@ function createMockRes() {
 }
 
 describe("POST /api/submit-url", () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
+    global.fetch = originalFetch;
   });
 
   it("returns 405 for non-POST requests", async () => {
@@ -61,7 +64,7 @@ describe("POST /api/submit-url", () => {
   });
 
   it("returns 200 and submits URLs successfully when IndexNow responds with ok", async () => {
-    mockFetch.mockResolvedValue({ ok: true });
+    global.fetch.mockResolvedValue({ ok: true });
 
     const urls = [
       "https://emrcgecpkd.vercel.app/",
@@ -73,8 +76,8 @@ describe("POST /api/submit-url", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({ message: "URLs submitted successfully" });
-    expect(mockFetch).toHaveBeenCalledTimes(1);
-    const [url, options] = mockFetch.mock.calls[0];
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    const [url, options] = global.fetch.mock.calls[0];
     expect(url).toBe("https://api.indexnow.org/indexnow");
     expect(options.method).toBe("POST");
     const payload = JSON.parse(options.body);
@@ -83,7 +86,7 @@ describe("POST /api/submit-url", () => {
   });
 
   it("returns 200 even when IndexNow responds with a non-ok status", async () => {
-    mockFetch.mockResolvedValue({
+    global.fetch.mockResolvedValue({
       ok: false,
       text: jest.fn().mockResolvedValue("Bad Request"),
     });
@@ -101,7 +104,7 @@ describe("POST /api/submit-url", () => {
   });
 
   it("returns 200 even when fetch throws an error", async () => {
-    mockFetch.mockRejectedValue(new Error("Network unreachable"));
+    global.fetch.mockRejectedValue(new Error("Network unreachable"));
 
     const req = {
       method: "POST",

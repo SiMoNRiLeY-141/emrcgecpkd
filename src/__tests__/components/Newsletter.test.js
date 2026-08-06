@@ -16,8 +16,8 @@ describe("Newsletter component", () => {
 
   it("renders the subscription form with heading and input", () => {
     render(<Newsletter />);
-    expect(screen.getByText("Subscribe to our Newsletter")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Enter your email")).toBeInTheDocument();
+    expect(screen.getByText("NEWS_LETTER_SUBSCRIPTION")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("ENTER_EMAIL_ID...")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /subscribe/i }),
     ).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe("Newsletter component", () => {
       fireEvent.click(screen.getByRole("button", { name: /subscribe/i }));
     });
     expect(
-      screen.getByText("Please enter a valid email address."),
+      screen.getByText("ERROR: INVALID_EMAIL_FORMAT."),
     ).toBeInTheDocument();
   });
 
@@ -43,7 +43,7 @@ describe("Newsletter component", () => {
 
     render(<Newsletter />);
     await userEvent.type(
-      screen.getByPlaceholderText("Enter your email"),
+      screen.getByPlaceholderText("ENTER_EMAIL_ID..."),
       "test@example.com",
     );
     await act(async () => {
@@ -52,7 +52,7 @@ describe("Newsletter component", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Thank you for subscribing!"),
+        screen.getByText("SUCCESS: SUBSCRIBED_TO_NODE."),
       ).toBeInTheDocument();
     });
   });
@@ -66,7 +66,7 @@ describe("Newsletter component", () => {
     });
 
     render(<Newsletter />);
-    const input = screen.getByPlaceholderText("Enter your email");
+    const input = screen.getByPlaceholderText("ENTER_EMAIL_ID...");
     await userEvent.type(input, "test@example.com");
     await act(async () => {
       fireEvent.click(screen.getByRole("button", { name: /subscribe/i }));
@@ -87,7 +87,7 @@ describe("Newsletter component", () => {
 
     render(<Newsletter />);
     await userEvent.type(
-      screen.getByPlaceholderText("Enter your email"),
+      screen.getByPlaceholderText("ENTER_EMAIL_ID..."),
       "test@example.com",
     );
     await act(async () => {
@@ -106,7 +106,7 @@ describe("Newsletter component", () => {
 
     render(<Newsletter />);
     await userEvent.type(
-      screen.getByPlaceholderText("Enter your email"),
+      screen.getByPlaceholderText("ENTER_EMAIL_ID..."),
       "test@example.com",
     );
     await act(async () => {
@@ -115,7 +115,7 @@ describe("Newsletter component", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Subscription failed. Please try again later."),
+        screen.getByText("ERROR: NODE_CONNECTION_REJECTED."),
       ).toBeInTheDocument();
     });
   });
@@ -130,7 +130,7 @@ describe("Newsletter component", () => {
 
     render(<Newsletter />);
     await userEvent.type(
-      screen.getByPlaceholderText("Enter your email"),
+      screen.getByPlaceholderText("ENTER_EMAIL_ID..."),
       "existing@example.com",
     );
     await act(async () => {
@@ -139,7 +139,7 @@ describe("Newsletter component", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("You are already subscribed!"),
+        screen.getByText("SUCCESS: SUBSCRIBED_TO_NODE."),
       ).toBeInTheDocument();
     });
   });
@@ -160,14 +160,14 @@ describe("Newsletter component", () => {
 
     render(<Newsletter />);
     await user.type(
-      screen.getByPlaceholderText("Enter your email"),
+      screen.getByPlaceholderText("ENTER_EMAIL_ID..."),
       "test@example.com",
     );
     await user.click(screen.getByRole("button", { name: /subscribe/i }));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Thank you for subscribing!"),
+        screen.getByText("SUCCESS: SUBSCRIBED_TO_NODE."),
       ).toBeInTheDocument();
     });
 
@@ -176,7 +176,7 @@ describe("Newsletter component", () => {
     });
 
     expect(
-      screen.queryByText("Thank you for subscribing!"),
+      screen.queryByText("SUCCESS: SUBSCRIBED_TO_NODE."),
     ).not.toBeInTheDocument();
 
     jest.useRealTimers();

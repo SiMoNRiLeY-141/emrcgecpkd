@@ -3,9 +3,9 @@ import { render, screen } from "@testing-library/react";
 import ContactSection from "../../components/ContactSection";
 
 describe("ContactSection component", () => {
-  it('renders the "Contact Us" heading', () => {
+  it("renders the contact heading", () => {
     render(<ContactSection />);
-    expect(screen.getByText("Contact Us")).toBeInTheDocument();
+    expect(screen.getByText("CONTACT_COMMUNICATION_NODES")).toBeInTheDocument();
   });
 
   it("renders the obfuscated email address", () => {
