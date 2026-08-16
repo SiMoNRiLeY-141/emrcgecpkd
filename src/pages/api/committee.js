@@ -2,6 +2,11 @@ import { COMMITTEE_SELECT } from "../../lib/supabaseContent";
 import supabase from "./supabase";
 
 export default async function handler(req, res) {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=300, stale-while-revalidate=60",
+  );
+
   try {
     const { data, error } = await supabase
       .from("committee")

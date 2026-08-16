@@ -27,6 +27,7 @@ function createMockRes() {
       this.body = data;
       return this;
     },
+    setHeader: jest.fn(),
   };
   return res;
 }
@@ -51,6 +52,7 @@ describe("GET /api/keep-alive", () => {
       message: "Supabase pinged successfully",
       data: mockData,
     });
+    expect(res.setHeader).toHaveBeenCalledWith("Cache-Control", "no-store");
   });
 
   it("returns 500 when Supabase returns an error", async () => {

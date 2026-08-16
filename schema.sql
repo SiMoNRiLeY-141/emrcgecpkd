@@ -122,10 +122,6 @@ CREATE POLICY "Allow public read access to news" ON public.news
 CREATE POLICY "Allow public read access to committee" ON public.committee
   FOR SELECT TO anon, authenticated USING (true);
 
--- newsletter_subscribers: Allow anyone to verify existences/duplicates and insert new subscriptions
-CREATE POLICY "Allow public select by anyone" ON public.newsletter_subscribers
-  FOR SELECT TO anon, authenticated USING (true);
-
 CREATE POLICY "Allow public newsletter signup with email validation" ON public.newsletter_subscribers
   FOR INSERT TO anon, authenticated WITH CHECK (
     (email IS NOT NULL) AND (email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
@@ -168,8 +164,8 @@ GRANT ALL ON public.news TO service_role;
 GRANT SELECT ON public.committee TO anon, authenticated;
 GRANT ALL ON public.committee TO service_role;
 
--- newsletter_subscribers: Grant SELECT and INSERT to API roles (for subscriptions and duplicates check)
-GRANT SELECT, INSERT ON public.newsletter_subscribers TO anon, authenticated;
+-- newsletter_subscribers: Allow anonymous signups without exposing subscriber data
+GRANT INSERT ON public.newsletter_subscribers TO anon, authenticated;
 GRANT ALL ON public.newsletter_subscribers TO service_role;
 
 -- maintenance_requests: Grant INSERT to API roles (for submission of requests)

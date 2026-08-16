@@ -2,15 +2,13 @@ import handler from "../../pages/api/subscribe";
 
 jest.mock("../../pages/api/supabase", () => ({
   __esModule: true,
-  default: {
-    from: jest.fn(),
-  },
+  default: { from: jest.fn() },
 }));
 
 import supabase from "../../pages/api/supabase";
 
 function createMockRes() {
-  const res = {
+  return {
     statusCode: null,
     body: null,
     headers: {},
@@ -25,124 +23,77 @@ function createMockRes() {
     setHeader(key, value) {
       this.headers[key] = value;
     },
-    end(msg) {
-      this.body = msg;
+    end(message) {
+      this.body = message;
       return this;
     },
   };
-  return res;
 }
 
 describe("POST /api/subscribe", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  afterEach(() => jest.clearAllMocks());
 
   it("returns 405 for non-POST requests", async () => {
-    const req = { method: "GET" };
     const res = createMockRes();
-    await handler(req, res);
+    await handler({ method: "GET" }, res);
 
     expect(res.statusCode).toBe(405);
-    expect(res.headers["Allow"]).toEqual(["POST"]);
+    expect(res.headers.Allow).toEqual(["POST"]);
+    expect(res.headers["Cache-Control"]).toBe("no-store");
   });
 
-  it("returns 400 when email is missing", async () => {
-    const req = { method: "POST", body: {} };
+  it("rejects missing and malformed emails", async () => {
     const res = createMockRes();
-    await handler(req, res);
+    await handler({ method: "POST", body: { email: "not-an-email" } }, res);
 
     expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({ error: "Email address is required." });
+    expect(res.body).toEqual({ error: "Enter a valid email address." });
   });
 
-  it("returns 200 with already-subscribed message when email exists", async () => {
-    supabase.from.mockReturnValue({
-      select: jest.fn().mockReturnValue({
-        eq: jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({
-            data: { id: 42 },
-            error: null,
-          }),
-        }),
-      }),
-    });
-
-    const req = { method: "POST", body: { email: "existing@example.com" } };
+  it("inserts a new email without reading subscriber data", async () => {
+    const insert = jest.fn().mockResolvedValue({ error: null });
+    supabase.from.mockReturnValue({ insert });
     const res = createMockRes();
-    await handler(req, res);
 
+    await handler({ method: "POST", body: { email: "new@example.com" } }, res);
+
+    expect(supabase.from).toHaveBeenCalledWith("newsletter_subscribers");
+    expect(insert).toHaveBeenCalledWith([{ email: "new@example.com" }]);
     expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({ message: "You are already subscribed!" });
-  });
-
-  it("returns 200 with thank-you message for a new subscription", async () => {
-    supabase.from
-      .mockReturnValueOnce({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
-            single: jest.fn().mockResolvedValue({
-              data: null,
-              error: { code: "PGRST116", message: "Row not found" },
-            }),
-          }),
-        }),
-      })
-      .mockReturnValueOnce({
-        insert: jest.fn().mockResolvedValue({ error: null }),
-      });
-
-    const req = { method: "POST", body: { email: "new@example.com" } };
-    const res = createMockRes();
-    await handler(req, res);
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({ message: "Thank you for subscribing!" });
-  });
-
-  it("returns 500 when the SELECT query fails with a non-PGRST116 error", async () => {
-    supabase.from.mockReturnValue({
-      select: jest.fn().mockReturnValue({
-        eq: jest.fn().mockReturnValue({
-          single: jest.fn().mockResolvedValue({
-            data: null,
-            error: { code: "OTHER_ERROR", message: "Unexpected DB error" },
-          }),
-        }),
-      }),
-    });
-
-    const req = { method: "POST", body: { email: "test@example.com" } };
-    const res = createMockRes();
-    await handler(req, res);
-
-    expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({
-      error: "Subscription failed. Please try again later.",
+      message: "Thanks! Your subscription is confirmed.",
+    });
+    expect(res.headers["Cache-Control"]).toBe("no-store");
+  });
+
+  it("returns the same success response for duplicate emails", async () => {
+    supabase.from.mockReturnValue({
+      insert: jest.fn().mockResolvedValue({
+        error: { code: "23505", message: "duplicate key" },
+      }),
+    });
+    const res = createMockRes();
+
+    await handler(
+      { method: "POST", body: { email: "existing@example.com" } },
+      res,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({
+      message: "Thanks! Your subscription is confirmed.",
     });
   });
 
-  it("returns 500 when the INSERT query fails", async () => {
-    supabase.from
-      .mockReturnValueOnce({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
-            single: jest.fn().mockResolvedValue({
-              data: null,
-              error: { code: "PGRST116", message: "Row not found" },
-            }),
-          }),
-        }),
-      })
-      .mockReturnValueOnce({
-        insert: jest
-          .fn()
-          .mockResolvedValue({ error: new Error("Insert failed") }),
-      });
-
-    const req = { method: "POST", body: { email: "fail@example.com" } };
+  it("returns 500 when the insert fails unexpectedly", async () => {
+    supabase.from.mockReturnValue({
+      insert: jest
+        .fn()
+        .mockResolvedValue({ error: { code: "OTHER", message: "DB error" } }),
+    });
     const res = createMockRes();
-    await handler(req, res);
+
+    await handler({ method: "POST", body: { email: "fail@example.com" } }, res);
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({

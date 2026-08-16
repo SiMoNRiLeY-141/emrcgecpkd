@@ -7,11 +7,14 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
+
   try {
     const { data, error } = await supabase.from("news").select("id").limit(1);
     if (error) throw error;
     res.status(200).json({ message: "Supabase pinged successfully", data });
   } catch (error) {
-    res.status(500).json({ message: "Error pinging Supabase", error });
+    console.error("Error pinging Supabase:", error);
+    res.status(500).json({ message: "Error pinging Supabase" });
   }
 }

@@ -17,6 +17,7 @@ function createMockRes() {
       this.statusCode = code;
       return this;
     },
+    setHeader: jest.fn(),
     json(data) {
       this.body = data;
       return this;
@@ -55,6 +56,10 @@ describe("GET /api/news", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual(mockData);
+    expect(res.setHeader).toHaveBeenCalledWith(
+      "Cache-Control",
+      "public, s-maxage=300, stale-while-revalidate=60",
+    );
   });
 
   it("returns 500 when Supabase returns an error", async () => {

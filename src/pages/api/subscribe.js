@@ -2,40 +2,30 @@
 import supabase from "./supabase";
 
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
+
   if (req.method === "POST") {
     const email =
       typeof req.body?.email === "string"
         ? req.body.email.trim().toLowerCase()
         : "";
 
-    if (!email) {
-      return res.status(400).json({ error: "Email address is required." });
+    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)) {
+      return res.status(400).json({ error: "Enter a valid email address." });
     }
 
     try {
-      const { data, error: selectError } = await supabase
-        .from("newsletter_subscribers")
-        .select("id")
-        .eq("email", email)
-        .single();
-
-      if (selectError && selectError.code !== "PGRST116") {
-        throw selectError;
-      }
-
-      if (data) {
-        return res.status(200).json({ message: "You are already subscribed!" });
-      }
-
-      const { error: insertError } = await supabase
+      const { error } = await supabase
         .from("newsletter_subscribers")
         .insert([{ email }]);
 
-      if (insertError) {
-        throw insertError;
+      if (error && error.code !== "23505") {
+        throw error;
       }
 
-      return res.status(200).json({ message: "Thank you for subscribing!" });
+      return res.status(200).json({
+        message: "Thanks! Your subscription is confirmed.",
+      });
     } catch (error) {
       console.error("Error subscribing:", error);
       return res
