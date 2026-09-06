@@ -14,11 +14,16 @@ export default function ActivityPage({ activity }) {
     path: `/news/${activity.slug}`,
     image: activity.image_url,
   });
-  const publishedDate = new Intl.DateTimeFormat("en-IN", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(activity.published_at));
+  const dateToFormat = activity.published_at || activity.created_at;
+  const parsedDate = dateToFormat ? new Date(dateToFormat) : null;
+  const publishedDate =
+    parsedDate && !isNaN(parsedDate.getTime())
+      ? new Intl.DateTimeFormat("en-IN", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }).format(parsedDate)
+      : "Recent";
   const externalUrl = activity.external_url || activity.url;
 
   return (

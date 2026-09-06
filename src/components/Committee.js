@@ -4,23 +4,6 @@ import { m } from "framer-motion";
 import { playHover, playClick } from "../utils/audio";
 
 const titleText = "Executive Committee";
-const OPTIMIZED_COMMITTEE_PREFIX =
-  "/storage/v1/object/public/images/committee/optimized/";
-
-const getOptimizedCommitteePhotoUrl = (photoUrl) => {
-  if (
-    !photoUrl ||
-    !photoUrl.includes("/storage/v1/object/public/images/committee/")
-  ) {
-    return photoUrl;
-  }
-
-  const fileName = photoUrl.split("/").pop();
-  if (!fileName) return photoUrl;
-
-  const baseName = fileName.replace(/\.[^.]+$/, "");
-  return `${photoUrl.split("/storage/v1/object/public/images/committee/")[0]}${OPTIMIZED_COMMITTEE_PREFIX}${baseName}-w232.webp`;
-};
 
 const Committee = ({ initialCommittee = [] }) => {
   const [committee, setCommittee] = useState(initialCommittee);
@@ -104,15 +87,15 @@ const Committee = ({ initialCommittee = [] }) => {
 
             <div className="image-wrapper w-28 h-28 md:w-32 md:h-32 mx-auto mb-4 rounded-full p-1 bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20 group-hover:from-accent-primary/80 group-hover:to-accent-secondary/80 transition-all duration-300">
               <Image
-                src={getOptimizedCommitteePhotoUrl(member.photo_url)}
+                src={member.photo_url}
                 alt={member.name}
                 className="member-image w-full h-full object-cover rounded-full border-2 border-slate-950 dark:border-slate-800"
-                width={128}
-                height={128}
+                width={256}
+                height={256}
                 loading="lazy"
                 fetchPriority="low"
-                quality={68}
-                sizes="128px"
+                quality={85}
+                sizes="(max-width: 768px) 192px, 256px"
               />
             </div>
             <h3 className="text-text-primary font-bold text-base tracking-wide mb-1 transition-colors group-hover:text-accent-primary">

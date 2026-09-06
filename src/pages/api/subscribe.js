@@ -1,5 +1,5 @@
 // src/pages/api/subscribe.js
-import supabase from "./supabase";
+import supabase from "../../lib/supabase";
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");

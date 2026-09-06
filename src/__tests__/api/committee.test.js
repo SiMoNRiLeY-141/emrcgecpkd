@@ -1,14 +1,14 @@
 import handler from "../../pages/api/committee";
 
 // Mock the supabase module
-jest.mock("../../pages/api/supabase", () => ({
+jest.mock("../../lib/supabase", () => ({
   __esModule: true,
   default: {
     from: jest.fn(),
   },
 }));
 
-import supabase from "../../pages/api/supabase";
+import supabase from "../../lib/supabase";
 
 function createMockRes() {
   const res = {

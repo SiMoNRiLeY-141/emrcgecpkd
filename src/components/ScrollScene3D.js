@@ -1137,7 +1137,11 @@ const ScrollScene3D = () => {
       const t2Top = new THREE.Vector3(3.5, 1.8, 0);
       const surgeVec = new THREE.Vector3();
 
+      let animationFrameId = null;
+      let isDisposed = false;
+
       const animate = () => {
+        if (isDisposed) return;
         const elapsedTime = (performance.now() - startTime) * 0.001;
 
         particleSystem.rotation.y = elapsedTime * 0.02;
@@ -1392,7 +1396,7 @@ const ScrollScene3D = () => {
         }
 
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       };
 
       animate();
@@ -1409,6 +1413,10 @@ const ScrollScene3D = () => {
       window.addEventListener("resize", handleResize);
 
       return () => {
+        isDisposed = true;
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
         observer.disconnect();
         window.removeEventListener("pointermove", onPointerMove);
         window.removeEventListener("pointerdown", onPointerDown);

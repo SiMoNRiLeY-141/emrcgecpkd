@@ -5,7 +5,9 @@ import Header from "../../components/Header";
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: ({ src, alt, ...props }) => <img src={src} alt={alt} {...props} />,
+  default: ({ src, alt, priority, ...props }) => (
+    <img src={src} alt={alt} {...props} />
+  ),
 }));
 
 // Mock next/head

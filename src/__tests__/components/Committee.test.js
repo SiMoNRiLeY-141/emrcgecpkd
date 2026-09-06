@@ -5,7 +5,9 @@ import Committee from "../../components/Committee";
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: ({ src, alt, ...props }) => <img src={src} alt={alt} {...props} />,
+  default: ({ src, alt, priority, ...props }) => (
+    <img src={src} alt={alt} {...props} />
+  ),
 }));
 
 describe("Committee component", () => {

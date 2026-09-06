@@ -37,7 +37,7 @@ const StatsMonitor = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-[99] pointer-events-none font-mono text-[10px] bg-black/85 border border-accent-primary/30 text-accent-primary px-2.5 py-1.5 rounded shadow-[0_0_12px_rgba(0,240,255,0.25)] flex items-center gap-2">
+    <div className="fixed top-5 left-5 z-[99] pointer-events-none font-mono text-[10px] bg-black/85 border border-accent-primary/30 text-accent-primary px-2.5 py-1.5 rounded shadow-[0_0_12px_rgba(0,240,255,0.25)] flex items-center gap-2">
       <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
       <span>
         SYS_STAT: <span className="font-bold text-[11px]">{fps} FPS</span>

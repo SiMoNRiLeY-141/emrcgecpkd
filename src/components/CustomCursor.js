@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { m, useMotionValue, useSpring } from "framer-motion";
 
 const CustomCursor = () => {
@@ -6,6 +6,7 @@ const CustomCursor = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
+  const [isLight, setIsLight] = useState(false);
 
   // Motion values for actual cursor coordinate
   const mouseX = useMotionValue(-100);
@@ -18,6 +19,30 @@ const CustomCursor = () => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    // Detect theme attribute for adaptive cursor visibility
+    const checkTheme = () => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      setIsLight(theme === "light");
+    };
+
+    checkTheme();
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "data-theme"
+        ) {
+          checkTheme();
+        }
+      }
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
 
     // Detect touch device / pointer availability
     const checkPointer = () => {
@@ -86,6 +111,7 @@ const CustomCursor = () => {
     document.addEventListener("mouseout", handleMouseOut, { passive: true });
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("resize", checkPointer);
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
@@ -100,7 +126,11 @@ const CustomCursor = () => {
   if (isMobile || !isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[99999] pointer-events-none mix-blend-screen">
+    <div
+      className={`fixed inset-0 z-[99999] pointer-events-none ${
+        isLight ? "mix-blend-normal" : "mix-blend-screen"
+      }`}
+    >
       {/* Outer Spring Ring */}
       <m.div
         className="fixed top-0 left-0 w-8 h-8 rounded-full border border-accent-primary pointer-events-none flex items-center justify-center"
@@ -114,11 +144,19 @@ const CustomCursor = () => {
           width: isHovered ? 48 : 28,
           height: isHovered ? 48 : 28,
           borderColor: isHovered
-            ? "var(--accent-secondary)"
-            : "var(--accent-primary)",
+            ? isLight
+              ? "#5e00d6"
+              : "var(--accent-secondary)"
+            : isLight
+              ? "#007bb5"
+              : "var(--accent-primary)",
           boxShadow: isHovered
-            ? "0 0 12px var(--accent-secondary)"
-            : "0 0 6px var(--accent-primary)",
+            ? isLight
+              ? "0 0 10px rgba(94,0,214,0.4)"
+              : "0 0 12px var(--accent-secondary)"
+            : isLight
+              ? "0 0 6px rgba(0,123,181,0.35)"
+              : "0 0 6px var(--accent-primary)",
           rotate: isHovered ? 180 : 0,
           scale: isClicked ? 0.75 : 1,
         }}
@@ -134,32 +172,48 @@ const CustomCursor = () => {
           className="absolute w-1.5 h-[1.5px] bg-accent-primary left-[-1.5px]"
           animate={{
             backgroundColor: isHovered
-              ? "var(--accent-secondary)"
-              : "var(--accent-primary)",
+              ? isLight
+                ? "#5e00d6"
+                : "var(--accent-secondary)"
+              : isLight
+                ? "#007bb5"
+                : "var(--accent-primary)",
           }}
         />
         <m.span
           className="absolute w-1.5 h-[1.5px] bg-accent-primary right-[-1.5px]"
           animate={{
             backgroundColor: isHovered
-              ? "var(--accent-secondary)"
-              : "var(--accent-primary)",
+              ? isLight
+                ? "#5e00d6"
+                : "var(--accent-secondary)"
+              : isLight
+                ? "#007bb5"
+                : "var(--accent-primary)",
           }}
         />
         <m.span
           className="absolute w-[1.5px] h-1.5 bg-accent-primary top-[-1.5px]"
           animate={{
             backgroundColor: isHovered
-              ? "var(--accent-secondary)"
-              : "var(--accent-primary)",
+              ? isLight
+                ? "#5e00d6"
+                : "var(--accent-secondary)"
+              : isLight
+                ? "#007bb5"
+                : "var(--accent-primary)",
           }}
         />
         <m.span
           className="absolute w-[1.5px] h-1.5 bg-accent-primary bottom-[-1.5px]"
           animate={{
             backgroundColor: isHovered
-              ? "var(--accent-secondary)"
-              : "var(--accent-primary)",
+              ? isLight
+                ? "#5e00d6"
+                : "var(--accent-secondary)"
+              : isLight
+                ? "#007bb5"
+                : "var(--accent-primary)",
           }}
         />
       </m.div>
@@ -176,11 +230,19 @@ const CustomCursor = () => {
         animate={{
           scale: isHovered ? 1.5 : 1,
           backgroundColor: isHovered
-            ? "var(--accent-secondary)"
-            : "var(--accent-primary)",
+            ? isLight
+              ? "#5e00d6"
+              : "var(--accent-secondary)"
+            : isLight
+              ? "#007bb5"
+              : "var(--accent-primary)",
           boxShadow: isHovered
-            ? "0 0 8px var(--accent-secondary)"
-            : "0 0 4px var(--accent-primary)",
+            ? isLight
+              ? "0 0 8px rgba(94,0,214,0.4)"
+              : "0 0 8px var(--accent-secondary)"
+            : isLight
+              ? "0 0 4px rgba(0,123,181,0.3)"
+              : "0 0 4px var(--accent-primary)",
         }}
         transition={{
           type: "spring",

@@ -1,5 +1,5 @@
 import { COMMITTEE_SELECT } from "../../lib/supabaseContent";
-import supabase from "./supabase";
+import supabase from "../../lib/supabase";
 
 export default async function handler(req, res) {
   res.setHeader(

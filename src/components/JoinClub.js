@@ -9,7 +9,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { toPng } from "html-to-image";
-import supabase from "../pages/api/supabase";
+import supabase from "../lib/supabase";
 import AvatarEditor from "react-avatar-editor";
 import { playClick, playHover } from "../utils/audio";
 

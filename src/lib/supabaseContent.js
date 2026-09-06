@@ -1,4 +1,4 @@
-import supabase from "../pages/api/supabase";
+import supabase from "./supabase";
 
 export const NEWS_CARD_SELECT = "id, title, image_url, url, slug, created_at";
 export const NEWS_ACTIVITY_SELECT =

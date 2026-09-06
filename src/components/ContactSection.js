@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { m } from "framer-motion";
-import { playClick, playHover } from "../utils/audio";
+import { Copy, Check } from "lucide-react";
+import { playClick, playHover, playSuccess } from "../utils/audio";
 
 const MailIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="var(--accent-primary)">
@@ -21,11 +22,24 @@ const LinkedInIcon = () => (
 );
 
 const contactTitle = " CONTACT_COMMUNICATION_NODES";
+const rawEmail = "emrc@gecskp.ac.in";
 const contactEmail = "emrc[at]gecskp[dot]ac[dot]in";
 const instagramText = " INSTAGRAM";
 const linkedinText = " LINKEDIN";
 
 const ContactSection = () => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(rawEmail).then(() => {
+      setCopied(true);
+      playSuccess();
+      setTimeout(() => setCopied(false), 2500);
+    });
+  };
+
   return (
     <m.div
       className="hud-panel relative overflow-hidden rounded-[24px] p-6 md:p-10 mb-10 md:mb-[60px] text-center"
@@ -52,15 +66,48 @@ const ContactSection = () => {
 
       <div className="hud-line mb-8" />
 
-      <m.div
-        className="contact-email flex items-center justify-center gap-2.5 mb-8 cursor-pointer font-mono text-xs md:text-sm tracking-wider uppercase text-text-secondary hover:text-accent-primary transition-colors pointer-events-auto"
-        whileHover={{ scale: 1.02 }}
-        onHoverStart={playHover}
-        onClick={playClick}
-      >
-        <MailIcon />
-        <p className="m-0">{contactEmail}</p>
-      </m.div>
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 pointer-events-auto">
+        <m.div
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              playClick();
+              window.location.href = `mailto:${rawEmail}`;
+            }
+          }}
+          className="contact-email flex items-center justify-center gap-2.5 font-mono text-xs md:text-sm tracking-wider uppercase text-text-secondary hover:text-accent-primary transition-colors cursor-pointer"
+          whileHover={{ scale: 1.02 }}
+          onHoverStart={playHover}
+          onClick={() => {
+            playClick();
+            window.location.href = `mailto:${rawEmail}`;
+          }}
+        >
+          <MailIcon />
+          <span>{contactEmail}</span>
+        </m.div>
+
+        <button
+          onClick={handleCopy}
+          onMouseEnter={playHover}
+          title="Copy email to clipboard"
+          aria-label="Copy email address"
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent-primary/10 border border-accent-primary/20 text-accent-primary font-mono text-[10px] tracking-wider hover:bg-accent-primary/20 hover:border-accent-primary/50 transition-all cursor-pointer"
+        >
+          {copied ? (
+            <>
+              <Check className="w-3 h-3 text-emerald-400" />
+              <span className="text-emerald-400">COPIED</span>
+            </>
+          ) : (
+            <>
+              <Copy className="w-3 h-3" />
+              <span>COPY</span>
+            </>
+          )}
+        </button>
+      </div>
 
       <div className="social-links flex flex-col sm:flex-row justify-center items-center gap-4 mt-4 pointer-events-auto font-mono text-xs">
         <m.a

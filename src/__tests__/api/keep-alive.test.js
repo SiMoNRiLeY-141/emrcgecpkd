@@ -1,12 +1,12 @@
-// Mock the @supabase/supabase-js module used directly by keep-alive
+// Mock the supabase module used by keep-alive
 const mockSelect = jest.fn();
 const mockFrom = jest.fn(() => ({ select: mockSelect }));
-const mockLimit = jest.fn();
 
-jest.mock("@supabase/supabase-js", () => ({
-  createClient: jest.fn(() => ({
+jest.mock("../../lib/supabase", () => ({
+  __esModule: true,
+  default: {
     from: mockFrom,
-  })),
+  },
 }));
 
 // Import after mock setup

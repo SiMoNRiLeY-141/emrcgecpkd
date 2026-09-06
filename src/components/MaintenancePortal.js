@@ -3,11 +3,13 @@ import { m, AnimatePresence } from "framer-motion";
 import {
   Wrench,
   CheckCircle,
+  AlertTriangle,
   Terminal,
+  RotateCcw,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import supabase from "../pages/api/supabase";
+import supabase from "../lib/supabase";
 import { playClick, playHover, playSuccess } from "../utils/audio";
 
 const portalTitle = " CAMPUS MAINTENANCE TERMINAL";
@@ -16,6 +18,7 @@ const portalDesc =
 const successTitle = "TRANSMISSION SUCCESSFUL";
 const successDesc =
   "Directive logged. Dispatching technicians to localized coordinates.";
+const errorTitle = "TRANSMISSION REJECTED";
 const submitBtnText = "EXECUTE DIRECTIVE";
 const placeholderName = "OPERATOR_NAME / DESIGNATION";
 const placeholderDept = "DEPARTMENT_ID";
@@ -30,7 +33,8 @@ const MaintenancePortal = () => {
     location: "",
     issue: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [submitState, setSubmitState] = useState("idle"); // 'idle' | 'loading' | 'success' | 'error'
+  const [errorMessage, setErrorMessage] = useState("");
   const [terminalLog, setTerminalLog] = useState([]);
 
   const addToLog = (msg) => {
@@ -47,36 +51,45 @@ const MaintenancePortal = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     playClick();
+    setSubmitState("loading");
     addToLog("INITIALIZING SECURITY HANDSHAKE...");
     addToLog("UPLOADING COORDINATES TO SUPABASE NODE...");
 
     try {
+      if (!supabase) {
+        throw new Error("SUPABASE_CLIENT_NOT_INITIALIZED");
+      }
       const { error } = await supabase.from("maintenance_requests").insert([
         {
-          name: formData.name,
-          department: formData.department,
-          location: formData.location,
-          issue: formData.issue,
+          name: formData.name.trim(),
+          department: formData.department.trim(),
+          location: formData.location.trim(),
+          issue: formData.issue.trim(),
         },
       ]);
       if (error) {
-        console.error("Error inserting request:", error);
-        addToLog("ERROR: CONNECTION TIMEOUT.");
-      } else {
-        addToLog("TRANSMISSION ESTABLISHED. DISPATCH CODE: EMRC-OK.");
-        playSuccess();
+        throw error;
       }
+      addToLog("TRANSMISSION ESTABLISHED. DISPATCH CODE: EMRC-OK.");
+      playSuccess();
+      setSubmitState("success");
+      setTimeout(() => {
+        setSubmitState("idle");
+        setFormData({ name: "", department: "", location: "", issue: "" });
+        setTerminalLog([]);
+      }, 6000);
     } catch (err) {
-      console.error(err);
-      addToLog("CRITICAL: DISPATCH EXCEPTION ENCOUNTERED.");
+      console.error("Error inserting request:", err);
+      const msg = err?.message || "DISPATCH EXCEPTION ENCOUNTERED";
+      addToLog(`ERROR: ${msg.toUpperCase()}`);
+      setErrorMessage(msg);
+      setSubmitState("error");
     }
+  };
 
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: "", department: "", location: "", issue: "" });
-      setTerminalLog([]);
-    }, 6000);
+  const handleRetry = () => {
+    playClick();
+    setSubmitState("idle");
   };
 
   const handleToggleExpand = () => {
@@ -113,11 +126,11 @@ const MaintenancePortal = () => {
           </p>
         </div>
         <div className="md:col-span-4 flex justify-center">
-          {!submitted && (
+          {submitState === "idle" && (
             <button
               onClick={handleToggleExpand}
               onMouseEnter={playHover}
-              className="flex items-center gap-2 px-5 py-3 rounded-full bg-accent-primary/10 border border-accent-primary/30 text-accent-primary font-bold font-mono text-[11px] tracking-[2px] transition-all duration-300 hover:bg-accent-primary/20 hover:border-accent-primary/60 select-none pointer-events-auto"
+              className="flex items-center gap-2 px-5 py-3 rounded-full bg-accent-primary/10 border border-accent-primary/30 text-accent-primary font-bold font-mono text-[11px] tracking-[2px] transition-all duration-300 hover:bg-accent-primary/20 hover:border-accent-primary/60 select-none pointer-events-auto cursor-pointer"
             >
               {isExpanded ? (
                 <>
@@ -134,7 +147,7 @@ const MaintenancePortal = () => {
       </div>
 
       <AnimatePresence>
-        {(isExpanded || submitted) && (
+        {(isExpanded || submitState !== "idle") && (
           <m.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -143,7 +156,7 @@ const MaintenancePortal = () => {
             className="overflow-hidden"
           >
             <div className="pt-4 border-t border-accent-primary/10">
-              {submitted ? (
+              {submitState === "success" ? (
                 <m.div
                   className="success-message text-center p-8 bg-[rgba(0,240,255,0.04)] rounded-xl border border-accent-primary/40 shadow-[0_0_24px_rgba(0,240,255,0.1)]"
                   initial={{ scale: 0.95, opacity: 0 }}
@@ -151,9 +164,9 @@ const MaintenancePortal = () => {
                 >
                   <CheckCircle
                     size={40}
-                    className="mx-auto text-accent-primary mb-4 animate-bounce"
+                    className="mx-auto text-emerald-400 mb-4 animate-bounce"
                   />
-                  <h3 className="font-mono tracking-[3px] text-accent-primary font-bold text-lg">
+                  <h3 className="font-mono tracking-[3px] text-emerald-400 font-bold text-lg">
                     {successTitle}
                   </h3>
                   <p className="mt-2 text-xs font-mono text-text-secondary uppercase">
@@ -171,6 +184,42 @@ const MaintenancePortal = () => {
                       </div>
                     ))}
                   </div>
+                </m.div>
+              ) : submitState === "error" ? (
+                <m.div
+                  className="error-message text-center p-8 bg-[rgba(239,68,68,0.05)] rounded-xl border border-rose-500/40 shadow-[0_0_24px_rgba(239,68,68,0.15)]"
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                >
+                  <AlertTriangle
+                    size={40}
+                    className="mx-auto text-rose-500 mb-4 animate-pulse"
+                  />
+                  <h3 className="font-mono tracking-[3px] text-rose-400 font-bold text-lg">
+                    {errorTitle}
+                  </h3>
+                  <p className="mt-2 text-xs font-mono text-rose-300/80 uppercase">
+                    Directive transmission failed: {errorMessage}
+                  </p>
+
+                  <div className="mt-6 p-4 rounded bg-black/90 border border-rose-500/20 text-left font-mono text-[10px] text-rose-400/90 leading-relaxed shadow-inner">
+                    <div className="flex items-center gap-1.5 border-b border-white/5 pb-2 mb-2 text-white/40">
+                      <Terminal className="w-3.5 h-3.5" />
+                      <span>TERMINAL ERROR LOG</span>
+                    </div>
+                    {terminalLog.map((log, i) => (
+                      <div key={i}>{log}</div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={handleRetry}
+                    onMouseEnter={playHover}
+                    className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-rose-500/50 bg-rose-500/10 text-rose-300 font-mono text-xs tracking-widest hover:bg-rose-500/20 hover:border-rose-500 transition-all cursor-pointer pointer-events-auto"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    RETRY DISPATCH
+                  </button>
                 </m.div>
               ) : (
                 <form
@@ -231,10 +280,13 @@ const MaintenancePortal = () => {
                   </div>
                   <button
                     type="submit"
+                    disabled={submitState === "loading"}
                     onMouseEnter={playHover}
-                    className="p-3.5 rounded-[50px] bg-gradient-to-r from-accent-primary/80 to-accent-secondary/80 text-white font-bold text-xs tracking-[2px] cursor-pointer transition-all duration-300 hover:scale-[1.01] hover:from-accent-primary hover:to-accent-secondary hover:shadow-[0_0_20px_rgba(0,240,255,0.35)] select-none pointer-events-auto"
+                    className="p-3.5 rounded-[50px] bg-gradient-to-r from-accent-primary/80 to-accent-secondary/80 text-white font-bold text-xs tracking-[2px] cursor-pointer transition-all duration-300 hover:scale-[1.01] hover:from-accent-primary hover:to-accent-secondary hover:shadow-[0_0_20px_rgba(0,240,255,0.35)] select-none pointer-events-auto disabled:opacity-50"
                   >
-                    {submitBtnText}
+                    {submitState === "loading"
+                      ? "TRANSMITTING..."
+                      : submitBtnText}
                   </button>
                 </form>
               )}

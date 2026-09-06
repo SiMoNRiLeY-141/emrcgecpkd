@@ -5,7 +5,9 @@ import News from "../../components/News";
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: ({ src, alt, ...props }) => <img src={src} alt={alt} {...props} />,
+  default: ({ src, alt, priority, ...props }) => (
+    <img src={src} alt={alt} {...props} />
+  ),
 }));
 
 describe("News component", () => {
